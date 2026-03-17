@@ -1,3 +1,42 @@
 url: https://impact-initiatives.github.io/Idem/
 template:
   bootstrap: 5
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, news]
+    right: [search, github]
+
+reference:
+  - title: "Read & construct"
+    desc: >
+      Create an `xlsform` object by reading an `.xlsx` file from disk or by
+      assembling one directly from in-memory data frames.
+    contents:
+      - read_xlsform
+      - xlsform
+
+  - title: "Extract form components"
+    desc: >
+      Pull specific pieces of information out of an `xlsform` object — question
+      names, choice-list names referenced in the survey, list names defined in
+      the choices sheet, and the full set of choice options per list. These
+      accessors are also used internally by the validation functions.
+    contents:
+      - xlsform_questions
+      - xlsform_list_names
+      - xlsform_choices_list_names
+      - xlsform_choices
+
+  - title: "Validate"
+    desc: >
+      Validate a `dev` XLSForm against an authoritative `target` reference form.
+      The top-level `validate_xlsform()` function runs all checks and returns a
+      tidy tibble of issues; the individual `validate_*()` functions each cover
+      one check and can be run independently when finer control is needed.
+    contents:
+      - validate_xlsform
+      - validate_question_names
+      - validate_list_names
+      - validate_survey_list_names
+      - validate_choices
