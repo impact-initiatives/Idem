@@ -24,11 +24,13 @@ A character vector of unique list names.
 Extracts the unique list names referenced in the \code{type} column of the
 \code{survey} sheet. List names are the second token (separated by a space) in
 question types that reference a choices list: \code{select_one},
-\code{select_multiple}, and \code{rank}.
+\code{select_multiple}, \code{select_one_external}, \code{select_multiple_external}, and
+\code{rank}.
 }
 \details{
 \code{select_one_from_file} and \code{select_multiple_from_file} are excluded because
-they reference external files, not lists defined in the \code{choices} sheet.
+they reference external CSV/XML/GeoJSON files, not lists defined in any
+in-workbook choices sheet.
 }
 \examples{
 xlsform <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))

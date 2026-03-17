@@ -1,13 +1,17 @@
 #' Get list names defined in the choices sheets of an XLSForm
 #'
 #' Extracts unique list names from the `list_name` column of all available
-#' choices sheets. The standard `choices` sheet is always used when present.
-#' The optional `external-choices` sheet (used for large lists compiled into a
-#' separate file at form conversion time) is included automatically when it
-#' exists in the loaded form.
+#' in-workbook choices sheets. Two sheets are recognised:
+#'
+#' - `choices` — the standard sheet used by `select_one`, `select_multiple`,
+#'   and `rank`.
+#' - `external_choices` — the optional sheet used by `select_one_external` and
+#'   `select_multiple_external` (database-backed fast external itemsets,
+#'   compiled into `itemsets.csv` at form conversion time). Included
+#'   automatically when present in the loaded form.
 #'
 #' Questions of type `select_one_from_file` or `select_multiple_from_file`
-#' reference external CSV/XML/GeoJSON files rather than an in-workbook choices
+#' reference external CSV/XML/GeoJSON files rather than any in-workbook choices
 #' sheet. These are not handled by this function; a warning is raised for each
 #' such type encountered so the caller is aware.
 #'
@@ -15,14 +19,16 @@
 #' @param ... Ignored; present for S3 method compatibility.
 #'
 #' @return A character vector of unique list names drawn from all available
-#'   choices sheets (`choices` and, if present, `external-choices`).
+#'   in-workbook choices sheets (`choices` and, if present, `external_choices`).
 #'
 #' @export
 #'
 #' @examples
 #' xlsform <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
 #' xlsform_choices_list_names(xlsform)
-xlsform_choices_list_names <- function(x, ...) UseMethod("xlsform_choices_list_names")
+xlsform_choices_list_names <- function(x, ...) {
+  UseMethod("xlsform_choices_list_names")
+}
 
 #' @export
 #' @rdname xlsform_choices_list_names
@@ -48,7 +54,7 @@ xlsform_choices_list_names.xlsform <- function(x, ...) {
     ))
   }
 
-  choices_sheets <- intersect(c("choices", "external-choices"), names(x))
+  choices_sheets <- intersect(c("choices", "external_choices"), names(x))
 
   list_names <- purrr::map(.x = choices_sheets, .f = \(sheet) {
     x[[sheet]][["list_name"]]

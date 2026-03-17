@@ -19,18 +19,24 @@ xlsform_choices_list_names(x, ...)
 }
 \value{
 A character vector of unique list names drawn from all available
-choices sheets (\code{choices} and, if present, \code{external-choices}).
+in-workbook choices sheets (\code{choices} and, if present, \code{external_choices}).
 }
 \description{
 Extracts unique list names from the \code{list_name} column of all available
-choices sheets. The standard \code{choices} sheet is always used when present.
-The optional \code{external-choices} sheet (used for large lists compiled into a
-separate file at form conversion time) is included automatically when it
-exists in the loaded form.
+in-workbook choices sheets. Two sheets are recognised:
 }
 \details{
+\itemize{
+\item \code{choices} — the standard sheet used by \code{select_one}, \code{select_multiple},
+and \code{rank}.
+\item \code{external_choices} — the optional sheet used by \code{select_one_external} and
+\code{select_multiple_external} (database-backed fast external itemsets,
+compiled into \code{itemsets.csv} at form conversion time). Included
+automatically when present in the loaded form.
+}
+
 Questions of type \code{select_one_from_file} or \code{select_multiple_from_file}
-reference external CSV/XML/GeoJSON files rather than an in-workbook choices
+reference external CSV/XML/GeoJSON files rather than any in-workbook choices
 sheet. These are not handled by this function; a warning is raised for each
 such type encountered so the caller is aware.
 }
