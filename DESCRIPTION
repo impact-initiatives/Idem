@@ -9,8 +9,10 @@ URL: https://impact-initiatives.github.io/Idem/
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-Imports: 
+Depends:
+    R (>= 4.1.0)
+Imports:
     cli,
     purrr,
     readxl,
-    stringr
+    stats
