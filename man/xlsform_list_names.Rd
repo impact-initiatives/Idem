@@ -4,7 +4,7 @@
 \alias{xlsform_list_names}
 \alias{xlsform_list_names.default}
 \alias{xlsform_list_names.xlsform}
-\title{Get list names referenced in an XLSForm}
+\title{Get list names referenced in an XLSForm's survey sheet}
 \usage{
 xlsform_list_names(x, ...)
 
@@ -18,21 +18,39 @@ xlsform_list_names(x, ...)
 \item{...}{Ignored; present for S3 method compatibility.}
 }
 \value{
-A character vector of unique list names.
+A character vector of unique list names referenced in the survey.
 }
 \description{
-Extracts the unique list names referenced in the \code{type} column of the
-\code{survey} sheet. List names are the second token (separated by a space) in
-question types that reference a choices list: \code{select_one},
-\code{select_multiple}, \code{select_one_external}, \code{select_multiple_external}, and
-\code{rank}.
+Extracts the unique list names that are actively \emph{referenced} in the \code{type}
+column of the \code{survey} sheet — that is, the second space-separated token for
+question types that link to a choices list:
 }
 \details{
+\tabular{lll}{
+   Question type \tab Example type value \tab Extracted list name \cr
+   \code{select_one} \tab \verb{select_one yn} \tab \code{yn} \cr
+   \code{select_multiple} \tab \verb{select_multiple colors} \tab \code{colors} \cr
+   \code{select_one_external} \tab \verb{select_one_external regions} \tab \code{regions} \cr
+   \code{select_multiple_external} \tab \verb{select_multiple_external items} \tab \code{items} \cr
+   \code{rank} \tab \verb{rank priority} \tab \code{priority} \cr
+}
+
+
 \code{select_one_from_file} and \code{select_multiple_from_file} are excluded because
-they reference external CSV/XML/GeoJSON files, not lists defined in any
-in-workbook choices sheet.
+they reference external CSV/XML/GeoJSON files rather than any in-workbook
+choices sheet.
 }
 \examples{
-xlsform <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
-xlsform_list_names(xlsform)
+form <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+
+# Lists actively used by survey questions
+xlsform_list_names(form)
+
+# Compare with lists defined in the choices sheet
+xlsform_choices_list_names(form)
+}
+\seealso{
+\code{\link[=xlsform_choices_list_names]{xlsform_choices_list_names()}} for list names \emph{defined} in the
+choices sheet; \code{\link[=validate_survey_list_names]{validate_survey_list_names()}} to compare referenced lists
+across two forms.
 }

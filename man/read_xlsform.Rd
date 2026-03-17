@@ -9,18 +9,39 @@ read_xlsform(path, sheets = c("survey", "choices"))
 \arguments{
 \item{path}{Path to the \code{.xlsx} file.}
 
-\item{sheets}{Character vector of sheet names to read. Defaults to
-\code{c("survey", "choices")}.}
+\item{sheets}{Character vector of sheet names to read. Must all be present in
+the workbook. Defaults to \code{c("survey", "choices")}.}
 }
 \value{
-An \code{xlsform} object: a named list of tibbles, one per sheet, with a
-\code{path} attribute holding the source file path.
+An \code{xlsform} object: a named list of tibbles, one per requested
+sheet, with a \code{path} attribute holding the source file path and class
+\code{c("xlsform", "list")}.
 }
 \description{
-Reads specified sheets from an XLSForm \code{.xlsx} file and returns them as an
-\code{xlsform} object — a named list of tibbles with the file path recorded as an
-attribute.
+Reads an XLSForm \code{.xlsx} file from disk and returns an \code{xlsform} object — a
+named list of tibbles (one per sheet) with the source file path stored as an
+attribute. This is the standard entry point for working with XLSForms in
+Idem.
+}
+\details{
+By default the \code{survey} and \code{choices} sheets are read, which cover the vast
+majority of use cases. Pass additional sheet names (e.g.
+\code{"external_choices"}, \code{"settings"}) via \code{sheets} when you need them.
 }
 \examples{
-xlsform <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+path <- system.file("extdata/form.xlsx", package = "Idem")
+
+# Read the default sheets (survey + choices)
+form <- read_xlsform(path)
+form
+
+# Inspect the survey sheet directly
+form$survey
+
+# Read only the survey sheet
+read_xlsform(path, sheets = "survey")
+}
+\seealso{
+\code{\link[=xlsform]{xlsform()}} to construct an \code{xlsform} object from in-memory data
+frames.
 }

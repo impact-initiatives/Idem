@@ -19,7 +19,7 @@ xlsform_choices_list_names(x, ...)
 }
 \value{
 A character vector of unique list names drawn from all available
-in-workbook choices sheets (\code{choices} and, if present, \code{external_choices}).
+in-workbook choices sheets.
 }
 \description{
 Extracts unique list names from the \code{list_name} column of all available
@@ -30,17 +30,39 @@ in-workbook choices sheets. Two sheets are recognised:
 \item \code{choices} — the standard sheet used by \code{select_one}, \code{select_multiple},
 and \code{rank}.
 \item \code{external_choices} — the optional sheet used by \code{select_one_external} and
-\code{select_multiple_external} (database-backed fast external itemsets,
-compiled into \code{itemsets.csv} at form conversion time). Included
-automatically when present in the loaded form.
+\code{select_multiple_external}. Included automatically when present in the
+loaded form.
+}
+\subsection{Note on file-based question types}{
+
+\code{select_one_from_file} and \code{select_multiple_from_file} reference external
+CSV/XML/GeoJSON files rather than any in-workbook sheet. This function cannot
+resolve those references and emits a warning for each such type it encounters.
 }
 
-Questions of type \code{select_one_from_file} or \code{select_multiple_from_file}
-reference external CSV/XML/GeoJSON files rather than any in-workbook choices
-sheet. These are not handled by this function; a warning is raised for each
-such type encountered so the caller is aware.
+\subsection{Difference from \code{xlsform_list_names()}}{
+
+\code{\link[=xlsform_list_names]{xlsform_list_names()}} returns lists \emph{referenced} by survey questions;
+\code{xlsform_choices_list_names()} returns lists \emph{defined} in the choices sheets.
+The two sets should match for a well-formed form, but can diverge when a
+question type is changed without updating the choices sheet (or vice versa).
+}
 }
 \examples{
-xlsform <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
-xlsform_choices_list_names(xlsform)
+form <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+
+# All list names defined in the choices sheet
+xlsform_choices_list_names(form)
+
+# Cross-check: lists defined in choices vs. lists used in survey
+# (both should be identical for a well-formed form)
+all.equal(
+  sort(xlsform_choices_list_names(form)),
+  sort(xlsform_list_names(form))
+)
+}
+\seealso{
+\code{\link[=xlsform_list_names]{xlsform_list_names()}} for list names referenced in the survey
+sheet; \code{\link[=xlsform_choices]{xlsform_choices()}} for the full choice options per list;
+\code{\link[=validate_list_names]{validate_list_names()}} to compare defined lists across two forms.
 }

@@ -1,25 +1,40 @@
-#' Get list names referenced in an XLSForm
+#' Get list names referenced in an XLSForm's survey sheet
 #'
-#' Extracts the unique list names referenced in the `type` column of the
-#' `survey` sheet. List names are the second token (separated by a space) in
-#' question types that reference a choices list: `select_one`,
-#' `select_multiple`, `select_one_external`, `select_multiple_external`, and
-#' `rank`.
+#' Extracts the unique list names that are actively *referenced* in the `type`
+#' column of the `survey` sheet — that is, the second space-separated token for
+#' question types that link to a choices list:
+#'
+#' | Question type | Example type value | Extracted list name |
+#' |---|---|---|
+#' | `select_one` | `select_one yn` | `yn` |
+#' | `select_multiple` | `select_multiple colors` | `colors` |
+#' | `select_one_external` | `select_one_external regions` | `regions` |
+#' | `select_multiple_external` | `select_multiple_external items` | `items` |
+#' | `rank` | `rank priority` | `priority` |
 #'
 #' `select_one_from_file` and `select_multiple_from_file` are excluded because
-#' they reference external CSV/XML/GeoJSON files, not lists defined in any
-#' in-workbook choices sheet.
+#' they reference external CSV/XML/GeoJSON files rather than any in-workbook
+#' choices sheet.
 #'
 #' @param x An `xlsform` object.
 #' @param ... Ignored; present for S3 method compatibility.
 #'
-#' @return A character vector of unique list names.
+#' @return A character vector of unique list names referenced in the survey.
+#'
+#' @seealso [xlsform_choices_list_names()] for list names *defined* in the
+#'   choices sheet; [validate_survey_list_names()] to compare referenced lists
+#'   across two forms.
 #'
 #' @export
 #'
 #' @examples
-#' xlsform <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
-#' xlsform_list_names(xlsform)
+#' form <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+#'
+#' # Lists actively used by survey questions
+#' xlsform_list_names(form)
+#'
+#' # Compare with lists defined in the choices sheet
+#' xlsform_choices_list_names(form)
 xlsform_list_names <- function(x, ...) {
   UseMethod("xlsform_list_names")
 }

@@ -18,13 +18,27 @@ xlsform_questions(x, ...)
 \item{...}{Ignored; present for S3 method compatibility.}
 }
 \value{
-A character vector of question names.
+A character vector of non-\code{NA} question names from the survey sheet.
 }
 \description{
-Returns the \code{name} column of the \code{survey} sheet, excluding rows where
-\code{name} is \code{NA}.
+Returns the values of the \code{name} column from the \code{survey} sheet, excluding
+any rows where \code{name} is \code{NA} (such as \code{begin_group} / \code{end_group} rows that
+carry no name).
+}
+\details{
+The returned vector is used internally by \code{\link[=validate_question_names]{validate_question_names()}} to
+compare question inventories across two forms.
 }
 \examples{
-xlsform <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
-xlsform_questions(xlsform)
+form <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+
+# All question names in the form
+xlsform_questions(form)
+
+# Count questions
+length(xlsform_questions(form))
+}
+\seealso{
+\code{\link[=xlsform_list_names]{xlsform_list_names()}} for list names referenced in the survey;
+\code{\link[=xlsform_choices_list_names]{xlsform_choices_list_names()}} for list names defined in the choices sheet.
 }
