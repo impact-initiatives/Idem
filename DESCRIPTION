@@ -21,7 +21,6 @@ Imports:
     tidyr
 Suggests: 
     dplyr,
-    gt,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)

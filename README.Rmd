@@ -79,38 +79,6 @@ filtered, counted, and passed to downstream reporting tools.
 
 ```{r library}
 library(Idem)
-library(gt)
-```
-
-```{r gt-helper, include = FALSE}
-# Shared gt styling used throughout — keeps chunk code DRY
-fmt_results <- function(tbl, title, subtitle) {
-  tbl |>
-    gt() |>
-    tab_header(title = md(title), subtitle = subtitle) |>
-    cols_label(
-      check     = "Check",
-      severity  = "Severity",
-      name      = "Name",
-      list_name = "List",
-      detail    = "Detail"
-    ) |>
-    tab_style(
-      style     = cell_fill(color = "#fce8e8"),
-      locations = cells_body(rows = severity == "error")
-    ) |>
-    tab_style(
-      style     = cell_fill(color = "#eaf4ea"),
-      locations = cells_body(rows = nrow(tbl) == 0L)
-    ) |>
-    tab_style(
-      style     = cell_text(weight = "bold"),
-      locations = cells_column_labels()
-    ) |>
-    cols_width(detail ~ px(340)) |>
-    opt_table_font(font = google_font("IBM Plex Mono")) |>
-    opt_stylize(style = 1)
-}
 ```
 
 Idem ships with a sample XLSForm. We will use it as our reference throughout
@@ -266,15 +234,7 @@ target_with_issues <- xlsform(survey = target_survey, choices = target_choices)
 
 ```{r validate-all}
 issues <- validate_xlsform(target_with_issues, dev)
-issues
-```
-
-```{r validate-all-gt, echo = FALSE}
-fmt_results(
-  issues,
-  title    = "**Validation results**",
-  subtitle = md("All checks — `target` vs `dev`")
-)
+knitr::kable(issues)
 ```
 
 ---
@@ -289,15 +249,7 @@ Checks that every question name in `target` exists in `dev`.
 
 ```{r check-question-names}
 result_qn <- validate_question_names(target_with_issues, dev)
-result_qn
-```
-
-```{r check-question-names-gt, echo = FALSE}
-fmt_results(
-  result_qn,
-  title    = "**Check: `question_names`**",
-  subtitle = "Questions present in target but absent from dev"
-)
+knitr::kable(result_qn)
 ```
 
 ### `validate_list_names()`
@@ -307,15 +259,7 @@ exists in `dev`'s choices sheet.
 
 ```{r check-list-names}
 result_ln <- validate_list_names(target_with_issues, dev)
-result_ln
-```
-
-```{r check-list-names-gt, echo = FALSE}
-fmt_results(
-  result_ln,
-  title    = "**Check: `list_names`**",
-  subtitle = "Choice lists defined in target's choices but absent from dev's choices"
-)
+knitr::kable(result_ln)
 ```
 
 ### `validate_survey_list_names()`
@@ -330,15 +274,7 @@ in dev's survey.
 
 ```{r check-survey-list-names}
 result_sln <- validate_survey_list_names(target_with_issues, dev)
-result_sln
-```
-
-```{r check-survey-list-names-gt, echo = FALSE}
-fmt_results(
-  result_sln,
-  title    = "**Check: `survey_list_names`**",
-  subtitle = "Lists referenced in target's survey but absent from dev's survey"
-)
+knitr::kable(result_sln)
 ```
 
 ### `validate_choices()`
@@ -351,15 +287,7 @@ are not reported here — this check focuses on options within shared lists.
 
 ```{r check-choices}
 result_ch <- validate_choices(target_with_issues, dev)
-result_ch
-```
-
-```{r check-choices-gt, echo = FALSE}
-fmt_results(
-  result_ch,
-  title    = "**Check: `choices`**",
-  subtitle = "Choice options present in target but absent from dev, for shared lists"
-)
+knitr::kable(result_ch)
 ```
 
 ---
@@ -373,7 +301,8 @@ need.
 validate_xlsform(
   target_with_issues, dev,
   checks = c("question_names", "choices")
-)
+) |>
+  knitr::kable()
 ```
 
 ---
