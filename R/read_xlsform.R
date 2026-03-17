@@ -11,6 +11,8 @@
 #' @return An `xlsform` object: a named list of tibbles, one per sheet, with a
 #'   `path` attribute holding the source file path.
 #'
+#' @importFrom stats setNames
+#'
 #' @export
 #'
 #' @examples
