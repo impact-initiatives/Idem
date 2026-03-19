@@ -74,10 +74,10 @@ Idem ships with a sample XLSForm. We will use it as our reference
 throughout this tutorial.
 
 ``` r
-path   <- system.file("extdata/form.xlsx", package = "Idem")
+path <- system.file("extdata/form.xlsx", package = "Idem")
 target <- read_xlsform(path)
 target
-#> <xlsform> '/tmp/RtmpZ2Qf99/temp_libpath2df315ed3db24/Idem/extdata/form.xlsx'
+#> <xlsform> '/tmp/RtmptabSgY/temp_libpath1ab062a6066a3/Idem/extdata/form.xlsx'
 #> • survey: 315 rows
 #> • choices: 2497 rows
 ```
@@ -264,51 +264,51 @@ tibble.
 
 ``` r
 # dev has an extra question that target doesn't need — passes
-dev_extra_q      <- target$survey[1L, ]
+dev_extra_q <- target$survey[1L, ]
 dev_extra_q$name <- "dev_only_question"
 dev_with_extra_q <- xlsform(
   survey  = rbind(target$survey, dev_extra_q),
   choices = target$choices
 )
-validate_question_names(target, dev_with_extra_q)   # 0 issues — target is a valid subset
+validate_question_names(target, dev_with_extra_q) # 0 issues — target is a valid subset
 #> # A tibble: 0 × 5
 #> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
 #> #   detail <chr>
 
 # dev defines an extra choice list that target doesn't use — passes
-dev_extra_list           <- target$choices[target$choices$list_name == "l_yn" &
-                                             !is.na(target$choices$list_name), ]
+dev_extra_list <- target$choices[target$choices$list_name == "l_yn" &
+  !is.na(target$choices$list_name), ]
 dev_extra_list$list_name <- "l_dev_only"
-dev_with_extra_list      <- xlsform(
+dev_with_extra_list <- xlsform(
   survey  = target$survey,
   choices = rbind(target$choices, dev_extra_list)
 )
-validate_list_names(target, dev_with_extra_list)    # 0 issues — target need not use every list in dev
+validate_list_names(target, dev_with_extra_list) # 0 issues — target need not use every list in dev
 #> # A tibble: 0 × 5
 #> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
 #> #   detail <chr>
 
 # dev references an extra list in its survey that target doesn't — passes
-dev_survey_extra     <- target$survey
+dev_survey_extra <- target$survey
 dev_survey_extra$type[dev_survey_extra$type == "text"][1L] <- "select_one l_dev_only"
-dev_with_extra_ref   <- xlsform(
+dev_with_extra_ref <- xlsform(
   survey  = dev_survey_extra,
   choices = rbind(target$choices, dev_extra_list)
 )
-validate_survey_list_names(target, dev_with_extra_ref)  # 0 issues — target simply doesn't use that list
+validate_survey_list_names(target, dev_with_extra_ref) # 0 issues — target simply doesn't use that list
 #> # A tibble: 0 × 5
 #> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
 #> #   detail <chr>
 
 # dev has an extra choice option in a shared list that target doesn't — passes
-dev_extra_opt      <- target$choices[target$choices$list_name == "l_yn" &
-                                       !is.na(target$choices$list_name), ][1L, ]
+dev_extra_opt <- target$choices[target$choices$list_name == "l_yn" &
+  !is.na(target$choices$list_name), ][1L, ]
 dev_extra_opt$name <- "not_applicable"
 dev_with_extra_opt <- xlsform(
   survey  = target$survey,
   choices = rbind(target$choices, dev_extra_opt)
 )
-validate_choices(target, dev_with_extra_opt)  # 0 issues — target uses a subset of available options
+validate_choices(target, dev_with_extra_opt) # 0 issues — target uses a subset of available options
 #> # A tibble: 0 × 5
 #> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
 #> #   detail <chr>
@@ -331,20 +331,20 @@ missing, introducing one example of each issue type.
 
 ``` r
 # 1. target requires a question dev doesn't have
-extra_q        <- target$survey[1L, ]
-extra_q$name   <- "required_indicator"
-target_survey  <- rbind(target$survey, extra_q)
+extra_q <- target$survey[1L, ]
+extra_q$name <- "required_indicator"
+target_survey <- rbind(target$survey, extra_q)
 
 # 2. target requires a choice option dev is missing (in the 'l_yn' list)
-extra_opt      <- target$choices[target$choices$list_name == "l_yn" &
-                                   !is.na(target$choices$list_name), ][1L, ]
+extra_opt <- target$choices[target$choices$list_name == "l_yn" &
+  !is.na(target$choices$list_name), ][1L, ]
 extra_opt$name <- "mandatory_option"
 
 # 3. target defines a choice list that dev's choices sheet doesn't have
-new_list           <- target$choices[target$choices$list_name == "l_yn" &
-                                       !is.na(target$choices$list_name), ][1:2, ]
+new_list <- target$choices[target$choices$list_name == "l_yn" &
+  !is.na(target$choices$list_name), ][1:2, ]
 new_list$list_name <- "l_required_scale"
-new_list$name      <- c("low", "high")
+new_list$name <- c("low", "high")
 
 target_choices <- rbind(target$choices, extra_opt, new_list)
 
@@ -485,3 +485,10 @@ issues |>
 #> 3 question_names    error           1
 #> 4 survey_list_names error           1
 ```
+
+## Comparable / Similar tools
+
+- <https://github.com/williameoswald/surveydesignr>
+- <https://github.com/unhcr-americas/XlsFormUtil/blob/HEAD/R/fct_xlsform_compare.R>
+- <https://github.com/PovertyAction/ipacheckscto>
+- <https://github.com/PMA-2020/xform-test>
