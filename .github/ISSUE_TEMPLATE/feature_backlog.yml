@@ -1,0 +1,69 @@
+name: "Feature Backlog"
+description: "Centralize and track new feature proposals through all development stages"
+title: "[Feature Title]"
+labels: feature
+assignees: ""
+
+body:
+  - type: input
+    id: feature_title
+    attributes:
+      label: "Feature Title"
+      description: "Short descriptive title for the feature"
+      placeholder: "E.g., Add multi-language support"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem_statement
+    attributes:
+      label: "Problem Statement"
+      description: "Describe the problem this feature solves or the need it addresses"
+      placeholder: "What issue does this solve?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: "Proposed Solution"
+      description: "High-level description of the approach or implementation concept"
+      placeholder: "How could this be implemented?"
+
+  - type: dropdown
+    id: status
+    attributes:
+      label: "Status"
+      description: "Current stage of the feature"
+      options:
+        - Idea
+        - Under Discussion
+        - To Be Refined
+        - Ready for Dev
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: "Priority"
+      description: "Impact and urgency of the feature"
+      options:
+        - Low
+        - Medium
+        - High
+    validations:
+      required: true
+
+  - type: input
+    id: owner
+    attributes:
+      label: "Owner / Contributor"
+      description: "Person responsible or proposing the feature"
+      placeholder: "@username"
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: "Notes / Open Questions"
+      description: "Any additional context, dependencies or open questions"
