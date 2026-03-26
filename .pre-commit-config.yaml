@@ -4,8 +4,6 @@ repos:
 -   repo: https://github.com/lorenzwalthert/precommit
     rev: v0.4.3.9021
     hooks:
-    -   id: style-files
-        args: [--style_pkg=styler, --style_fun=tidyverse_style]    
     -   id: roxygenize
         additional_dependencies:
         - readxl
@@ -77,6 +75,13 @@ repos:
         stages: [commit-msg]
 -   repo: local
     hooks:
+    -   id: air-format
+        name: Air format
+        entry: air
+        args: [format, .]
+        language: system
+        types: [r]
+        pass_filenames: false
     -   id: forbid-to-commit
         name: Don't commit common R artifacts
         entry: Cannot commit .Rhistory, .RData, .Rds or .rds.

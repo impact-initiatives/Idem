@@ -12,10 +12,12 @@ linter
 lintr
 localised
 option'
+pre
 Rbuildignore
 README
 roxygen
 scale'
+styler
 tibble
 tibbles
 toml
