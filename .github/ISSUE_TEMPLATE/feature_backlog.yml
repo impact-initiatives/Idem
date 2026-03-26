@@ -4,15 +4,6 @@ title: "[Feature Title]"
 labels: feature
 
 body:
-  - type: input
-    id: feature_title
-    attributes:
-      label: "Feature Title"
-      description: "Short descriptive title for the feature"
-      placeholder: "E.g., Add multi-language support"
-    validations:
-      required: true
-
   - type: textarea
     id: problem_statement
     attributes:
