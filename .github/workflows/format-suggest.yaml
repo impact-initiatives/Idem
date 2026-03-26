@@ -14,7 +14,16 @@ on:
   # as a situation that should be safe (because we aren't actually running the untrusted
   # code, we are just treating it as passive data).
   # https://securitylab.github.com/resources/github-actions-preventing-pwn-requests/
+  push:
+    branches: [main, master]
+    paths:
+      - '**.R'
+      - '**.r'
   pull_request_target:
+    branches: [main, master]
+    paths:
+      - '**.R'
+      - '**.r'
 
 name: format-suggest.yaml
 
@@ -30,7 +39,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
 
       - name: Install
         uses: posit-dev/setup-air@v1
