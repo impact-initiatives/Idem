@@ -2,7 +2,6 @@ name: "Feature Backlog"
 description: "Centralize and track new feature proposals through all development stages"
 title: "[Feature Title]"
 labels: feature
-assignees: ""
 
 body:
   - type: input
