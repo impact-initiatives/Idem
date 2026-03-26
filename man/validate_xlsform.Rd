@@ -16,8 +16,9 @@ form.}
 
 \item{dev}{An \code{xlsform} object representing the form being validated.}
 
-\item{checks}{A character vector of check names to run. Defaults to all four
-checks: \code{c("question_names", "list_names", "survey_list_names", "choices")}.}
+\item{checks}{A character vector of check names to run. Defaults to all
+four checks:
+\code{c("question_names", "list_names", "survey_list_names", "choices")}.}
 }
 \value{
 A tibble with columns \code{check}, \code{severity}, \code{name}, \code{list_name}, and

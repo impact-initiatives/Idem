@@ -41,7 +41,7 @@
 #' # Issues found: dev's survey has all select questions replaced by text,
 #' # so none of target's referenced lists appear in dev's survey
 #' dev_no_selects <- xlsform(
-#'   survey  = data.frame(
+#'   survey = data.frame(
 #'     type = rep("text", nrow(target$survey)),
 #'     name = target$survey$name
 #'   ),
@@ -68,11 +68,11 @@ validate_survey_list_names <- function(target, dev) {
   )
 
   tibble::tibble(
-    check     = "survey_list_names",
-    severity  = "error",
-    name      = missing,
+    check = "survey_list_names",
+    severity = "error",
+    name = missing,
     list_name = NA_character_,
-    detail    = paste0(
+    detail = paste0(
       "List '", missing,
       "' is referenced in target's survey but not in dev's survey."
     )

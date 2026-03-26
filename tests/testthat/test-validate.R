@@ -1,15 +1,16 @@
 fixture_xlsform <- function(
-    survey_names  = c("q1", "q2", "q3"),
-    survey_types  = c("select_one list_a", "select_one list_b", "text"),
-    choice_lists  = c("list_a", "list_a", "list_b", "list_b"),
-    choice_names  = c("opt1", "opt2", "opt3", "opt4")) {
+  survey_names = c("q1", "q2", "q3"),
+  survey_types = c("select_one list_a", "select_one list_b", "text"),
+  choice_lists = c("list_a", "list_a", "list_b", "list_b"),
+  choice_names = c("opt1", "opt2", "opt3", "opt4")
+) {
   xlsform(
     survey  = tibble::tibble(type = survey_types, name = survey_names),
     choices = tibble::tibble(list_name = choice_lists, name = choice_names)
   )
 }
 
-# ── xlsform_choices ────────────────────────────────────────────────────────────
+# ── xlsform_choices ───────────────────────────────────────────────────────────
 
 test_that("xlsform_choices returns a named list", {
   x <- fixture_xlsform()
@@ -50,7 +51,7 @@ test_that("xlsform_choices.default errors on non-xlsform", {
   expect_error(xlsform_choices(list()), class = "rlang_error")
 })
 
-# ── validate_question_names ────────────────────────────────────────────────────
+# ── validate_question_names ───────────────────────────────────────────────────
 
 test_that("validate_question_names returns 0 rows when forms are identical", {
   x <- fixture_xlsform()
@@ -60,7 +61,7 @@ test_that("validate_question_names returns 0 rows when forms are identical", {
   expect_named(result, c("check", "severity", "name", "list_name", "detail"))
 })
 
-test_that("validate_question_names reports questions in target missing from dev", {
+test_that("validate_question_names reports questions missing from dev", {
   # target has q3; dev only has q1 + q2 — q3 should be flagged
   dev <- fixture_xlsform(
     survey_names = c("q1", "q2"),
@@ -92,10 +93,10 @@ test_that("validate_question_names errors on non-xlsform dev", {
   expect_error(validate_question_names(x, list()), class = "rlang_error")
 })
 
-# ── validate_list_names ────────────────────────────────────────────────────────
+# ── validate_list_names ───────────────────────────────────────────────────────
 
 test_that("validate_list_names returns 0 rows when forms are identical", {
-  x      <- fixture_xlsform()
+  x <- fixture_xlsform()
   result <- validate_list_names(x, x)
   expect_s3_class(result, "tbl_df")
   expect_equal(nrow(result), 0L)
@@ -140,10 +141,10 @@ test_that("validate_list_names does not report lists only in dev", {
   expect_equal(nrow(result), 0L)
 })
 
-test_that("validate_list_names catches list defined in target choices but absent from dev survey", {
+test_that("validate_list_names catches list in target absent from dev", {
   # list_b is in target's choices but NOT in dev's choices — flagged
   target <- xlsform(
-    survey  = tibble::tibble(
+    survey = tibble::tibble(
       type = c("select_one list_a", "text"),
       name = c("q1", "q2")
     ),
@@ -169,17 +170,17 @@ test_that("validate_list_names errors on non-xlsform inputs", {
   expect_error(validate_list_names(x, list()), class = "rlang_error")
 })
 
-# ── validate_survey_list_names ─────────────────────────────────────────────────
+# ── validate_survey_list_names ────────────────────────────────────────────────
 
-test_that("validate_survey_list_names returns 0 rows when forms are identical", {
-  x      <- fixture_xlsform()
+test_that("validate_survey_list_names returns 0 rows on identical forms", {
+  x <- fixture_xlsform()
   result <- validate_survey_list_names(x, x)
   expect_s3_class(result, "tbl_df")
   expect_equal(nrow(result), 0L)
   expect_named(result, c("check", "severity", "name", "list_name", "detail"))
 })
 
-test_that("validate_survey_list_names reports lists referenced in target survey but not dev survey", {
+test_that("validate_survey_list_names reports lists absent from dev", {
   # target references list_b; dev only references list_a — list_b flagged
   target <- fixture_xlsform()
   dev <- fixture_xlsform(
@@ -194,9 +195,9 @@ test_that("validate_survey_list_names reports lists referenced in target survey 
   expect_equal(result$check, "survey_list_names")
 })
 
-test_that("validate_survey_list_names does not report lists only referenced in dev survey", {
+test_that("validate_survey_list_names does not report lists only in dev", {
   # dev references list_b but target doesn't require it — no issue
-  dev    <- fixture_xlsform()
+  dev <- fixture_xlsform()
   target <- fixture_xlsform(
     survey_types = c("select_one list_a", "text"),
     survey_names = c("q1", "q2"),
@@ -207,11 +208,11 @@ test_that("validate_survey_list_names does not report lists only referenced in d
   expect_equal(nrow(result), 0L)
 })
 
-test_that("validate_survey_list_names catches type change from select to non-select in dev", {
+test_that("validate_survey_list_names catches type change to non-select", {
   # dev changed all questions to text — target's lists are all missing from dev
   target <- fixture_xlsform()
   dev <- xlsform(
-    survey  = tibble::tibble(type = c("text", "text"), name = c("q1", "q2")),
+    survey = tibble::tibble(type = c("text", "text"), name = c("q1", "q2")),
     choices = tibble::tibble(
       list_name = c("list_a", "list_a", "list_b", "list_b"),
       name      = c("opt1", "opt2", "opt3", "opt4")
@@ -228,10 +229,10 @@ test_that("validate_survey_list_names errors on non-xlsform inputs", {
   expect_error(validate_survey_list_names(x, list()), class = "rlang_error")
 })
 
-# ── validate_choices ───────────────────────────────────────────────────────────
+# ── validate_choices ──────────────────────────────────────────────────────────
 
 test_that("validate_choices returns 0 rows when forms are identical", {
-  x      <- fixture_xlsform()
+  x <- fixture_xlsform()
   result <- validate_choices(x, x)
   expect_s3_class(result, "tbl_df")
   expect_equal(nrow(result), 0L)
@@ -296,10 +297,10 @@ test_that("validate_choices errors on non-xlsform inputs", {
   expect_error(validate_choices(x, list()), class = "rlang_error")
 })
 
-# ── validate_xlsform ───────────────────────────────────────────────────────────
+# ── validate_xlsform ──────────────────────────────────────────────────────────
 
 test_that("validate_xlsform returns 0 rows when forms are identical", {
-  x      <- fixture_xlsform()
+  x <- fixture_xlsform()
   result <- validate_xlsform(x, x)
   expect_s3_class(result, "tbl_df")
   expect_equal(nrow(result), 0L)
@@ -357,7 +358,7 @@ test_that("validate_xlsform errors on non-xlsform inputs", {
   expect_error(validate_xlsform(x, list()), class = "rlang_error")
 })
 
-# ── xlsform constructor ────────────────────────────────────────────────────────
+# ── xlsform constructor ───────────────────────────────────────────────────────
 
 test_that("xlsform() returns an xlsform object", {
   x <- xlsform(
@@ -374,7 +375,10 @@ test_that("xlsform() sets path attribute to NA by default", {
 })
 
 test_that("xlsform() accepts a custom path", {
-  x <- xlsform(survey = data.frame(type = "text", name = "q1"), path = "a/b.xlsx")
+  x <- xlsform(
+    survey = data.frame(type = "text", name = "q1"),
+    path = "a/b.xlsx"
+  )
   expect_equal(attr(x, "path"), "a/b.xlsx")
 })
 
@@ -399,7 +403,7 @@ test_that("xlsform() errors when a sheet is not a data frame", {
 test_that("xlsform() produces the same structure as read_xlsform()", {
   path <- system.file("extdata/form.xlsx", package = "Idem")
   from_file <- read_xlsform(path)
-  from_dfs  <- xlsform(
+  from_dfs <- xlsform(
     survey  = from_file$survey,
     choices = from_file$choices,
     path    = path
@@ -411,7 +415,7 @@ test_that("xlsform() produces the same structure as read_xlsform()", {
 
 # ── integration tests with real form ──────────────────────────────────────────
 
-test_that("validate_question_names flags a question in target missing from dev", {
+test_that("validate_question_names flags a question missing from dev", {
   target <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
   # dev is missing the last survey row that target has
   dev <- xlsform(
@@ -424,7 +428,7 @@ test_that("validate_question_names flags a question in target missing from dev",
   expect_equal(result$check[[1L]], "question_names")
 })
 
-test_that("validate_list_names flags a list in target choices absent from dev", {
+test_that("validate_list_names flags a list in target absent from dev", {
   target <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
   dev_no_choices <- xlsform(
     survey  = target$survey,
@@ -436,10 +440,10 @@ test_that("validate_list_names flags a list in target choices absent from dev", 
   expect_true(all(result$check == "list_names"))
 })
 
-test_that("validate_survey_list_names flags lists used in target survey but absent from dev survey", {
+test_that("validate_survey_list_names flags lists in target absent from dev", {
   target <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
   dev_no_selects <- xlsform(
-    survey  = data.frame(
+    survey = data.frame(
       type = rep("text", nrow(target$survey)),
       name = target$survey$name
     ),
@@ -452,8 +456,8 @@ test_that("validate_survey_list_names flags lists used in target survey but abse
 })
 
 test_that("validate_choices flags a choice option in target missing from dev", {
-  target         <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
-  dev_trimmed    <- xlsform(
+  target <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+  dev_trimmed <- xlsform(
     survey  = target$survey,
     choices = target$choices[-nrow(target$choices), ]
   )

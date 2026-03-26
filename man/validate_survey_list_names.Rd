@@ -47,7 +47,7 @@ validate_survey_list_names(target, target)
 # Issues found: dev's survey has all select questions replaced by text,
 # so none of target's referenced lists appear in dev's survey
 dev_no_selects <- xlsform(
-  survey  = data.frame(
+  survey = data.frame(
     type = rep("text", nrow(target$survey)),
     name = target$survey$name
   ),
