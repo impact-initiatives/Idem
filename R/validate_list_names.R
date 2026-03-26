@@ -60,12 +60,13 @@ validate_list_names <- function(target, dev) {
   )
 
   tibble::tibble(
-    check     = "list_names",
-    severity  = "error",
-    name      = missing,
+    check = "list_names",
+    severity = "error",
+    name = missing,
     list_name = NA_character_,
-    detail    = paste0(
-      "List '", missing, "' is defined in target's choices but not in dev's choices."
+    detail = paste0(
+      "List '", missing, "' is defined in target's choices",
+      " but not in dev's choices."
     )
   )
 }

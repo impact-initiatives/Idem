@@ -33,8 +33,9 @@
 #' @param target An `xlsform` object representing the authoritative reference
 #'   form.
 #' @param dev An `xlsform` object representing the form being validated.
-#' @param checks A character vector of check names to run. Defaults to all four
-#'   checks: `c("question_names", "list_names", "survey_list_names", "choices")`.
+#' @param checks A character vector of check names to run. Defaults to all
+#'   four checks:
+#'   `c("question_names", "list_names", "survey_list_names", "choices")`.
 #'
 #' @return A tibble with columns `check`, `severity`, `name`, `list_name`, and
 #'   `detail`. Has zero rows when no issues are found.
@@ -63,9 +64,10 @@
 #' issues <- validate_xlsform(target, dev_trimmed)
 #' issues
 validate_xlsform <- function(
-    target,
-    dev,
-    checks = c("question_names", "list_names", "survey_list_names", "choices")) {
+  target,
+  dev,
+  checks = c("question_names", "list_names", "survey_list_names", "choices")
+) {
   if (!inherits(target, "xlsform")) {
     cli::cli_abort(
       "{.arg target} must be an {.cls xlsform} object, not \\
@@ -79,7 +81,9 @@ validate_xlsform <- function(
     )
   }
 
-  valid_checks <- c("question_names", "list_names", "survey_list_names", "choices")
+  valid_checks <- c(
+    "question_names", "list_names", "survey_list_names", "choices"
+  )
   unknown <- setdiff(checks, valid_checks)
   if (length(unknown) > 0L) {
     cli::cli_abort(c(

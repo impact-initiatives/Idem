@@ -55,7 +55,7 @@ validate_choices <- function(target, dev) {
   }
 
   target_choices <- xlsform_choices(target)
-  dev_choices    <- xlsform_choices(dev)
+  dev_choices <- xlsform_choices(dev)
 
   shared_lists <- intersect(names(target_choices), names(dev_choices))
 
@@ -65,11 +65,11 @@ validate_choices <- function(target, dev) {
       return(NULL)
     }
     tibble::tibble(
-      check     = "choices",
-      severity  = "error",
-      name      = missing_opts,
+      check = "choices",
+      severity = "error",
+      name = missing_opts,
       list_name = list_nm,
-      detail    = paste0(
+      detail = paste0(
         "Choice '", missing_opts, "' in list '", list_nm,
         "' is present in target but not in dev."
       )

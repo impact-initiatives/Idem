@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/ig-impact/IdemR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ig-impact/IdemR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Idem helps you validate XLSForm files against an authoritative reference
@@ -77,7 +78,7 @@ throughout this tutorial.
 path <- system.file("extdata/form.xlsx", package = "Idem")
 target <- read_xlsform(path)
 target
-#> <xlsform> '/tmp/RtmptabSgY/temp_libpath1ab062a6066a3/Idem/extdata/form.xlsx'
+#> <xlsform> '/tmp/RtmpCEislJ/temp_libpath7cac25c596b6/Idem/extdata/form.xlsx'
 #> • survey: 315 rows
 #> • choices: 2497 rows
 ```

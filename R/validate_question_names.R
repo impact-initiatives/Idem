@@ -53,11 +53,11 @@ validate_question_names <- function(target, dev) {
   missing <- setdiff(xlsform_questions(target), xlsform_questions(dev))
 
   tibble::tibble(
-    check     = "question_names",
-    severity  = "error",
-    name      = missing,
+    check = "question_names",
+    severity = "error",
+    name = missing,
     list_name = NA_character_,
-    detail    = paste0(
+    detail = paste0(
       "Question '", missing, "' is present in target but not in dev."
     )
   )
