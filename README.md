@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/ig-impact/IdemR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ig-impact/IdemR/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/impact-initiatives/Idem/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/impact-initiatives/Idem/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Idem helps you validate XLSForm files against an authoritative reference
