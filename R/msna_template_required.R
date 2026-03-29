@@ -8,14 +8,8 @@
 #' @format An `xlsform` object — a named list of two tibbles with class
 #'   `c("xlsform", "list")`:
 #'
-#'   **`survey`** — 689 rows × 22 columns:
+#'   **`survey`** — 689 rows × 17 columns:
 #'   \describe{
-#'     \item{level}{Hierarchy level of the question (e.g. `"metadata"`,
-#'       `"hh"`, `"ind"`).}
-#'     \item{theme}{Thematic grouping of the question.}
-#'     \item{module}{Sub-module within a theme, if applicable.}
-#'     \item{indicator}{Indicator label, if applicable.}
-#'     \item{index}{Numeric sort index.}
 #'     \item{type}{XLSForm question type (e.g. `"select_one"`, `"integer"`).}
 #'     \item{name}{Variable name.}
 #'     \item{`label::english (en)`}{Question label in English.}
@@ -37,7 +31,7 @@
 #'     \item{parameters}{Additional XLSForm parameters.}
 #'   }
 #'
-#'   **`choices`** — 3,579 rows × 9 columns:
+#'   **`choices`** — 3,579 rows × 8 columns:
 #'   \describe{
 #'     \item{list_name}{Choice list identifier referenced in `survey$type`.}
 #'     \item{name}{Choice option value.}
@@ -47,8 +41,18 @@
 #'     \item{parent_admin1}{Admin1-level cascade filter value.}
 #'     \item{parent_admin2}{Admin2-level cascade filter value.}
 #'     \item{parent_admin3}{Admin3-level cascade filter value.}
-#'     \item{parent_wash_handwashing}{WASH handwashing cascade filter value.}
 #'   }
+#'
+#' @section Versioning:
+#'   The dataset carries a `version` attribute recording the package version
+#'   under which it was generated. Inspect it with:
+#'
+#'   ```r
+#'   attr(msna_template_required, "version")
+#'   ```
+#'
+#'   The dataset is updated in lockstep with package releases, so the version
+#'   attribute ties each snapshot of the reference form to a specific release.
 #'
 #' @source Derived from the MSNA template XLSForm bundled in
 #'   `inst/extdata/form.xlsx`. Regenerate with
@@ -60,4 +64,6 @@
 #' msna_template_required
 #'
 #' xlsform_questions(msna_template_required)
+#'
+#' attr(msna_template_required, "version")
 "msna_template_required"
