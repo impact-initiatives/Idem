@@ -42,6 +42,7 @@ repos:
           (.*/|)WORDLIST|
           \.github/workflows/.*|
           data/.*|
+          inst/extdata/.*|
           )$
     -   id: lintr
         additional_dependencies:
@@ -59,7 +60,7 @@ repos:
     rev: v6.0.0
     hooks: 
     -   id: check-added-large-files
-        args: ['--maxkb=200']
+        args: ['--maxkb=500']
     -   id: file-contents-sorter
         files: '^\.Rbuildignore$'
     -   id: end-of-file-fixer
