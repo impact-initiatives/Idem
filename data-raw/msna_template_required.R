@@ -46,5 +46,6 @@ msna_template_required$choices <- msna_template_required$choices[, choices_cols]
 # Strip the absolute local path — the dataset is a self-contained snapshot
 # and the path attribute would otherwise embed the contributor's machine path.
 attr(msna_template_required, "path") <- NA_character_
+attr(msna_template_required, "version") <- as.character(packageVersion("Idem"))
 
 usethis::use_data(msna_template_required, overwrite = TRUE)
