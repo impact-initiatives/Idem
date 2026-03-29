@@ -41,6 +41,12 @@ reference:
       - validate_survey_list_names
       - validate_choices
 
+  - title: "Datasets"
+    desc: >
+      Bundled reference XLSForms included with the package.
+    contents:
+      - msna_template_required
+
   - title: "Miscellaneous"
     contents:
       - idem_passing_lists
