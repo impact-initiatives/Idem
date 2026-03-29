@@ -1,5 +1,4 @@
 ^.*\.Rproj$
-^AGENTS\.md$
 ^LICENSE\.md$
 ^README\.Rmd$
 ^[.]?air[.]toml$
@@ -7,6 +6,7 @@
 ^\.github$
 ^\.pre-commit-config\.yaml$
 ^_pkgdown\.yml$
+^data-raw$
 ^docs$
 ^pkgdown$
 ^renv$
