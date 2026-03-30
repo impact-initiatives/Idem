@@ -23,7 +23,7 @@ is_translated_col <- function(x) {
   pattern <- paste0(
     "^(",
     paste(translatable_fields, collapse = "|"),
-    ")::[^:]+\\s\\([A-Za-z]+\\)$"
+    ")::[^:]+\\s\\([a-z]+\\)$"
   )
   stringr::str_detect(stringr::str_trim(x), pattern)
 }
