@@ -7,7 +7,7 @@
 validate_xlsform(
   target,
   dev,
-  checks = c("question_names", "list_names", "survey_list_names", "choices")
+  checks = c("question_names", "list_names", "survey_list_names", "choices", "labels")
 )
 }
 \arguments{
@@ -17,8 +17,9 @@ form.}
 \item{dev}{An \code{xlsform} object representing the form being validated.}
 
 \item{checks}{A character vector of check names to run. Defaults to all
-four checks:
-\code{c("question_names", "list_names", "survey_list_names", "choices")}.}
+five checks:
+\verb{c("question_names", "list_names", "survey_list_names", "choices",}
+\verb{"labels")}.}
 }
 \value{
 A tibble with columns \code{check}, \code{severity}, \code{name}, \code{list_name}, and
@@ -40,8 +41,12 @@ tibble.
    \code{"list_names"} \tab Every list name \emph{defined} in \code{target}'s choices sheet must also be defined in \code{dev}'s choices sheet. \cr
    \code{"survey_list_names"} \tab Every list name \emph{referenced} in \code{target}'s survey questions must also be referenced in \code{dev}'s survey questions. \cr
    \code{"choices"} \tab For every shared list, every choice option in \code{target} must exist in the same list in \code{dev}. \cr
+   \code{"labels"} \tab Translation columns in \code{target} and \code{dev} are well-formed. \cr
 }
 
+
+The \code{"labels"} check delegates to \code{\link[=check_labels]{check_labels()}} and runs it on both
+\code{target} and \code{dev} independently.
 }
 
 \subsection{Return value structure}{
@@ -77,6 +82,6 @@ issues
 }
 \seealso{
 \code{\link[=validate_question_names]{validate_question_names()}}, \code{\link[=validate_list_names]{validate_list_names()}},
-\code{\link[=validate_survey_list_names]{validate_survey_list_names()}}, \code{\link[=validate_choices]{validate_choices()}} for the individual
-checks.
+\code{\link[=validate_survey_list_names]{validate_survey_list_names()}}, \code{\link[=validate_choices]{validate_choices()}},
+\code{\link[=check_labels]{check_labels()}} for the individual checks.
 }

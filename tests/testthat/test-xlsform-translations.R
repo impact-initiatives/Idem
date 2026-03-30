@@ -160,6 +160,127 @@ test_that("is_translated_col is vectorised and returns mixed results", {
   )
 })
 
+# ── is_malformed_translation_col ─────────────────────────────────────────────
+
+test_that("is_malformed_translation_col returns TRUE for bare fields", {
+  bare <- c(
+    "label",
+    "hint",
+    "guidance_hint",
+    "constraint_message",
+    "required_message",
+    "image",
+    "audio",
+    "video"
+  )
+  expect_true(all(is_malformed_translation_col(bare)))
+})
+
+test_that("is_malformed_translation_col returns TRUE for missing code", {
+  no_code <- c(
+    "label::English",
+    "label::Français",
+    "label::Հայերեն",
+    "label::french",
+    "label::Swahili",
+    "hint::french",
+    "constraint_message::English"
+  )
+  expect_true(all(is_malformed_translation_col(no_code)))
+})
+
+test_that("is_malformed_translation_col: TRUE for no space before code", {
+  no_space <- c(
+    "label::English(en)",
+    "label::Spanish(es)",
+    "hint::French(fr)"
+  )
+  expect_true(all(is_malformed_translation_col(no_space)))
+})
+
+test_that("is_malformed_translation_col returns TRUE for uppercase ISO codes", {
+  uppercase <- c(
+    "label::French (FR)",
+    "label::Kreol (KR)",
+    "hint::English (EN)"
+  )
+  expect_true(all(is_malformed_translation_col(uppercase)))
+})
+
+test_that("is_malformed_translation_col: TRUE for single-colon separator", {
+  single_colon <- c(
+    "label:Kreyol",
+    "hint:English",
+    "label:french"
+  )
+  expect_true(all(is_malformed_translation_col(single_colon)))
+})
+
+test_that("is_malformed_translation_col returns TRUE for space after ::", {
+  space_after <- c(
+    "label:: Swahili",
+    "hint:: French"
+  )
+  expect_true(all(is_malformed_translation_col(space_after)))
+})
+
+test_that("is_malformed_translation_col handles whitespace-padded names", {
+  expect_true(is_malformed_translation_col(" label::English "))
+  expect_true(is_malformed_translation_col("  hint  "))
+})
+
+test_that("is_malformed_translation_col: FALSE for valid translated cols", {
+  valid <- c(
+    "label::English (en)",
+    "label::Français (fr)",
+    "label::Український (uk)",
+    "hint::French (fr)",
+    "constraint_message::English (en)"
+  )
+  expect_true(all(!is_malformed_translation_col(valid)))
+})
+
+test_that("is_malformed_translation_col returns FALSE for metadata columns", {
+  metadata <- c(
+    "label_analysis_var",
+    "label_group_var",
+    "label_municipio",
+    "label_number_manual",
+    "label_question",
+    "label_analysis_key",
+    "label.question",
+    "label.x"
+  )
+  expect_true(all(!is_malformed_translation_col(metadata)))
+})
+
+test_that("is_malformed_translation_col: FALSE for non-translatable cols", {
+  other <- c(
+    "type",
+    "name",
+    "relevant",
+    "required",
+    "non_translatable::English (en)",
+    "list_name::English (en)"
+  )
+  expect_true(all(!is_malformed_translation_col(other)))
+})
+
+test_that("is_malformed_translation_col is vectorised with mixed results", {
+  mixed <- c(
+    "label::English (en)", # FALSE — valid
+    "label::English", # TRUE — no code
+    "label_analysis_var", # FALSE — metadata
+    "label", # TRUE — bare
+    "label:Kreyol", # TRUE — single colon
+    "hint::French (fr)" # FALSE — valid
+  )
+  expect_equal(
+    is_malformed_translation_col(mixed),
+    c(FALSE, TRUE, FALSE, TRUE, TRUE, FALSE)
+  )
+})
+
 # ── xlsform_translations ──────────────────────────────────────────────────────
 
 test_that("xlsform_translations returns a tibble with 4 columns", {

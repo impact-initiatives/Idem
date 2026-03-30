@@ -28,6 +28,40 @@ is_translated_col <- function(x) {
   stringr::str_detect(stringr::str_trim(x), pattern)
 }
 
+#' Test whether a string is a malformed translated field column name
+#'
+#' Checks whether a character string looks like a translation attempt for a
+#' [translatable_fields] prefix but does not conform to the valid XLSForm
+#' convention (as detected internally). A column is considered a
+#' malformed translation attempt when, after trimming whitespace, it either
+#' exactly equals a translatable field (bare, e.g. `"label"`) or starts with
+#' a translatable field followed immediately by a colon (single or double,
+#' e.g. `"label:Kreyol"`, `"label::English"`, `"label::French (FR)"`).
+#'
+#' Columns that use other separators (e.g. `"label_analysis_var"`,
+#' `"label.question"`) are **not** considered translation attempts and return
+#' `FALSE`.
+#'
+#' The function is vectorised over `x`.
+#'
+#' @param x A character vector of column names to test.
+#'
+#' @return A logical vector the same length as `x`. `TRUE` where `x` looks
+#'   like a malformed translation column, `FALSE` otherwise.
+#'
+#' @seealso [translatable_fields]
+#'
+#' @noRd
+is_malformed_translation_col <- function(x) {
+  partial_pattern <- paste0(
+    "^(",
+    paste(translatable_fields, collapse = "|"),
+    ")($|:)"
+  )
+  trimmed <- stringr::str_trim(x)
+  stringr::str_detect(trimmed, partial_pattern) & !is_translated_col(x)
+}
+
 #' Get declared translations from an XLSForm
 #'
 #' Scans the column names of the `survey` sheet (and the `choices` sheet when

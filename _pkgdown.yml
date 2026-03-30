@@ -29,6 +29,15 @@ reference:
       - xlsform_choices
       - xlsform_translations
 
+  - title: "Check a single form"
+    desc: >
+      Inspect a single `xlsform` object for internal consistency issues —
+      translation column formatting and language consistency. These functions
+      return the same tidy tibble format as the `validate_*()` family but
+      operate on one form rather than comparing two.
+    contents:
+      - check_labels
+
   - title: "Validate"
     desc: >
       Validate a `dev` XLSForm against an authoritative `target` reference form.

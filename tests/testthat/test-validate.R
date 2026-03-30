@@ -309,6 +309,49 @@ test_that("validate_xlsform errors on non-xlsform inputs", {
   expect_error(validate_xlsform(x, list()), class = "rlang_error")
 })
 
+test_that("validate_xlsform runs labels check and flags bare label in dev", {
+  target <- fixture_xlsform()
+  dev <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      label = "Question"
+    )
+  )
+  result <- validate_xlsform(target, dev, checks = "labels")
+  expect_true(any(result$check == "labels"))
+  expect_true(any(result$severity == "error"))
+})
+
+test_that("validate_xlsform labels check runs on both target and dev", {
+  bad <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English` = "Q"
+    )
+  )
+  result <- validate_xlsform(bad, bad, checks = "labels")
+  # Both target and dev have the same malformed column — expect 2 rows
+  expect_equal(nrow(result), 2L)
+})
+
+test_that("validate_xlsform labels check returns 0 rows for valid forms", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q"
+    ),
+    choices = tibble::tibble(
+      list_name = character(),
+      name = character(),
+      `label::English (en)` = character()
+    )
+  )
+  result <- validate_xlsform(x, x, checks = "labels")
+  expect_equal(nrow(result), 0L)
+})
 
 # ── integration tests with real form ──────────────────────────────────────────
 

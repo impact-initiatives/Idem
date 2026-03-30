@@ -17,6 +17,10 @@
 #' | `"list_names"` | Every list name *defined* in `target`'s choices sheet must also be defined in `dev`'s choices sheet. |
 #' | `"survey_list_names"` | Every list name *referenced* in `target`'s survey questions must also be referenced in `dev`'s survey questions. |
 #' | `"choices"` | For every shared list, every choice option in `target` must exist in the same list in `dev`. |
+#' | `"labels"` | Translation columns in `target` and `dev` are well-formed. |
+#'
+#' The `"labels"` check delegates to [check_labels()] and runs it on both
+#' `target` and `dev` independently.
 #'
 #' ## Return value structure
 #'
@@ -34,15 +38,16 @@
 #'   form.
 #' @param dev An `xlsform` object representing the form being validated.
 #' @param checks A character vector of check names to run. Defaults to all
-#'   four checks:
-#'   `c("question_names", "list_names", "survey_list_names", "choices")`.
+#'   five checks:
+#'   `c("question_names", "list_names", "survey_list_names", "choices",`
+#'   `"labels")`.
 #'
 #' @return A tibble with columns `check`, `severity`, `name`, `list_name`, and
 #'   `detail`. Has zero rows when no issues are found.
 #'
 #' @seealso [validate_question_names()], [validate_list_names()],
-#'   [validate_survey_list_names()], [validate_choices()] for the individual
-#'   checks.
+#'   [validate_survey_list_names()], [validate_choices()],
+#'   [check_labels()] for the individual checks.
 #'
 #' @export
 #'
@@ -66,7 +71,13 @@
 validate_xlsform <- function(
   target,
   dev,
-  checks = c("question_names", "list_names", "survey_list_names", "choices")
+  checks = c(
+    "question_names",
+    "list_names",
+    "survey_list_names",
+    "choices",
+    "labels"
+  )
 ) {
   if (!inherits(target, "xlsform")) {
     cli::cli_abort(
@@ -85,7 +96,8 @@ validate_xlsform <- function(
     "question_names",
     "list_names",
     "survey_list_names",
-    "choices"
+    "choices",
+    "labels"
   )
   unknown <- setdiff(checks, valid_checks)
   if (length(unknown) > 0L) {
@@ -101,7 +113,13 @@ validate_xlsform <- function(
     question_names = validate_question_names,
     list_names = validate_list_names,
     survey_list_names = validate_survey_list_names,
-    choices = validate_choices
+    choices = validate_choices,
+    labels = \(target, dev) {
+      purrr::list_rbind(list(
+        check_labels(target),
+        check_labels(dev)
+      ))
+    }
   )
 
   results <- purrr::map(
