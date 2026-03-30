@@ -275,21 +275,26 @@ xlsform_translations(target)
 
 ### Translation consistency
 
-`check_labels()` inspects a single form for two classes of translation
-error:
+`check_labels()` inspects a single form for three classes of translation
+issue:
 
-- **Bare field** — a translatable column (e.g. `label`, `hint`) present
-  without a `::language (code)` suffix.
-- **Language mismatch** — a non-`label` field declared in a language not
-  present on any `label` column.
+- **Bare field (error)** — a translatable column (e.g. `label`, `hint`)
+  present without a `::language (code)` suffix.
+- **Language mismatch (error)** — a non-`label` field declared in a
+  language not present on any `label` column.
+- **Missing `default_language` (warning)** — the form declares more than
+  one label language but no `default_language` is set in the `settings`
+  sheet. Load the form with `optional_sheets = "settings"` to enable
+  this check.
 
 The fixture form is clean:
 
 ``` r
 check_labels(target)
-#> # A tibble: 0 × 5
-#> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
-#> #   detail <chr>
+#> # A tibble: 1 × 5
+#>   check  severity name  list_name detail                                        
+#>   <chr>  <chr>    <chr> <chr>     <chr>                                         
+#> 1 labels warning  <NA>  <NA>      "Form has 2 languages (\"english (en)\", \"fr…
 ```
 
 A form with a bare `label` column and a mismatched `hint` language:
@@ -334,9 +339,11 @@ against an identical form returns an empty tibble.
 
 ``` r
 validate_xlsform(target, target)
-#> # A tibble: 0 × 5
-#> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
-#> #   detail <chr>
+#> # A tibble: 2 × 5
+#>   check  severity name  list_name detail                                        
+#>   <chr>  <chr>    <chr> <chr>     <chr>                                         
+#> 1 labels warning  <NA>  <NA>      "Form has 2 languages (\"english (en)\", \"fr…
+#> 2 labels warning  <NA>  <NA>      "Form has 2 languages (\"english (en)\", \"fr…
 ```
 
 ### What is and isn’t flagged
@@ -459,6 +466,8 @@ knitr::kable(issues)
 | list_names | error | l_required_scale | NA | List ‘l_required_scale’ is defined in target’s choices but not in dev’s choices. |
 | survey_list_names | error | l_required_scale | NA | List ‘l_required_scale’ is referenced in target’s survey but not in dev’s survey. |
 | choices | error | mandatory_option | l_yn | Choice ‘mandatory_option’ in list ‘l_yn’ is present in target but not in dev. |
+| labels | warning | NA | NA | Form has 2 languages (“english (en)”, “french (fr)”) but no default_language is set in the settings sheet |
+| labels | warning | NA | NA | Form has 2 languages (“english (en)”, “french (fr)”) but no default_language is set in the settings sheet |
 
 ------------------------------------------------------------------------
 
@@ -551,10 +560,11 @@ dev_bad_labels <- xlsform(
   )
 )
 validate_xlsform(target_with_issues, dev_bad_labels, checks = "labels")
-#> # A tibble: 1 × 5
+#> # A tibble: 2 × 5
 #>   check  severity name  list_name detail                                        
 #>   <chr>  <chr>    <chr> <chr>     <chr>                                         
-#> 1 labels error    label <NA>      "\"label\" is a bare field — use a language s…
+#> 1 labels warning  <NA>  <NA>      "Form has 2 languages (\"english (en)\", \"fr…
+#> 2 labels error    label <NA>      "\"label\" is a bare field — use a language s…
 ```
 
 ------------------------------------------------------------------------
@@ -588,13 +598,14 @@ manipulation works directly on the output.
 # Count issues by check
 issues |>
   dplyr::count(check, severity, name = "n_issues")
-#> # A tibble: 4 × 3
+#> # A tibble: 5 × 3
 #>   check             severity n_issues
 #>   <chr>             <chr>       <int>
 #> 1 choices           error           1
-#> 2 list_names        error           1
-#> 3 question_names    error           1
-#> 4 survey_list_names error           1
+#> 2 labels            warning         2
+#> 3 list_names        error           1
+#> 4 question_names    error           1
+#> 5 survey_list_names error           1
 ```
 
 ## Comparable / Similar tools

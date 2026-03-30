@@ -41,7 +41,9 @@ tibble.
    \code{"list_names"} \tab Every list name \emph{defined} in \code{target}'s choices sheet must also be defined in \code{dev}'s choices sheet. \cr
    \code{"survey_list_names"} \tab Every list name \emph{referenced} in \code{target}'s survey questions must also be referenced in \code{dev}'s survey questions. \cr
    \code{"choices"} \tab For every shared list, every choice option in \code{target} must exist in the same list in \code{dev}. \cr
-   \code{"labels"} \tab Translation columns in \code{target} and \code{dev} are well-formed. \cr
+   \code{"labels"} \tab Translation columns in \code{target} and \code{dev} are well-formed \cr
+   and language-consistent. Also warns when a multi-language form has no \tab  \cr
+   \code{default_language} set in the \code{settings} sheet. \tab  \cr
 }
 
 
@@ -54,7 +56,7 @@ The \code{"labels"} check delegates to \code{\link[=check_labels]{check_labels()
 Each row in the returned tibble represents one validation issue:\tabular{ll}{
    Column \tab Description \cr
    \code{check} \tab Which check produced this issue. \cr
-   \code{severity} \tab Currently always \code{"error"}. \cr
+   \code{severity} \tab \code{"error"} or \code{"warning"}. \cr
    \code{name} \tab The name of the offending question or choice option. \cr
    \code{list_name} \tab The choices list involved (\code{NA} for question-level checks). \cr
    \code{detail} \tab A human-readable description of the problem. \cr

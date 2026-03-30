@@ -148,12 +148,15 @@ xlsform_translations(target)
 
 ### Translation consistency
 
-`check_labels()` inspects a single form for two classes of translation error:
+`check_labels()` inspects a single form for three classes of translation issue:
 
-- **Bare field** — a translatable column (e.g. `label`, `hint`) present
+- **Bare field (error)** — a translatable column (e.g. `label`, `hint`) present
   without a `::language (code)` suffix.
-- **Language mismatch** — a non-`label` field declared in a language not
+- **Language mismatch (error)** — a non-`label` field declared in a language not
   present on any `label` column.
+- **Missing `default_language` (warning)** — the form declares more than one
+  label language but no `default_language` is set in the `settings` sheet.
+  Load the form with `optional_sheets = "settings"` to enable this check.
 
 The fixture form is clean:
 

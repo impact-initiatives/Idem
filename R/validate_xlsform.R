@@ -17,7 +17,9 @@
 #' | `"list_names"` | Every list name *defined* in `target`'s choices sheet must also be defined in `dev`'s choices sheet. |
 #' | `"survey_list_names"` | Every list name *referenced* in `target`'s survey questions must also be referenced in `dev`'s survey questions. |
 #' | `"choices"` | For every shared list, every choice option in `target` must exist in the same list in `dev`. |
-#' | `"labels"` | Translation columns in `target` and `dev` are well-formed. |
+#' | `"labels"` | Translation columns in `target` and `dev` are well-formed
+#' and language-consistent. Also warns when a multi-language form has no
+#' `default_language` set in the `settings` sheet. |
 #'
 #' The `"labels"` check delegates to [check_labels()] and runs it on both
 #' `target` and `dev` independently.
@@ -29,7 +31,7 @@
 #' | Column | Description |
 #' |---|---|
 #' | `check` | Which check produced this issue. |
-#' | `severity` | Currently always `"error"`. |
+#' | `severity` | `"error"` or `"warning"`. |
 #' | `name` | The name of the offending question or choice option. |
 #' | `list_name` | The choices list involved (`NA` for question-level checks). |
 #' | `detail` | A human-readable description of the problem. |
