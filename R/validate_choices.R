@@ -29,7 +29,7 @@
 #' @export
 #'
 #' @examples
-#' target <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+#' target <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 #'
 #' # No issues: all choice options in target also exist in dev
 #' validate_choices(target, target)

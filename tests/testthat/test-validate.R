@@ -402,7 +402,7 @@ test_that("xlsform() errors when a sheet is not a data frame", {
 })
 
 test_that("xlsform() produces the same structure as read_xlsform()", {
-  path <- system.file("extdata/form.xlsx", package = "Idem")
+  path <- system.file("extdata/form.xlsx", package = "idem")
   from_file <- read_xlsform(path)
   from_dfs <- xlsform(
     survey = from_file$survey,
@@ -417,7 +417,7 @@ test_that("xlsform() produces the same structure as read_xlsform()", {
 # ── read_xlsform ──────────────────────────────────────────────────────────────
 
 test_that("read_xlsform errors when a required sheet is missing", {
-  path <- system.file("extdata/form.xlsx", package = "Idem")
+  path <- system.file("extdata/form.xlsx", package = "idem")
   expect_error(
     read_xlsform(path, required_sheets = c("survey", "settings")),
     class = "rlang_error"
@@ -425,7 +425,7 @@ test_that("read_xlsform errors when a required sheet is missing", {
 })
 
 test_that("read_xlsform warns and excludes a missing optional sheet", {
-  path <- system.file("extdata/form.xlsx", package = "Idem")
+  path <- system.file("extdata/form.xlsx", package = "idem")
   expect_warning(
     form <- read_xlsform(path, optional_sheets = "settings"),
     regexp = "settings"
@@ -435,7 +435,7 @@ test_that("read_xlsform warns and excludes a missing optional sheet", {
 })
 
 test_that("read_xlsform includes an optional sheet when present", {
-  path <- system.file("extdata/form.xlsx", package = "Idem")
+  path <- system.file("extdata/form.xlsx", package = "idem")
   # "choices" is present in the form; request it as optional
   form <- read_xlsform(
     path,
@@ -449,7 +449,7 @@ test_that("read_xlsform includes an optional sheet when present", {
 # ── integration tests with real form ──────────────────────────────────────────
 
 test_that("validate_question_names flags a question missing from dev", {
-  target <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+  target <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
   # dev is missing the last survey row that target has
   dev <- xlsform(
     survey = target$survey[-nrow(target$survey), ],
@@ -462,7 +462,7 @@ test_that("validate_question_names flags a question missing from dev", {
 })
 
 test_that("validate_list_names flags a list in target absent from dev", {
-  target <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+  target <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
   dev_no_choices <- xlsform(
     survey = target$survey,
     choices = data.frame(list_name = character(), name = character())
@@ -474,7 +474,7 @@ test_that("validate_list_names flags a list in target absent from dev", {
 })
 
 test_that("validate_survey_list_names flags lists in target absent from dev", {
-  target <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+  target <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
   dev_no_selects <- xlsform(
     survey = data.frame(
       type = rep("text", nrow(target$survey)),
@@ -489,7 +489,7 @@ test_that("validate_survey_list_names flags lists in target absent from dev", {
 })
 
 test_that("validate_choices flags a choice option in target missing from dev", {
-  target <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+  target <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
   dev_trimmed <- xlsform(
     survey = target$survey,
     choices = target$choices[-nrow(target$choices), ]

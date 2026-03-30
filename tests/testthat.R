@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(Idem)
+library(idem)
 
-test_check("Idem")
+test_check("idem")

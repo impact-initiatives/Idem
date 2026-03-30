@@ -1,14 +1,14 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Idem
+# idem
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/impact-initiatives/Idem/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/impact-initiatives/Idem/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/impact-initiatives/idem/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/impact-initiatives/idem/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-Idem helps you validate XLSForm files against an authoritative reference
+idem helps you validate XLSForm files against an authoritative reference
 form. It is designed for workflows where a canonical form is maintained
 centrally and partner or localised copies must stay in sync with it —
 catching drift in question names, choice lists, and answer options
@@ -18,7 +18,7 @@ before it causes problems in data collection or analysis.
 
 ``` r
 # install.packages("pak")
-pak::pak("impact-initiatives/Idem")
+pak::pak("impact-initiatives/idem")
 ```
 
 ## Key concepts
@@ -39,7 +39,7 @@ the boundaries that `target` defines.
 
 ### The rule: target must be a subset of dev
 
-Idem enforces one rule: **everything present in `target` must also exist
+idem enforces one rule: **everything present in `target` must also exist
 in `dev`**. In other words, `target` is a valid *subset* of `dev`.
 
 This means:
@@ -68,17 +68,17 @@ filtered, counted, and passed to downstream reporting tools.
 ## Setup
 
 ``` r
-library(Idem)
+library(idem)
 ```
 
-Idem ships with a sample XLSForm. We will use it as our reference
+idem ships with a sample XLSForm. We will use it as our reference
 throughout this tutorial.
 
 ``` r
-path <- system.file("extdata/form.xlsx", package = "Idem")
+path <- system.file("extdata/form.xlsx", package = "idem")
 target <- read_xlsform(path)
 target
-#> <xlsform> '/tmp/RtmpCEislJ/temp_libpath7cac25c596b6/Idem/extdata/form.xlsx'
+#> <xlsform> '/tmp/Rtmptnm12L/temp_libpath3c5523573ac07/idem/extdata/form.xlsx'
 #> • survey: 315 rows
 #> • choices: 2497 rows
 ```

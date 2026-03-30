@@ -41,7 +41,7 @@ they reference external CSV/XML/GeoJSON files rather than any in-workbook
 choices sheet.
 }
 \examples{
-form <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+form <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 
 # Lists actively used by survey questions
 xlsform_list_names(form)

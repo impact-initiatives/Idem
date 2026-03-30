@@ -58,7 +58,7 @@ Each row in the returned tibble represents one validation issue:\tabular{ll}{
 }
 }
 \examples{
-target <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+target <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 
 # No issues: a form is always a valid subset of itself
 validate_xlsform(target, target)

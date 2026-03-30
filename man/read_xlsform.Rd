@@ -30,7 +30,7 @@ class \code{c("xlsform", "list")}.
 Reads an XLSForm \code{.xlsx} file from disk and returns an \code{xlsform} object — a
 named list of tibbles (one per sheet) with the source file path stored as an
 attribute. This is the standard entry point for working with XLSForms in
-Idem.
+idem.
 }
 \details{
 By default the \code{survey} and \code{choices} sheets are required. Pass additional
@@ -38,7 +38,7 @@ sheet names (e.g. \code{"external_choices"}) via \code{required_sheets}, or requ
 sheets that may not be present (e.g. \code{"settings"}) via \code{optional_sheets}.
 }
 \examples{
-path <- system.file("extdata/form.xlsx", package = "Idem")
+path <- system.file("extdata/form.xlsx", package = "idem")
 
 # Read the default sheets (survey + choices)
 form <- read_xlsform(path)

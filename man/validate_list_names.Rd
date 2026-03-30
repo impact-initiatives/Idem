@@ -35,7 +35,7 @@ questions (not just defined in choices), see \code{\link[=validate_survey_list_n
 }
 }
 \examples{
-target <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+target <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 
 # No issues: all lists defined in target's choices are also defined in dev
 validate_list_names(target, target)

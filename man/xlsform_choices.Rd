@@ -33,7 +33,7 @@ This is useful for inspecting which options are available for a given
 \code{\link[=validate_choices]{validate_choices()}} to compare option sets across two forms.
 }
 \examples{
-form <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+form <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 
 # All choice options, organised by list name
 xlsform_choices(form)

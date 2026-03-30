@@ -3,7 +3,7 @@
 #' Reads an XLSForm `.xlsx` file from disk and returns an `xlsform` object — a
 #' named list of tibbles (one per sheet) with the source file path stored as an
 #' attribute. This is the standard entry point for working with XLSForms in
-#' Idem.
+#' idem.
 #'
 #' By default the `survey` and `choices` sheets are required. Pass additional
 #' sheet names (e.g. `"external_choices"`) via `required_sheets`, or request
@@ -29,7 +29,7 @@
 #' @export
 #'
 #' @examples
-#' path <- system.file("extdata/form.xlsx", package = "Idem")
+#' path <- system.file("extdata/form.xlsx", package = "idem")
 #'
 #' # Read the default sheets (survey + choices)
 #' form <- read_xlsform(path)

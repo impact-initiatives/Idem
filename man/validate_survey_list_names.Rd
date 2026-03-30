@@ -39,7 +39,7 @@ latter case.
 }
 }
 \examples{
-target <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+target <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 
 # No issues: all lists target's survey uses are also used in dev's survey
 validate_survey_list_names(target, target)

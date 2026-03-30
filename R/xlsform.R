@@ -5,7 +5,7 @@
 #' produced by [read_xlsform()], making it useful for testing, creating minimal
 #' reproducible examples, or programmatically assembling forms.
 #'
-#' Most Idem functions expect at least a `survey` sheet and, for choice-related
+#' Most idem functions expect at least a `survey` sheet and, for choice-related
 #' operations, a `choices` sheet.
 #'
 #' @param ... Named data frames, one per sheet. Names become the sheet names

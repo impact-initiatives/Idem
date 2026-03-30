@@ -25,7 +25,7 @@ produced by \code{\link[=read_xlsform]{read_xlsform()}}, making it useful for te
 reproducible examples, or programmatically assembling forms.
 }
 \details{
-Most Idem functions expect at least a \code{survey} sheet and, for choice-related
+Most idem functions expect at least a \code{survey} sheet and, for choice-related
 operations, a \code{choices} sheet.
 }
 \examples{

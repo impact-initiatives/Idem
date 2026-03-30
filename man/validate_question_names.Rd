@@ -29,7 +29,7 @@ example, a localised adaptation that dropped required questions, or a form
 version that has fallen behind the central reference.
 }
 \examples{
-target <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+target <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 
 # No issues: every question in target also exists in dev
 validate_question_names(target, target)

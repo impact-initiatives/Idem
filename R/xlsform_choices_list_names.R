@@ -35,7 +35,7 @@
 #' @export
 #'
 #' @examples
-#' form <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+#' form <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 #'
 #' # All list names defined in the choices sheet
 #' xlsform_choices_list_names(form)

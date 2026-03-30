@@ -1,4 +1,4 @@
-Package: Idem
+Package: idem
 Title: XLSForm Comparison and Validation
 Version: 0.0.0.9000
 Authors@R: 
@@ -6,7 +6,7 @@ Authors@R:
 Description: Reads and compares XLSForm survey files, validating that a target form
     is consistent with a development form.
 License: GPL (>= 3)
-URL: https://impact-initiatives.github.io/Idem/
+URL: https://impact-initiatives.github.io/idem/
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3

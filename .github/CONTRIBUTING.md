@@ -1,6 +1,6 @@
-# Contributing to Idem
+# Contributing to idem
 
-This outlines how to propose a change to Idem. This package follows
+This outlines how to propose a change to idem. This package follows
 tidyverse conventions for code style and workflow — see the
 [tidyverse development contributing guide](https://rstd.io/tidy-contrib) and
 [code review principles](https://code-review.tidyverse.org/) for broader
@@ -29,7 +29,7 @@ useful advice on this.
 
 - Fork the package and clone onto your computer. If you haven't done this
   before, we recommend using
-  `usethis::create_from_github("impact-initiatives/Idem", fork = TRUE)`.
+  `usethis::create_from_github("impact-initiatives/idem", fork = TRUE)`.
 
 - Install all development dependencies with `devtools::install_dev_deps()`,
   and then make sure the package passes R CMD check by running

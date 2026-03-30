@@ -30,7 +30,7 @@ The returned vector is used internally by \code{\link[=validate_question_names]{
 compare question inventories across two forms.
 }
 \examples{
-form <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+form <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 
 # All question names in the form
 xlsform_questions(form)
