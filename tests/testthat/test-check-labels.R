@@ -1,0 +1,196 @@
+# ── check_labels ──────────────────────────────────────────────────────────────
+
+test_that("check_labels returns a tibble with the correct 5 columns", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q"
+    ),
+    choices = tibble::tibble(
+      list_name = character(),
+      name = character(),
+      `label::English (en)` = character()
+    )
+  )
+  result <- check_labels(x)
+  expect_s3_class(result, "tbl_df")
+  expect_named(result, c("check", "severity", "name", "list_name", "detail"))
+})
+
+test_that("check_labels returns 0 rows for a valid translated form", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q",
+      `hint::English (en)` = "Hint"
+    ),
+    choices = tibble::tibble(
+      list_name = character(),
+      name = character(),
+      `label::English (en)` = character()
+    )
+  )
+  result <- check_labels(x)
+  expect_equal(nrow(result), 0L)
+})
+
+test_that("check_labels errors on bare label column in survey", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      label = "Question"
+    )
+  )
+  result <- check_labels(x)
+  expect_s3_class(result, "tbl_df")
+  expect_gte(nrow(result), 1L)
+  expect_true(any(result$severity == "error"))
+  expect_true(any(result$check == "labels"))
+})
+
+test_that("check_labels errors on bare hint column in survey", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q",
+      hint = "A hint"
+    )
+  )
+  result <- check_labels(x)
+  expect_gte(nrow(result), 1L)
+  expect_true(any(result$severity == "error"))
+})
+
+test_that("check_labels errors on bare constraint_message in survey", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q",
+      constraint_message = "Bad value"
+    )
+  )
+  result <- check_labels(x)
+  expect_gte(nrow(result), 1L)
+  expect_true(any(result$severity == "error"))
+})
+
+test_that("check_labels errors on bare image column in survey", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q",
+      image = "pic.png"
+    )
+  )
+  result <- check_labels(x)
+  expect_gte(nrow(result), 1L)
+  expect_true(any(result$severity == "error"))
+})
+
+test_that("check_labels errors on bare label column in choices", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "select_one yn",
+      name = "q1",
+      `label::English (en)` = "Q"
+    ),
+    choices = tibble::tibble(
+      list_name = "yn",
+      name = c("yes", "no"),
+      label = c("Yes", "No")
+    )
+  )
+  result <- check_labels(x)
+  expect_gte(nrow(result), 1L)
+  expect_true(any(result$severity == "error"))
+})
+
+test_that("check_labels does not error on valid translated choices label", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "select_one yn",
+      name = "q1",
+      `label::English (en)` = "Q"
+    ),
+    choices = tibble::tibble(
+      list_name = "yn",
+      name = c("yes", "no"),
+      `label::English (en)` = c("Yes", "No")
+    )
+  )
+  result <- check_labels(x)
+  expect_equal(nrow(result), 0L)
+})
+
+test_that("check_labels errors on hint language not declared on label", {
+  # labels: en + fr; hint: es — mismatch
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q",
+      `label::French (fr)` = "Q",
+      `hint::Spanish (es)` = "Pista"
+    )
+  )
+  result <- check_labels(x)
+  expect_gte(nrow(result), 1L)
+  expect_true(any(result$severity == "error"))
+  expect_true(any(result$check == "labels"))
+})
+
+test_that("check_labels errors on constraint_message language not in labels", {
+  # labels: en only; constraint_message: de — mismatch
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q",
+      `constraint_message::german (de)` = "Falsch"
+    )
+  )
+  result <- check_labels(x)
+  expect_gte(nrow(result), 1L)
+  expect_true(any(result$severity == "error"))
+})
+
+test_that("check_labels does not error when hint languages match labels", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q",
+      `label::French (fr)` = "Q",
+      `hint::English (en)` = "Hint",
+      `hint::French (fr)` = "Indice"
+    )
+  )
+  result <- check_labels(x)
+  expect_equal(nrow(result), 0L)
+})
+
+test_that("check_labels does not error when hint matches single label lang", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q",
+      `hint::English (en)` = "Hint"
+    )
+  )
+  result <- check_labels(x)
+  expect_equal(nrow(result), 0L)
+})
+
+test_that("check_labels returns 0 rows for the real fixture form", {
+  form <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+  result <- check_labels(form)
+  expect_s3_class(result, "tbl_df")
+  expect_equal(nrow(result), 0L)
+})
