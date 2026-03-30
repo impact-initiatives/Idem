@@ -45,14 +45,16 @@ declared with a language that was not declared for \code{label}. For example,
 if labels are declared in French and English but a \code{hint} column appears
 in Spanish, that Spanish \code{hint} is an error. The languages detected on
 \code{label} columns form the reference set.
-}
 
-\subsection{Checks not yet performed}{
-
-\strong{Missing \code{default_language} (warning)} — When multiple translations are
-present, XLSForm best practice requires a \code{default_language} entry in the
-\code{settings} sheet. This check is deferred pending a dedicated \code{settings}
-sheet accessor (tracked in issue #3).
+\strong{Missing \code{default_language} (warning)} — When a form declares more than
+one label language, XLSForm best practice requires a \code{default_language}
+entry in the \code{settings} sheet so that data collection tools know which
+translation to show by default. This warning fires when the \code{settings}
+element is absent from the \code{xlsform} object, when it has no
+\code{default_language} column, or when \code{default_language} is \code{NA} or empty.
+To suppress the warning, load the form with
+\code{read_xlsform(path, optional_sheets = "settings")} and ensure the
+\code{settings} sheet contains a non-empty \code{default_language} value.
 }
 }
 \examples{

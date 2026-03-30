@@ -172,7 +172,8 @@ test_that("check_labels does not error when hint languages match labels", {
     )
   )
   result <- check_labels(x)
-  expect_equal(nrow(result), 0L)
+  # No errors — only the default_language warning fires (no settings sheet)
+  expect_true(all(result$severity != "error"))
 })
 
 test_that("check_labels does not error when hint matches single label lang", {
@@ -189,7 +190,10 @@ test_that("check_labels does not error when hint matches single label lang", {
 })
 
 test_that("check_labels returns 0 rows for the real fixture form", {
-  form <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+  form <- read_xlsform(
+    system.file("extdata/form.xlsx", package = "Idem"),
+    optional_sheets = "settings"
+  )
   result <- check_labels(form)
   expect_s3_class(result, "tbl_df")
   expect_equal(nrow(result), 0L)

@@ -58,7 +58,7 @@ test_that("xlsform() produces the same structure as read_xlsform()", {
 test_that("read_xlsform errors when a required sheet is missing", {
   path <- system.file("extdata/form.xlsx", package = "Idem")
   expect_error(
-    read_xlsform(path, required_sheets = c("survey", "settings")),
+    read_xlsform(path, required_sheets = c("survey", "external_choices")),
     class = "rlang_error"
   )
 })
@@ -66,10 +66,10 @@ test_that("read_xlsform errors when a required sheet is missing", {
 test_that("read_xlsform warns and excludes a missing optional sheet", {
   path <- system.file("extdata/form.xlsx", package = "Idem")
   expect_warning(
-    form <- read_xlsform(path, optional_sheets = "settings"),
-    regexp = "settings"
+    form <- read_xlsform(path, optional_sheets = "external_choices"),
+    regexp = "external_choices"
   )
-  expect_null(form$settings)
+  expect_null(form$external_choices)
   expect_s3_class(form, "xlsform")
 })
 

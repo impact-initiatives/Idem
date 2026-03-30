@@ -50,12 +50,15 @@ translatable_fields <- c(
 #' in Spanish, that Spanish `hint` is an error. The languages detected on
 #' `label` columns form the reference set.
 #'
-#' ## Checks not yet performed
-#'
-#' **Missing `default_language` (warning)** — When multiple translations are
-#' present, XLSForm best practice requires a `default_language` entry in the
-#' `settings` sheet. This check is deferred pending a dedicated `settings`
-#' sheet accessor (tracked in issue #3).
+#' **Missing `default_language` (warning)** — When a form declares more than
+#' one label language, XLSForm best practice requires a `default_language`
+#' entry in the `settings` sheet so that data collection tools know which
+#' translation to show by default. This warning fires when the `settings`
+#' element is absent from the `xlsform` object, when it has no
+#' `default_language` column, or when `default_language` is `NA` or empty.
+#' To suppress the warning, load the form with
+#' `read_xlsform(path, optional_sheets = "settings")` and ensure the
+#' `settings` sheet contains a non-empty `default_language` value.
 #'
 #' @param x An `xlsform` object as returned by [read_xlsform()] or
 #'   [xlsform()].
@@ -228,6 +231,50 @@ check_labels.xlsform <- function(x, ...) {
         )
       )
       return(purrr::list_rbind(list(malformed, mismatch_rows)))
+    }
+  }
+
+  malformed
+
+  # ── Check C: missing default_language ────────────────────────────────────
+  # Only fires when the form has more than one distinct label language.
+  label_languages <- unique(
+    survey_translations$language[survey_translations$field == "label"]
+  )
+
+  if (length(label_languages) > 1L) {
+    settings <- x[["settings"]]
+    default_lang <- if (
+      !is.null(settings) &&
+        "default_language" %in% names(settings)
+    ) {
+      settings[["default_language"]][[1L]]
+    } else {
+      NA_character_
+    }
+
+    has_default <- !is.na(default_lang) &&
+      nzchar(stringr::str_trim(default_lang))
+
+    if (!has_default) {
+      langs_fmt <- paste(
+        paste0("\"", label_languages, "\""),
+        collapse = ", "
+      )
+      default_lang_row <- tibble::tibble(
+        check = "labels",
+        severity = "warning",
+        name = NA_character_,
+        list_name = NA_character_,
+        detail = paste0(
+          "Form has ",
+          length(label_languages),
+          " languages (",
+          langs_fmt,
+          ") but no default_language is set in the settings sheet"
+        )
+      )
+      return(purrr::list_rbind(list(malformed, default_lang_row)))
     }
   }
 
