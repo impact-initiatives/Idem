@@ -67,7 +67,7 @@ To suppress the warning, load the form with
 }
 \examples{
 # No issues: the fixture form uses valid translated columns throughout
-form <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+form <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 check_labels(form)
 
 # Bare label column (no language suffix) — error

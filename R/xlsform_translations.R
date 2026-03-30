@@ -114,7 +114,7 @@ is_malformed_translation_col <- function(x) {
 #' @export
 #'
 #' @examples
-#' form <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+#' form <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 #' xlsform_translations(form)
 xlsform_translations <- function(x, ...) UseMethod("xlsform_translations")
 

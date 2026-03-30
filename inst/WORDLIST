@@ -1,4 +1,5 @@
 's
+Affero
 agentic
 ai
 args
@@ -12,12 +13,14 @@ claude
 cli
 CMD
 codetools
+copyrightable
 cre
 desc
 dev
 dev's
 devtools
 dplyr
+dropdown
 english
 fmt
 GeoJSON
@@ -36,14 +39,17 @@ Iyed
 justfile
 knitr
 KoboToolbox
+licensors
 linter
 lintr
 localised
 magrittr
 md
+MERCHANTABILITY
 msg
 Namespacing
 navbar
+noncommercially
 normalises
 ODK
 option'
@@ -60,6 +66,7 @@ README
 readme
 readxl
 recognised
+relicensing
 reprex
 rmarkdown
 Rmd
@@ -69,6 +76,8 @@ Rscript
 scale'
 stringr
 styler
+sublicenses
+Sublicensing
 subtag
 testthat
 textarea
@@ -82,6 +91,7 @@ uvx
 validators
 WebFetch
 WebSearch
+WIPO
 WORDLIST
 www
 XLSForm

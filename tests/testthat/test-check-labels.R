@@ -191,7 +191,7 @@ test_that("check_labels does not error when hint matches single label lang", {
 
 test_that("check_labels returns 0 rows for the real fixture form", {
   form <- read_xlsform(
-    system.file("extdata/form.xlsx", package = "Idem"),
+    system.file("extdata/form.xlsx", package = "idem"),
     optional_sheets = "settings"
   )
   result <- check_labels(form)
@@ -289,9 +289,111 @@ test_that("check_labels does not warn when default_language is set correctly", {
 
 test_that("check_labels returns 0 rows for fixture form loaded with settings", {
   form <- read_xlsform(
-    system.file("extdata/form.xlsx", package = "Idem"),
+    system.file("extdata/form.xlsx", package = "idem"),
     optional_sheets = "settings"
   )
   result <- check_labels(form)
   expect_equal(nrow(result), 0L)
+})
+
+# ── Check B: survey ↔ choices label language symmetry ─────────────────────────
+
+test_that("check_labels errors when survey has language absent from choices", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "select_one yn",
+      name = "q1",
+      `label::English (en)` = "Q",
+      `label::French (fr)` = "Q"
+    ),
+    choices = tibble::tibble(
+      list_name = "yn",
+      name = c("yes", "no"),
+      `label::English (en)` = c("Yes", "No")
+      # French missing from choices
+    )
+  )
+  result <- check_labels(x)
+  expect_true(any(result$severity == "error"))
+  expect_true(any(stringr::str_detect(result$detail, "French \\(fr\\)")))
+  expect_true(any(stringr::str_detect(
+    result$detail,
+    "survey label.*not.*choices"
+  )))
+})
+
+test_that("check_labels errors when choices has language absent from survey", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "select_one yn",
+      name = "q1",
+      `label::English (en)` = "Q"
+      # French missing from survey
+    ),
+    choices = tibble::tibble(
+      list_name = "yn",
+      name = c("yes", "no"),
+      `label::English (en)` = c("Yes", "No"),
+      `label::French (fr)` = c("Oui", "Non")
+    )
+  )
+  result <- check_labels(x)
+  expect_true(any(result$severity == "error"))
+  expect_true(any(stringr::str_detect(result$detail, "French \\(fr\\)")))
+  expect_true(any(stringr::str_detect(
+    result$detail,
+    "choices label.*not.*survey"
+  )))
+})
+
+test_that("check_labels passes when survey and choices label languages match", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "select_one yn",
+      name = "q1",
+      `label::English (en)` = "Q",
+      `label::French (fr)` = "Q"
+    ),
+    choices = tibble::tibble(
+      list_name = "yn",
+      name = c("yes", "no"),
+      `label::English (en)` = c("Yes", "No"),
+      `label::French (fr)` = c("Oui", "Non")
+    ),
+    settings = tibble::tibble(default_language = "English (en)")
+  )
+  result <- check_labels(x)
+  expect_equal(nrow(result), 0L)
+})
+
+test_that("check_labels skips symmetry check when no choices sheet", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q",
+      `label::French (fr)` = "Q"
+    ),
+    settings = tibble::tibble(default_language = "English (en)")
+  )
+  result <- check_labels(x)
+  expect_equal(nrow(result), 0L)
+})
+
+test_that("check_labels accumulates all issue types without early return", {
+  # Form with: mismatch on non-label field + no default_language
+  # Both should appear in the result (no early return)
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q",
+      `label::French (fr)` = "Q",
+      `hint::Spanish (es)` = "Pista"
+    )
+  )
+  result <- check_labels(x)
+  # Should have the language-mismatch error AND the default_language warning
+  expect_true(any(result$severity == "error"))
+  expect_true(any(result$severity == "warning"))
 })

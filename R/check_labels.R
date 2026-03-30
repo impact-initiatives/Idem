@@ -82,7 +82,7 @@ translatable_fields <- c(
 #'
 #' @examples
 #' # No issues: the fixture form uses valid translated columns throughout
-#' form <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+#' form <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 #' check_labels(form)
 #'
 #' # Bare label column (no language suffix) — error
@@ -229,14 +229,16 @@ check_labels.xlsform <- function(x, ...) {
         paste0(
           "Language \"",
           only_in_survey,
-          "\" is declared on survey label columns but not on choices label columns"
+          "\" is declared on survey label columns but not on choices",
+          " label columns"
         )
       },
       if (length(only_in_choices) > 0L) {
         paste0(
           "Language \"",
           only_in_choices,
-          "\" is declared on choices label columns but not on survey label columns"
+          "\" is declared on choices label columns but not on survey",
+          " label columns"
         )
       }
     )

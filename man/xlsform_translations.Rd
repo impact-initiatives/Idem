@@ -53,7 +53,7 @@ so \code{" label::English (en) "} is treated identically to
 \code{"label::English (en)"}.
 }
 \examples{
-form <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+form <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 xlsform_translations(form)
 }
 \seealso{

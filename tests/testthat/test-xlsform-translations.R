@@ -387,7 +387,7 @@ test_that("xlsform_translations.default errors on non-xlsform input", {
 })
 
 test_that("xlsform_translations returns correct rows for real fixture", {
-  form <- read_xlsform(system.file("extdata/form.xlsx", package = "Idem"))
+  form <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
   result <- xlsform_translations(form)
   expect_s3_class(result, "tbl_df")
   expect_named(result, c("sheet", "field", "language", "column"))

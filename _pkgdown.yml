@@ -37,6 +37,8 @@ reference:
       operate on one form rather than comparing two.
     contents:
       - check_labels
+      - is_translated_col
+      - is_malformed_translation_col
 
   - title: "Validate"
     desc: >

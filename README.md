@@ -81,7 +81,7 @@ throughout this tutorial.
 path <- system.file("extdata/form.xlsx", package = "idem")
 target <- read_xlsform(path, optional_sheets = "settings")
 target
-#> <xlsform> '/tmp/Rtmptnm12L/temp_libpath3c5523573ac07/idem/extdata/form.xlsx'
+#> <xlsform> '/tmp/Rtmplk7yZB/temp_libpath4417b4ecb1f91/idem/extdata/form.xlsx'
 #> • survey: 315 rows
 #> • choices: 2497 rows
 #> • settings: 1 row
