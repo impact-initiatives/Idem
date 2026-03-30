@@ -81,7 +81,7 @@ throughout this tutorial.
 path <- system.file("extdata/form.xlsx", package = "idem")
 target <- read_xlsform(path, optional_sheets = "settings")
 target
-#> <xlsform> '/tmp/Rtmplk7yZB/temp_libpath4417b4ecb1f91/idem/extdata/form.xlsx'
+#> <xlsform> '/tmp/RtmpjxxefJ/temp_libpath47bb63b65ef05/idem/extdata/form.xlsx'
 #> • survey: 315 rows
 #> • choices: 2497 rows
 #> • settings: 1 row
@@ -276,13 +276,22 @@ xlsform_translations(target)
 
 ### Translation consistency
 
-`check_labels()` inspects a single form for three classes of translation
+`check_labels()` inspects a single form for four classes of translation
 issue:
 
-- **Bare field (error)** — a translatable column (e.g. `label`, `hint`)
-  present without a `::language (code)` suffix.
-- **Language mismatch (error)** — a non-`label` field declared in a
-  language not present on any `label` column.
+- **Bare or malformed column (error)** — a translatable column
+  (e.g. `label`, `hint`) is present either without a `::language (code)`
+  suffix (bare, e.g. `label`) or with a malformed suffix that does not
+  follow the `field::Language (code)` convention (e.g. `label::English`
+  without an ISO code, `label::French (FR)` with an uppercase code,
+  `label:Kreyol` with a single colon).
+- **Survey–choices label language mismatch (error)** — the set of
+  languages declared on `label` columns in the `survey` sheet must
+  exactly match those declared on `label` columns in the `choices`
+  sheet.
+- **Non-label field language mismatch (error)** — a non-`label` field
+  (e.g. `hint`, `constraint_message`) is declared in a language not
+  present on any `label` column in `survey`.
 - **Missing `default_language` (warning)** — the form declares more than
   one label language but no `default_language` is set in the `settings`
   sheet. Load the form with `optional_sheets = "settings"` to enable

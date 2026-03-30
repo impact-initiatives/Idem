@@ -38,7 +38,7 @@ translatable_fields <- c(
 #'
 #' ## Checks performed
 #'
-#' **Bare or malformed column (error)** — A translatable field is present
+#' **Bare or malformed column (error)** -- A translatable field is present
 #' either as a plain column with no suffix (e.g. `label`, `hint`) or as a
 #' malformed translation attempt that does not follow the
 #' `field::Language (code)` convention (e.g. `label::English` without an ISO
@@ -47,18 +47,18 @@ translatable_fields <- c(
 #' as `label::English (en)`. Applies to `label` in both the `survey` and
 #' `choices` sheets; applies to all other fields in `survey` only.
 #'
-#' **Survey–choices label language mismatch (error)** — The set of languages
+#' **Survey-choices label language mismatch (error)** -- The set of languages
 #' declared on `label` columns in the `survey` sheet must exactly match the
 #' set declared on `label` columns in the `choices` sheet. Any language
 #' present in one sheet but absent from the other is an error. This check is
 #' skipped when the form has no `choices` sheet.
 #'
-#' **Non-label field language mismatch (error)** — A non-`label` translatable
+#' **Non-label field language mismatch (error)** -- A non-`label` translatable
 #' field in the `survey` sheet (e.g. `hint`, `constraint_message`) is declared
 #' with a language that was not declared for any `label` column in `survey`.
 #' The languages detected on survey `label` columns form the reference set.
 #'
-#' **Missing `default_language` (warning)** — When a form declares more than
+#' **Missing `default_language` (warning)** -- When a form declares more than
 #' one label language, XLSForm best practice requires a `default_language`
 #' entry in the `settings` sheet so that data collection tools know which
 #' translation to show by default. This warning fires when the `settings`
@@ -85,7 +85,7 @@ translatable_fields <- c(
 #' form <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 #' check_labels(form)
 #'
-#' # Bare label column (no language suffix) — error
+#' # Bare label column (no language suffix) -- error
 #' bare <- xlsform(
 #'   survey = tibble::tibble(
 #'     type  = "text",
@@ -95,7 +95,7 @@ translatable_fields <- c(
 #' )
 #' check_labels(bare)
 #'
-#' # Malformed translation attempt (missing ISO code) — error
+#' # Malformed translation attempt (missing ISO code) -- error
 #' malformed <- xlsform(
 #'   survey = tibble::tibble(
 #'     type             = "text",
@@ -105,7 +105,7 @@ translatable_fields <- c(
 #' )
 #' check_labels(malformed)
 #'
-#' # Language mismatch: hint in Spanish but label only in English — error
+#' # Language mismatch: hint in Spanish but label only in English -- error
 #' mismatch <- xlsform(
 #'   survey = tibble::tibble(
 #'     type                  = "text",
@@ -144,7 +144,7 @@ check_labels.xlsform <- function(x, ...) {
 
   issues <- list()
 
-  # ── Check A: bare or malformed translation columns ────────────────────────
+  # -- Check A: bare or malformed translation columns ------------------------
   # Sheets to inspect: survey (all fields), choices (label only)
   sheets_to_check <- intersect(c("survey", "choices"), names(x))
 
@@ -176,7 +176,7 @@ check_labels.xlsform <- function(x, ...) {
         paste0(
           "\"",
           bad_cols,
-          "\" is a bare field — use a language suffix, ",
+          "\" is a bare field -- use a language suffix, ",
           "e.g. ",
           field,
           "::English (en)"
@@ -184,7 +184,7 @@ check_labels.xlsform <- function(x, ...) {
         paste0(
           "\"",
           bad_cols,
-          "\" is not a valid translated column — ",
+          "\" is not a valid translated column -- ",
           "expected ",
           field,
           "::Language (code), e.g. ",
@@ -204,7 +204,7 @@ check_labels.xlsform <- function(x, ...) {
   ) |>
     purrr::list_rbind()
 
-  # ── Check B: survey ↔ choices label language symmetry ─────────────────────
+  # -- Check B: survey <-> choices label language symmetry -------------------
   # The set of languages on label columns in survey must exactly match the set
   # on label columns in choices. This check is skipped when there is no
   # choices sheet.
@@ -254,7 +254,7 @@ check_labels.xlsform <- function(x, ...) {
     }
   }
 
-  # ── Check C: non-label field language mismatch ────────────────────────────
+  # -- Check C: non-label field language mismatch ----------------------------
   # Languages declared on survey label columns form the reference set.
   # Any other translatable field in survey using a language outside that set
   # is an error.
@@ -287,7 +287,7 @@ check_labels.xlsform <- function(x, ...) {
     }
   }
 
-  # ── Check D: missing default_language ────────────────────────────────────
+  # -- Check D: missing default_language -------------------------------------
   # Only fires when the form has more than one distinct label language.
   if (length(survey_label_langs) > 1L) {
     settings <- x[["settings"]]

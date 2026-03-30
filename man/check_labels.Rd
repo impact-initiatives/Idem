@@ -34,7 +34,7 @@ column names, so \code{" label::English (en) "} is treated the same as
 \code{"label::English (en)"}.
 \subsection{Checks performed}{
 
-\strong{Bare or malformed column (error)} — A translatable field is present
+\strong{Bare or malformed column (error)} -- A translatable field is present
 either as a plain column with no suffix (e.g. \code{label}, \code{hint}) or as a
 malformed translation attempt that does not follow the
 \code{field::Language (code)} convention (e.g. \code{label::English} without an ISO
@@ -43,18 +43,18 @@ single colon). The user must use an explicitly language-tagged column such
 as \code{label::English (en)}. Applies to \code{label} in both the \code{survey} and
 \code{choices} sheets; applies to all other fields in \code{survey} only.
 
-\strong{Survey–choices label language mismatch (error)} — The set of languages
+\strong{Survey-choices label language mismatch (error)} -- The set of languages
 declared on \code{label} columns in the \code{survey} sheet must exactly match the
 set declared on \code{label} columns in the \code{choices} sheet. Any language
 present in one sheet but absent from the other is an error. This check is
 skipped when the form has no \code{choices} sheet.
 
-\strong{Non-label field language mismatch (error)} — A non-\code{label} translatable
+\strong{Non-label field language mismatch (error)} -- A non-\code{label} translatable
 field in the \code{survey} sheet (e.g. \code{hint}, \code{constraint_message}) is declared
 with a language that was not declared for any \code{label} column in \code{survey}.
 The languages detected on survey \code{label} columns form the reference set.
 
-\strong{Missing \code{default_language} (warning)} — When a form declares more than
+\strong{Missing \code{default_language} (warning)} -- When a form declares more than
 one label language, XLSForm best practice requires a \code{default_language}
 entry in the \code{settings} sheet so that data collection tools know which
 translation to show by default. This warning fires when the \code{settings}
@@ -70,7 +70,7 @@ To suppress the warning, load the form with
 form <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 check_labels(form)
 
-# Bare label column (no language suffix) — error
+# Bare label column (no language suffix) -- error
 bare <- xlsform(
   survey = tibble::tibble(
     type  = "text",
@@ -80,7 +80,7 @@ bare <- xlsform(
 )
 check_labels(bare)
 
-# Malformed translation attempt (missing ISO code) — error
+# Malformed translation attempt (missing ISO code) -- error
 malformed <- xlsform(
   survey = tibble::tibble(
     type             = "text",
@@ -90,7 +90,7 @@ malformed <- xlsform(
 )
 check_labels(malformed)
 
-# Language mismatch: hint in Spanish but label only in English — error
+# Language mismatch: hint in Spanish but label only in English -- error
 mismatch <- xlsform(
   survey = tibble::tibble(
     type                  = "text",
