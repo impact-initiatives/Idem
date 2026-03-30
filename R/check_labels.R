@@ -145,9 +145,32 @@ check_labels.xlsform <- function(x, ...) {
       }
 
       bad_cols <- cols[is_mal]
-      field <- stringr::str_extract(
-        stringr::str_trim(bad_cols),
-        field_prefix_pattern
+      trimmed <- stringr::str_trim(bad_cols)
+      field <- stringr::str_extract(trimmed, field_prefix_pattern)
+
+      # Distinguish bare fields (exactly the field name) from malformed
+      # translation attempts (field name followed by a colon).
+      is_bare <- trimmed == field
+      detail <- ifelse(
+        is_bare,
+        paste0(
+          "\"",
+          bad_cols,
+          "\" is a bare field — use a language suffix, ",
+          "e.g. ",
+          field,
+          "::English (en)"
+        ),
+        paste0(
+          "\"",
+          bad_cols,
+          "\" is not a valid translated column — ",
+          "expected ",
+          field,
+          "::Language (code), e.g. ",
+          field,
+          "::English (en)"
+        )
       )
 
       tibble::tibble(
@@ -155,7 +178,7 @@ check_labels.xlsform <- function(x, ...) {
         severity = "error",
         name = field,
         list_name = NA_character_,
-        detail = bad_cols
+        detail = detail
       )
     }
   ) |>
@@ -177,12 +200,25 @@ check_labels.xlsform <- function(x, ...) {
     mismatched <- non_label[!non_label$language %in% label_languages, ]
 
     if (nrow(mismatched) > 0L) {
+      label_langs_fmt <- paste(
+        paste0("\"", label_languages, "\""),
+        collapse = ", "
+      )
       mismatch_rows <- tibble::tibble(
         check = "labels",
         severity = "error",
         name = mismatched$field,
         list_name = NA_character_,
-        detail = mismatched$column
+        detail = paste0(
+          "\"",
+          mismatched$column,
+          "\" uses language \"",
+          mismatched$language,
+          "\" not declared on any label column",
+          " (declared: ",
+          label_langs_fmt,
+          ")"
+        )
       )
       return(purrr::list_rbind(list(malformed, mismatch_rows)))
     }

@@ -304,9 +304,9 @@ bad <- xlsform(
 )
 check_labels(bad)
 #> # A tibble: 1 × 5
-#>   check  severity name  list_name detail
-#>   <chr>  <chr>    <chr> <chr>     <chr> 
-#> 1 labels error    label <NA>      label
+#>   check  severity name  list_name detail                                        
+#>   <chr>  <chr>    <chr> <chr>     <chr>                                         
+#> 1 labels error    label <NA>      "\"label\" is a bare field — use a language s…
 
 mismatch <- xlsform(
   survey = tibble::tibble(
@@ -318,9 +318,9 @@ mismatch <- xlsform(
 )
 check_labels(mismatch)
 #> # A tibble: 1 × 5
-#>   check  severity name  list_name detail            
-#>   <chr>  <chr>    <chr> <chr>     <chr>             
-#> 1 labels error    hint  <NA>      hint::Spanish (es)
+#>   check  severity name  list_name detail                                        
+#>   <chr>  <chr>    <chr> <chr>     <chr>                                         
+#> 1 labels error    hint  <NA>      "\"hint::Spanish (es)\" uses language \"Spani…
 ```
 
 ------------------------------------------------------------------------
@@ -552,9 +552,9 @@ dev_bad_labels <- xlsform(
 )
 validate_xlsform(target_with_issues, dev_bad_labels, checks = "labels")
 #> # A tibble: 1 × 5
-#>   check  severity name  list_name detail
-#>   <chr>  <chr>    <chr> <chr>     <chr> 
-#> 1 labels error    label <NA>      label
+#>   check  severity name  list_name detail                                        
+#>   <chr>  <chr>    <chr> <chr>     <chr>                                         
+#> 1 labels error    label <NA>      "\"label\" is a bare field — use a language s…
 ```
 
 ------------------------------------------------------------------------
