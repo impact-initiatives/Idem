@@ -4,18 +4,27 @@
 \alias{read_xlsform}
 \title{Read an XLSForm file}
 \usage{
-read_xlsform(path, sheets = c("survey", "choices"))
+read_xlsform(
+  path,
+  required_sheets = c("survey", "choices"),
+  optional_sheets = character()
+)
 }
 \arguments{
 \item{path}{Path to the \code{.xlsx} file.}
 
-\item{sheets}{Character vector of sheet names to read. Must all be present in
-the workbook. Defaults to \code{c("survey", "choices")}.}
+\item{required_sheets}{Character vector of sheet names that must be present
+in the workbook. Defaults to \code{c("survey", "choices")}. An absent required
+sheet is an error.}
+
+\item{optional_sheets}{Character vector of sheet names to read if present.
+Defaults to \code{character()}. An absent optional sheet produces a warning and
+is silently excluded from the returned object.}
 }
 \value{
-An \code{xlsform} object: a named list of tibbles, one per requested
-sheet, with a \code{path} attribute holding the source file path and class
-\code{c("xlsform", "list")}.
+An \code{xlsform} object: a named list of tibbles, one per sheet
+successfully read, with a \code{path} attribute holding the source file path and
+class \code{c("xlsform", "list")}.
 }
 \description{
 Reads an XLSForm \code{.xlsx} file from disk and returns an \code{xlsform} object — a
@@ -24,9 +33,9 @@ attribute. This is the standard entry point for working with XLSForms in
 Idem.
 }
 \details{
-By default the \code{survey} and \code{choices} sheets are read, which cover the vast
-majority of use cases. Pass additional sheet names (e.g.
-\code{"external_choices"}, \code{"settings"}) via \code{sheets} when you need them.
+By default the \code{survey} and \code{choices} sheets are required. Pass additional
+sheet names (e.g. \code{"external_choices"}) via \code{required_sheets}, or request
+sheets that may not be present (e.g. \code{"settings"}) via \code{optional_sheets}.
 }
 \examples{
 path <- system.file("extdata/form.xlsx", package = "Idem")
@@ -38,8 +47,8 @@ form
 # Inspect the survey sheet directly
 form$survey
 
-# Read only the survey sheet
-read_xlsform(path, sheets = "survey")
+# Opportunistically read the settings sheet (no error if absent)
+read_xlsform(path, optional_sheets = "settings")
 }
 \seealso{
 \code{\link[=xlsform]{xlsform()}} to construct an \code{xlsform} object from in-memory data

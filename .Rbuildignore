@@ -1,11 +1,13 @@
+^.*\.Rproj$
 ^AGENTS\.md$
 ^LICENSE\.md$
 ^README\.Rmd$
 ^[.]?air[.]toml$
+^\.Rproj\.user$
 ^\.github$
 ^\.pre-commit-config\.yaml$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-^.*\.Rproj$
-^\.Rproj\.user$
+^renv$
+^renv\.lock$

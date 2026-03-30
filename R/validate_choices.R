@@ -70,7 +70,10 @@ validate_choices <- function(target, dev) {
       name = missing_opts,
       list_name = list_nm,
       detail = paste0(
-        "Choice '", missing_opts, "' in list '", list_nm,
+        "Choice '",
+        missing_opts,
+        "' in list '",
+        list_nm,
         "' is present in target but not in dev."
       )
     )
@@ -79,11 +82,11 @@ validate_choices <- function(target, dev) {
 
   if (is.null(results) || nrow(results) == 0L) {
     return(tibble::tibble(
-      check     = character(),
-      severity  = character(),
-      name      = character(),
+      check = character(),
+      severity = character(),
+      name = character(),
       list_name = character(),
-      detail    = character()
+      detail = character()
     ))
   }
 
