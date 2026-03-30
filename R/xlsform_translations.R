@@ -18,7 +18,10 @@
 #'
 #' @seealso [translatable_fields], [xlsform_translations()]
 #'
-#' @noRd
+#' @export
+#'
+#' @examples
+#' is_translated_col(c("label::English (en)", "label", "label::English"))
 is_translated_col <- function(x) {
   pattern <- paste0(
     "^(",
@@ -32,7 +35,7 @@ is_translated_col <- function(x) {
 #'
 #' Checks whether a character string looks like a translation attempt for a
 #' [translatable_fields] prefix but does not conform to the valid XLSForm
-#' convention (as detected internally). A column is considered a
+#' convention (as detected by [is_translated_col()]). A column is considered a
 #' malformed translation attempt when, after trimming whitespace, it either
 #' exactly equals a translatable field (bare, e.g. `"label"`) or starts with
 #' a translatable field followed immediately by a colon (single or double,
@@ -49,9 +52,14 @@ is_translated_col <- function(x) {
 #' @return A logical vector the same length as `x`. `TRUE` where `x` looks
 #'   like a malformed translation column, `FALSE` otherwise.
 #'
-#' @seealso [translatable_fields]
+#' @seealso [translatable_fields], [is_translated_col()]
 #'
-#' @noRd
+#' @export
+#'
+#' @examples
+#' is_malformed_translation_col(
+#'   c("label", "label::English", "label::English (en)")
+#' )
 is_malformed_translation_col <- function(x) {
   partial_pattern <- paste0(
     "^(",
