@@ -194,3 +194,100 @@ test_that("check_labels returns 0 rows for the real fixture form", {
   expect_s3_class(result, "tbl_df")
   expect_equal(nrow(result), 0L)
 })
+
+# ── Check C: default_language warning ─────────────────────────────────────────
+
+test_that("check_labels does not warn for a single-language form", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q"
+    )
+  )
+  result <- check_labels(x)
+  expect_equal(nrow(result), 0L)
+})
+
+test_that("check_labels warns when multi-language form has no settings", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q",
+      `label::French (fr)` = "Q"
+    )
+  )
+  result <- check_labels(x)
+  expect_equal(nrow(result), 1L)
+  expect_equal(result$severity, "warning")
+  expect_equal(result$check, "labels")
+})
+
+test_that("check_labels warns when settings has no default_language column", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q",
+      `label::French (fr)` = "Q"
+    ),
+    settings = tibble::tibble(form_title = "Test")
+  )
+  result <- check_labels(x)
+  expect_equal(nrow(result), 1L)
+  expect_equal(result$severity, "warning")
+})
+
+test_that("check_labels warns when default_language is NA", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q",
+      `label::French (fr)` = "Q"
+    ),
+    settings = tibble::tibble(default_language = NA_character_)
+  )
+  result <- check_labels(x)
+  expect_equal(nrow(result), 1L)
+  expect_equal(result$severity, "warning")
+})
+
+test_that("check_labels warns when default_language is empty string", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q",
+      `label::French (fr)` = "Q"
+    ),
+    settings = tibble::tibble(default_language = "")
+  )
+  result <- check_labels(x)
+  expect_equal(nrow(result), 1L)
+  expect_equal(result$severity, "warning")
+})
+
+test_that("check_labels does not warn when default_language is set correctly", {
+  x <- xlsform(
+    survey = tibble::tibble(
+      type = "text",
+      name = "q1",
+      `label::English (en)` = "Q",
+      `label::French (fr)` = "Q"
+    ),
+    settings = tibble::tibble(default_language = "English (en)")
+  )
+  result <- check_labels(x)
+  expect_equal(nrow(result), 0L)
+})
+
+test_that("check_labels returns 0 rows for fixture form loaded with settings", {
+  form <- read_xlsform(
+    system.file("extdata/form.xlsx", package = "Idem"),
+    optional_sheets = "settings"
+  )
+  result <- check_labels(form)
+  expect_equal(nrow(result), 0L)
+})
