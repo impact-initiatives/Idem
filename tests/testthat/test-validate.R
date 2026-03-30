@@ -1,56 +1,3 @@
-fixture_xlsform <- function(
-  survey_names = c("q1", "q2", "q3"),
-  survey_types = c("select_one list_a", "select_one list_b", "text"),
-  choice_lists = c("list_a", "list_a", "list_b", "list_b"),
-  choice_names = c("opt1", "opt2", "opt3", "opt4")
-) {
-  xlsform(
-    survey = tibble::tibble(type = survey_types, name = survey_names),
-    choices = tibble::tibble(list_name = choice_lists, name = choice_names)
-  )
-}
-
-# ── xlsform_choices ───────────────────────────────────────────────────────────
-
-test_that("xlsform_choices returns a named list", {
-  x <- fixture_xlsform()
-  result <- xlsform_choices(x)
-  expect_type(result, "list")
-  expect_named(result)
-})
-
-test_that("xlsform_choices groups options by list_name", {
-  x <- fixture_xlsform()
-  result <- xlsform_choices(x)
-  expect_equal(sort(names(result)), c("list_a", "list_b"))
-  expect_setequal(result[["list_a"]], c("opt1", "opt2"))
-  expect_setequal(result[["list_b"]], c("opt3", "opt4"))
-})
-
-test_that("xlsform_choices includes external_choices when present", {
-  x <- fixture_xlsform()
-  x$external_choices <- tibble::tibble(
-    list_name = "list_ext",
-    name = "ext_opt1"
-  )
-  result <- xlsform_choices(x)
-  expect_true("list_ext" %in% names(result))
-  expect_equal(result[["list_ext"]], "ext_opt1")
-})
-
-test_that("xlsform_choices drops NA names", {
-  x <- fixture_xlsform(
-    choice_names = c("opt1", NA, "opt3", "opt4")
-  )
-  result <- xlsform_choices(x)
-  expect_false(any(is.na(result[["list_a"]])))
-  expect_equal(result[["list_a"]], "opt1")
-})
-
-test_that("xlsform_choices.default errors on non-xlsform", {
-  expect_error(xlsform_choices(list()), class = "rlang_error")
-})
-
 # ── validate_question_names ───────────────────────────────────────────────────
 
 test_that("validate_question_names returns 0 rows when forms are identical", {
@@ -212,7 +159,10 @@ test_that("validate_survey_list_names catches type change to non-select", {
   # dev changed all questions to text — target's lists are all missing from dev
   target <- fixture_xlsform()
   dev <- xlsform(
-    survey = tibble::tibble(type = c("text", "text"), name = c("q1", "q2")),
+    survey = tibble::tibble(
+      type = c("text", "text"),
+      name = c("q1", "q2")
+    ),
     choices = tibble::tibble(
       list_name = c("list_a", "list_a", "list_b", "list_b"),
       name = c("opt1", "opt2", "opt3", "opt4")
@@ -359,92 +309,6 @@ test_that("validate_xlsform errors on non-xlsform inputs", {
   expect_error(validate_xlsform(x, list()), class = "rlang_error")
 })
 
-# ── xlsform constructor ───────────────────────────────────────────────────────
-
-test_that("xlsform() returns an xlsform object", {
-  x <- xlsform(
-    survey = data.frame(type = "text", name = "q1"),
-    choices = data.frame(list_name = character(), name = character())
-  )
-  expect_s3_class(x, "xlsform")
-  expect_named(x, c("survey", "choices"))
-})
-
-test_that("xlsform() sets path attribute to NA by default", {
-  x <- xlsform(survey = data.frame(type = "text", name = "q1"))
-  expect_true(is.na(attr(x, "path")))
-})
-
-test_that("xlsform() accepts a custom path", {
-  x <- xlsform(
-    survey = data.frame(type = "text", name = "q1"),
-    path = "a/b.xlsx"
-  )
-  expect_equal(attr(x, "path"), "a/b.xlsx")
-})
-
-test_that("xlsform() errors when no sheets are provided", {
-  expect_error(xlsform(), class = "rlang_error")
-})
-
-test_that("xlsform() errors when a sheet is unnamed", {
-  expect_error(
-    xlsform(data.frame(type = "text", name = "q1")),
-    class = "rlang_error"
-  )
-})
-
-test_that("xlsform() errors when a sheet is not a data frame", {
-  expect_error(
-    xlsform(survey = list(type = "text", name = "q1")),
-    class = "rlang_error"
-  )
-})
-
-test_that("xlsform() produces the same structure as read_xlsform()", {
-  path <- system.file("extdata/form.xlsx", package = "idem")
-  from_file <- read_xlsform(path)
-  from_dfs <- xlsform(
-    survey = from_file$survey,
-    choices = from_file$choices,
-    path = path
-  )
-  expect_equal(class(from_file), class(from_dfs))
-  expect_equal(names(from_file), names(from_dfs))
-  expect_equal(attr(from_file, "path"), attr(from_dfs, "path"))
-})
-
-# ── read_xlsform ──────────────────────────────────────────────────────────────
-
-test_that("read_xlsform errors when a required sheet is missing", {
-  path <- system.file("extdata/form.xlsx", package = "idem")
-  expect_error(
-    read_xlsform(path, required_sheets = c("survey", "settings")),
-    class = "rlang_error"
-  )
-})
-
-test_that("read_xlsform warns and excludes a missing optional sheet", {
-  path <- system.file("extdata/form.xlsx", package = "idem")
-  expect_warning(
-    form <- read_xlsform(path, optional_sheets = "settings"),
-    regexp = "settings"
-  )
-  expect_null(form$settings)
-  expect_s3_class(form, "xlsform")
-})
-
-test_that("read_xlsform includes an optional sheet when present", {
-  path <- system.file("extdata/form.xlsx", package = "idem")
-  # "choices" is present in the form; request it as optional
-  form <- read_xlsform(
-    path,
-    required_sheets = "survey",
-    optional_sheets = "choices"
-  )
-  expect_true("choices" %in% names(form))
-  expect_s3_class(form, "xlsform")
-})
 
 # ── integration tests with real form ──────────────────────────────────────────
 
