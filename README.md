@@ -79,11 +79,12 @@ throughout this tutorial.
 
 ``` r
 path <- system.file("extdata/form.xlsx", package = "idem")
-target <- read_xlsform(path)
+target <- read_xlsform(path, optional_sheets = "settings")
 target
 #> <xlsform> '/tmp/Rtmptnm12L/temp_libpath3c5523573ac07/idem/extdata/form.xlsx'
 #> • survey: 315 rows
 #> • choices: 2497 rows
+#> • settings: 1 row
 ```
 
 ------------------------------------------------------------------------
@@ -287,10 +288,22 @@ issue:
   sheet. Load the form with `optional_sheets = "settings"` to enable
   this check.
 
-The fixture form is clean:
+The fixture form is clean (settings sheet loaded, `default_language` is
+set):
 
 ``` r
 check_labels(target)
+#> # A tibble: 0 × 5
+#> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
+#> #   detail <chr>
+```
+
+A multi-language form loaded *without* the settings sheet triggers the
+`default_language` warning:
+
+``` r
+target_no_settings <- read_xlsform(path)
+check_labels(target_no_settings)
 #> # A tibble: 1 × 5
 #>   check  severity name  list_name detail                                        
 #>   <chr>  <chr>    <chr> <chr>     <chr>                                         
@@ -339,11 +352,9 @@ against an identical form returns an empty tibble.
 
 ``` r
 validate_xlsform(target, target)
-#> # A tibble: 2 × 5
-#>   check  severity name  list_name detail                                        
-#>   <chr>  <chr>    <chr> <chr>     <chr>                                         
-#> 1 labels warning  <NA>  <NA>      "Form has 2 languages (\"english (en)\", \"fr…
-#> 2 labels warning  <NA>  <NA>      "Form has 2 languages (\"english (en)\", \"fr…
+#> # A tibble: 0 × 5
+#> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
+#> #   detail <chr>
 ```
 
 ### What is and isn’t flagged

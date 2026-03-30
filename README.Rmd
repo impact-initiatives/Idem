@@ -89,7 +89,7 @@ this tutorial.
 
 ```{r load-form}
 path <- system.file("extdata/form.xlsx", package = "idem")
-target <- read_xlsform(path)
+target <- read_xlsform(path, optional_sheets = "settings")
 target
 ```
 
@@ -158,10 +158,18 @@ xlsform_translations(target)
   label language but no `default_language` is set in the `settings` sheet.
   Load the form with `optional_sheets = "settings"` to enable this check.
 
-The fixture form is clean:
+The fixture form is clean (settings sheet loaded, `default_language` is set):
 
 ```{r check-labels-clean}
 check_labels(target)
+```
+
+A multi-language form loaded *without* the settings sheet triggers the
+`default_language` warning:
+
+```{r check-labels-no-settings}
+target_no_settings <- read_xlsform(path)
+check_labels(target_no_settings)
 ```
 
 A form with a bare `label` column and a mismatched `hint` language:
