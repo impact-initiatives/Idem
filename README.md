@@ -11,8 +11,9 @@
 idem helps you validate XLSForm files against an authoritative reference
 form. It is designed for workflows where a canonical form is maintained
 centrally and partner or localised copies must stay in sync with it —
-catching drift in question names, choice lists, and answer options
-before it causes problems in data collection or analysis.
+catching drift in question names, choice lists, answer options, and
+translation columns before it causes problems in data collection or
+analysis.
 
 ## Installation
 
@@ -51,7 +52,8 @@ This means:
 
 ## The checks
 
-Four checks apply this rule to different parts of the form:
+Four checks apply the subset rule to different parts of the form, and
+one check inspects each form independently for translation consistency:
 
 | Check | What is tested |
 |----|----|
@@ -59,6 +61,7 @@ Four checks apply this rule to different parts of the form:
 | `list_names` | Every choice list *defined* in `target`’s choices sheet must also be defined in `dev`’s choices sheet. |
 | `survey_list_names` | Every choice list *referenced* by `target`’s survey questions must also be referenced in `dev`’s survey questions. |
 | `choices` | For every shared list, every choice option in `target` must exist in the same list in `dev`. |
+| `labels` | Translation columns in `target` and `dev` must be well-formed and language-consistent (runs `check_labels()` on each form). |
 
 All checks return a tidy tibble — one row per issue — so results can be
 filtered, counted, and passed to downstream reporting tools.
@@ -242,6 +245,80 @@ xlsform_choices(target)[["l_yn"]]
 
 ------------------------------------------------------------------------
 
+## Checking translations
+
+### Declared translations
+
+`xlsform_translations()` extracts every translated column from a form as
+a tidy tibble — one row per field–language combination.
+
+``` r
+xlsform_translations(target)
+#> # A tibble: 8 × 4
+#>   sheet   field              language     column                          
+#>   <chr>   <chr>              <chr>        <chr>                           
+#> 1 survey  label              english (en) label::english (en)             
+#> 2 survey  label              french (fr)  label::french (fr)              
+#> 3 survey  hint               english (en) hint::english (en)              
+#> 4 survey  hint               french (fr)  hint::french (fr)               
+#> 5 survey  constraint_message english (en) constraint_message::english (en)
+#> 6 survey  constraint_message french (fr)  constraint_message::french (fr) 
+#> 7 choices label              english (en) label::english (en)             
+#> 8 choices label              french (fr)  label::french (fr)
+```
+
+### Translation consistency
+
+`check_labels()` inspects a single form for two classes of translation
+error:
+
+- **Bare field** — a translatable column (e.g. `label`, `hint`) present
+  without a `::language (code)` suffix.
+- **Language mismatch** — a non-`label` field declared in a language not
+  present on any `label` column.
+
+The fixture form is clean:
+
+``` r
+check_labels(target)
+#> # A tibble: 0 × 5
+#> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
+#> #   detail <chr>
+```
+
+A form with a bare `label` column and a mismatched `hint` language:
+
+``` r
+bad <- xlsform(
+  survey = tibble::tibble(
+    type                  = "text",
+    name                  = "q1",
+    label                 = "Name"
+  )
+)
+check_labels(bad)
+#> # A tibble: 1 × 5
+#>   check  severity name  list_name detail
+#>   <chr>  <chr>    <chr> <chr>     <chr> 
+#> 1 labels error    label <NA>      label
+
+mismatch <- xlsform(
+  survey = tibble::tibble(
+    type                  = "text",
+    name                  = "q1",
+    `label::English (en)` = "Name",
+    `hint::Spanish (es)`  = "Tu nombre"
+  )
+)
+check_labels(mismatch)
+#> # A tibble: 1 × 5
+#>   check  severity name  list_name detail            
+#>   <chr>  <chr>    <chr> <chr>     <chr>             
+#> 1 labels error    hint  <NA>      hint::Spanish (es)
+```
+
+------------------------------------------------------------------------
+
 ## Validating forms
 
 ### The clean case — no issues
@@ -362,7 +439,8 @@ target_with_issues <- xlsform(survey = target_survey, choices = target_choices)
 
 ### Running all checks at once
 
-`validate_xlsform()` runs every check and returns a combined tibble.
+`validate_xlsform()` runs every check — including `"labels"` on both
+forms — and returns a combined tibble.
 
 ``` r
 issues <- validate_xlsform(target_with_issues, dev)
@@ -446,6 +524,32 @@ knitr::kable(result_ch)
 | check | severity | name | list_name | detail |
 |:---|:---|:---|:---|:---|
 | choices | error | mandatory_option | l_yn | Choice ‘mandatory_option’ in list ‘l_yn’ is present in target but not in dev. |
+
+### `check_labels()`
+
+Unlike the `validate_*()` functions, `check_labels()` operates on a
+**single** form and checks translation column consistency independently.
+When called via `validate_xlsform()` with `checks = "labels"`, it runs
+on both `target` and `dev` and combines the results.
+
+Here `dev_bad_labels` has a bare `label` column and a hint in a language
+not declared on any label column:
+
+``` r
+dev_bad_labels <- xlsform(
+  survey = tibble::tibble(
+    type                 = "text",
+    name                 = "q1",
+    label                = "Name",
+    `hint::Spanish (es)` = "Tu nombre"
+  )
+)
+validate_xlsform(target_with_issues, dev_bad_labels, checks = "labels")
+#> # A tibble: 1 × 5
+#>   check  severity name  list_name detail
+#>   <chr>  <chr>    <chr> <chr>     <chr> 
+#> 1 labels error    label <NA>      label
+```
 
 ------------------------------------------------------------------------
 
