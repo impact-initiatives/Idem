@@ -1,9 +1,10 @@
 Package: Idem
-Title: What the Package Does (One Line, Title Case)
+Title: XLSForm Comparison and Validation
 Version: 0.0.0.9000
 Authors@R: 
     person("Iyed", "GHEDAMSI", , "iyed.ghedamsi@impact-initiatives.org", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: Reads and compares XLSForm survey files, validating that a target form
+    is consistent with a development form.
 License: GPL (>= 3)
 URL: https://impact-initiatives.github.io/Idem/
 Encoding: UTF-8
