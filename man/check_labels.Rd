@@ -34,17 +34,25 @@ column names, so \code{" label::English (en) "} is treated the same as
 \code{"label::English (en)"}.
 \subsection{Checks performed}{
 
-\strong{Bare field (error)} — A translatable field is present as a plain column
-(e.g. \code{label}, \code{hint}) with no \verb{::language} suffix. The user must replace
-it with an explicitly language-tagged column such as
-\code{label::English (en)}. Applies to \code{label} in both the \code{survey} and
+\strong{Bare or malformed column (error)} — A translatable field is present
+either as a plain column with no suffix (e.g. \code{label}, \code{hint}) or as a
+malformed translation attempt that does not follow the
+\code{field::Language (code)} convention (e.g. \code{label::English} without an ISO
+code, \code{label::French (FR)} with an uppercase code, \code{label:Kreyol} with a
+single colon). The user must use an explicitly language-tagged column such
+as \code{label::English (en)}. Applies to \code{label} in both the \code{survey} and
 \code{choices} sheets; applies to all other fields in \code{survey} only.
 
-\strong{Language mismatch (error)} — A non-\code{label} translatable field is
-declared with a language that was not declared for \code{label}. For example,
-if labels are declared in French and English but a \code{hint} column appears
-in Spanish, that Spanish \code{hint} is an error. The languages detected on
-\code{label} columns form the reference set.
+\strong{Survey–choices label language mismatch (error)} — The set of languages
+declared on \code{label} columns in the \code{survey} sheet must exactly match the
+set declared on \code{label} columns in the \code{choices} sheet. Any language
+present in one sheet but absent from the other is an error. This check is
+skipped when the form has no \code{choices} sheet.
+
+\strong{Non-label field language mismatch (error)} — A non-\code{label} translatable
+field in the \code{survey} sheet (e.g. \code{hint}, \code{constraint_message}) is declared
+with a language that was not declared for any \code{label} column in \code{survey}.
+The languages detected on survey \code{label} columns form the reference set.
 
 \strong{Missing \code{default_language} (warning)} — When a form declares more than
 one label language, XLSForm best practice requires a \code{default_language}
