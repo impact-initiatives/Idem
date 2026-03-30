@@ -46,6 +46,14 @@ if labels are declared in French and English but a \code{hint} column appears
 in Spanish, that Spanish \code{hint} is an error. The languages detected on
 \code{label} columns form the reference set.
 }
+
+\subsection{Checks not yet performed}{
+
+\strong{Missing \code{default_language} (warning)} — When multiple translations are
+present, XLSForm best practice requires a \code{default_language} entry in the
+\code{settings} sheet. This check is deferred pending a dedicated \code{settings}
+sheet accessor (tracked in issue #3).
+}
 }
 \examples{
 # No issues: the fixture form uses valid translated columns throughout

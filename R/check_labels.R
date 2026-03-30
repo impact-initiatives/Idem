@@ -50,6 +50,13 @@ translatable_fields <- c(
 #' in Spanish, that Spanish `hint` is an error. The languages detected on
 #' `label` columns form the reference set.
 #'
+#' ## Checks not yet performed
+#'
+#' **Missing `default_language` (warning)** — When multiple translations are
+#' present, XLSForm best practice requires a `default_language` entry in the
+#' `settings` sheet. This check is deferred pending a dedicated `settings`
+#' sheet accessor (tracked in issue #3).
+#'
 #' @param x An `xlsform` object as returned by [read_xlsform()] or
 #'   [xlsform()].
 #' @param ... Ignored; present for S3 method compatibility.
