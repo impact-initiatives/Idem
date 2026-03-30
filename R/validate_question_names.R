@@ -58,7 +58,9 @@ validate_question_names <- function(target, dev) {
     name = missing,
     list_name = NA_character_,
     detail = paste0(
-      "Question '", missing, "' is present in target but not in dev."
+      "Question '",
+      missing,
+      "' is present in target but not in dev."
     )
   )
 }

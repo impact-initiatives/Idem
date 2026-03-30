@@ -73,7 +73,8 @@ validate_survey_list_names <- function(target, dev) {
     name = missing,
     list_name = NA_character_,
     detail = paste0(
-      "List '", missing,
+      "List '",
+      missing,
       "' is referenced in target's survey but not in dev's survey."
     )
   )

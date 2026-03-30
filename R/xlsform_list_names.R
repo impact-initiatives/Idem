@@ -51,8 +51,10 @@ xlsform_list_names.default <- function(x, ...) {
 #' @rdname xlsform_list_names
 xlsform_list_names.xlsform <- function(x, ...) {
   list_referencing_types <- c(
-    "select_one", "select_multiple",
-    "select_one_external", "select_multiple_external",
+    "select_one",
+    "select_multiple",
+    "select_one_external",
+    "select_multiple_external",
     "rank"
   )
 
@@ -66,7 +68,8 @@ xlsform_list_names.xlsform <- function(x, ...) {
   )
 
   list_names <- separated[["list_name"]][
-    separated[["type_prefix"]] %in% list_referencing_types &
+    separated[["type_prefix"]] %in%
+      list_referencing_types &
       !is.na(separated[["list_name"]])
   ]
 

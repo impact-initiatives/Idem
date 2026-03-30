@@ -82,7 +82,10 @@ validate_xlsform <- function(
   }
 
   valid_checks <- c(
-    "question_names", "list_names", "survey_list_names", "choices"
+    "question_names",
+    "list_names",
+    "survey_list_names",
+    "choices"
   )
   unknown <- setdiff(checks, valid_checks)
   if (length(unknown) > 0L) {
@@ -95,10 +98,10 @@ validate_xlsform <- function(
   checks <- match.arg(checks, valid_checks, several.ok = TRUE)
 
   runners <- list(
-    question_names    = validate_question_names,
-    list_names        = validate_list_names,
+    question_names = validate_question_names,
+    list_names = validate_list_names,
     survey_list_names = validate_survey_list_names,
-    choices           = validate_choices
+    choices = validate_choices
   )
 
   results <- purrr::map(
@@ -109,11 +112,11 @@ validate_xlsform <- function(
 
   if (nrow(results) == 0L) {
     return(tibble::tibble(
-      check     = character(),
-      severity  = character(),
-      name      = character(),
+      check = character(),
+      severity = character(),
+      name = character(),
       list_name = character(),
-      detail    = character()
+      detail = character()
     ))
   }
 
