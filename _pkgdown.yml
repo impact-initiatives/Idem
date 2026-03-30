@@ -27,6 +27,7 @@ reference:
       - xlsform_list_names
       - xlsform_choices_list_names
       - xlsform_choices
+      - xlsform_translations
 
   - title: "Validate"
     desc: >
@@ -40,3 +41,10 @@ reference:
       - validate_list_names
       - validate_survey_list_names
       - validate_choices
+
+  - title: "Reference data"
+    desc: >
+      Constants and lookup tables used internally and available for reuse in
+      downstream tooling.
+    contents:
+      - translatable_fields

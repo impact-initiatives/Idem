@@ -26,8 +26,9 @@ github
 gsk
 http
 https
+IANA
 impl
-indicator’
+indicator'
 io
 iyed
 Iyed
@@ -44,8 +45,9 @@ Namespacing
 navbar
 normalises
 ODK
-option’
+option'
 orchestrator
+parenthesised
 pkgdown
 pre
 precommit
@@ -63,10 +65,12 @@ Rmd
 roxygen
 RoxygenNote
 Rscript
-scale’
+scale'
 stringr
 styler
+subtag
 testthat
+textarea
 tibble
 tibbles
 tidyr
