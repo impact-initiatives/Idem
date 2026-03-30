@@ -39,10 +39,14 @@ field–language combination.
 \details{
 A valid translated column name consists of a \link{translatable_fields} prefix,
 \code{::}, a language name (which may contain non-ASCII characters), a single
-space, and a parenthesised Latin alphabetic code — for example
+space, and a parenthesised IANA language subtag in lowercase — for example
 \code{"label::English (en)"} or \code{"hint::Français (fr)"}. Columns that do not
 follow this convention (bare \code{"label"}, \code{"label::English"} without a code,
-\code{"label::Spanish(es)"} without a space) are not returned.
+\code{"label::Spanish(es)"} without a space, \code{"label::French (FR)"} with an
+uppercase code) are not returned.
+
+Use the \href{https://www.iana.org/assignments/language-subtag-registry}{IANA language subtag registry} to look up
+the correct code for a given language.
 
 Column names are trimmed of leading and trailing whitespace before matching,
 so \code{" label::English (en) "} is treated identically to

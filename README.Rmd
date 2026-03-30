@@ -131,6 +131,12 @@ xlsform_choices(target)[["l_yn"]]
 
 ## Checking translations
 
+Translated columns follow the convention `field::Language name (code)`, e.g.
+`label::English (en)` or `hint::Français (fr)`. The parenthesised code must
+be a lowercase [IANA language subtag](
+https://www.iana.org/assignments/language-subtag-registry) — use that
+registry to look up the correct code for a given language.
+
 ### Declared translations
 
 `xlsform_translations()` extracts every translated column from a form as a

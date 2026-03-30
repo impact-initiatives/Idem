@@ -72,10 +72,15 @@ is_malformed_translation_col <- function(x) {
 #'
 #' A valid translated column name consists of a [translatable_fields] prefix,
 #' `::`, a language name (which may contain non-ASCII characters), a single
-#' space, and a parenthesised Latin alphabetic code — for example
+#' space, and a parenthesised IANA language subtag in lowercase — for example
 #' `"label::English (en)"` or `"hint::Français (fr)"`. Columns that do not
 #' follow this convention (bare `"label"`, `"label::English"` without a code,
-#' `"label::Spanish(es)"` without a space) are not returned.
+#' `"label::Spanish(es)"` without a space, `"label::French (FR)"` with an
+#' uppercase code) are not returned.
+#'
+#' Use the [IANA language subtag registry](
+#' https://www.iana.org/assignments/language-subtag-registry) to look up
+#' the correct code for a given language.
 #'
 #' Column names are trimmed of leading and trailing whitespace before matching,
 #' so `" label::English (en) "` is treated identically to

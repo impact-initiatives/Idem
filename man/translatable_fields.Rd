@@ -16,6 +16,11 @@ translations in XLSForm. Each field can be suffixed with a language tag
 (e.g. \code{label::English (en)}, \code{hint::French (fr)}) following the
 \href{https://xlsform.org/en/#multiple-language-support}{XLSForm multiple language convention}.
 }
+\details{
+The parenthesised code at the end of the suffix (e.g. \code{en}, \code{fr}) should be
+a valid IANA language subtag. The full registry is available at
+\url{https://www.iana.org/assignments/language-subtag-registry}.
+}
 \examples{
 translatable_fields
 

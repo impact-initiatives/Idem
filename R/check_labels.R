@@ -6,6 +6,10 @@
 #' [XLSForm multiple language convention](
 #' https://xlsform.org/en/#multiple-language-support).
 #'
+#' The parenthesised code at the end of the suffix (e.g. `en`, `fr`) should be
+#' a valid IANA language subtag. The full registry is available at
+#' <https://www.iana.org/assignments/language-subtag-registry>.
+#'
 #' @examples
 #' translatable_fields
 #'
