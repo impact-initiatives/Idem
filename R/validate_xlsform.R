@@ -16,10 +16,10 @@
 #' | `"question_names"` | Every question name in `target` must exist in `dev`. |
 #' | `"list_names"` | Every list name *defined* in `target`'s choices sheet must also be defined in `dev`'s choices sheet. |
 #' | `"survey_list_names"` | Every list name *referenced* in `target`'s survey questions must also be referenced in `dev`'s survey questions. |
+# nolint start: line_length_linter.
 #' | `"choices"` | For every shared list, every choice option in `target` must exist in the same list in `dev`. |
-#' | `"labels"` | Translation columns in `target` and `dev` are well-formed
-#' and language-consistent. Also warns when a multi-language form has no
-#' `default_language` set in the `settings` sheet. |
+#' | `"labels"` | Translation columns in `target` and `dev` are well-formed and language-consistent. Also warns when a multi-language form has no `default_language` set in the `settings` sheet. |
+# nolint end
 #'
 #' The `"labels"` check delegates to [check_labels()] and runs it on both
 #' `target` and `dev` independently.

@@ -41,9 +41,7 @@ tibble.
    \code{"list_names"} \tab Every list name \emph{defined} in \code{target}'s choices sheet must also be defined in \code{dev}'s choices sheet. \cr
    \code{"survey_list_names"} \tab Every list name \emph{referenced} in \code{target}'s survey questions must also be referenced in \code{dev}'s survey questions. \cr
    \code{"choices"} \tab For every shared list, every choice option in \code{target} must exist in the same list in \code{dev}. \cr
-   \code{"labels"} \tab Translation columns in \code{target} and \code{dev} are well-formed \cr
-   and language-consistent. Also warns when a multi-language form has no \tab  \cr
-   \code{default_language} set in the \code{settings} sheet. \tab  \cr
+   \code{"labels"} \tab Translation columns in \code{target} and \code{dev} are well-formed and language-consistent. Also warns when a multi-language form has no \code{default_language} set in the \code{settings} sheet. \cr
 }
 
 
