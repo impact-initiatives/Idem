@@ -71,7 +71,7 @@ check inspects each form independently for translation consistency:
 | `list_names` | Every choice list *defined* in `target`'s choices sheet must also be defined in `dev`'s choices sheet. |
 | `survey_list_names` | Every choice list *referenced* by `target`'s survey questions must also be referenced in `dev`'s survey questions. |
 | `choices` | For every shared list, every choice option in `target` must exist in the same list in `dev`. |
-| `labels` | Translation columns in `target` and `dev` must be well-formed and language-consistent (runs `check_labels()` on each form). |
+| `labels` | Each form's translation columns are checked independently for malformed column names (bare or incorrectly formatted), survey–choices label language mismatches, non-label field language mismatches, and a missing `default_language` in the `settings` sheet (runs `check_labels()` on each form). |
 
 All checks return a tidy tibble — one row per issue — so results can be
 filtered, counted, and passed to downstream reporting tools.

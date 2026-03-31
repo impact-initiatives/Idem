@@ -1,23 +1,26 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+
 
 # idem
 
 <!-- badges: start -->
-
 [![R-CMD-check](https://github.com/impact-initiatives/idem/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/impact-initiatives/idem/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-idem helps you validate XLSForm files against an authoritative reference
-form. It is designed for workflows where a canonical form is maintained
-centrally and partner or localised copies must stay in sync with it —
-catching drift in question names, choice lists, answer options, and
-translation columns before it causes problems in data collection or
-analysis.
+idem helps you validate XLSForm files against an authoritative reference form.
+It is designed for workflows where a canonical form is maintained centrally and
+partner or localised copies must stay in sync with it — catching drift in
+question names, choice lists, answer options, and translation columns before it
+causes problems in data collection or analysis.
 
 ## Installation
 
-``` r
+```r
 # install.packages("pak")
 pak::pak("impact-initiatives/idem")
 ```
@@ -26,68 +29,72 @@ pak::pak("impact-initiatives/idem")
 
 ### `target` — the authoritative reference form
 
-The **`target`** form is the canonical, centrally maintained XLSForm. It
-defines the full set of permitted questions, choice lists, and answer
-options for a given data collection exercise. Think of it as the source
-of truth: what *can* legally appear in any deployed copy of the form.
+The **`target`** form is the canonical, centrally maintained XLSForm. It defines
+the full set of permitted questions, choice lists, and answer options for a given
+data collection exercise. Think of it as the source of truth: what *can* legally
+appear in any deployed copy of the form.
 
 ### `dev` — the form being validated
 
-The **`dev`** form is the copy you want to check — a localised
-adaptation, a partner’s version, or a form deployed in a specific
-context. It is validated *against* `target` to confirm it stays within
-the boundaries that `target` defines.
+The **`dev`** form is the copy you want to check — a localised adaptation, a
+partner's version, or a form deployed in a specific context. It is validated
+*against* `target` to confirm it stays within the boundaries that `target`
+defines.
 
 ### The rule: target must be a subset of dev
 
-idem enforces one rule: **everything present in `target` must also exist
-in `dev`**. In other words, `target` is a valid *subset* of `dev`.
+idem enforces one rule: **everything present in `target` must also exist in
+`dev`**. In other words, `target` is a valid *subset* of `dev`.
 
 This means:
 
-- `dev` is allowed to have questions, lists, or options that `target`
-  does not have — that is expected and fine.
-- `dev` is **not** allowed to be missing questions, lists, or options
-  that `target` requires — those gaps are flagged as errors.
+- `dev` is allowed to have questions, lists, or options that `target` does not
+  have — that is expected and fine.
+- `dev` is **not** allowed to be missing questions, lists, or options that
+  `target` requires — those gaps are flagged as errors.
 
 ## The checks
 
-Four checks apply the subset rule to different parts of the form, and
-one check inspects each form independently for translation consistency:
+Four checks apply the subset rule to different parts of the form, and one
+check inspects each form independently for translation consistency:
 
 | Check | What is tested |
-|----|----|
+|---|---|
 | `question_names` | Every question name in `target` must exist in `dev`. |
-| `list_names` | Every choice list *defined* in `target`’s choices sheet must also be defined in `dev`’s choices sheet. |
-| `survey_list_names` | Every choice list *referenced* by `target`’s survey questions must also be referenced in `dev`’s survey questions. |
+| `list_names` | Every choice list *defined* in `target`'s choices sheet must also be defined in `dev`'s choices sheet. |
+| `survey_list_names` | Every choice list *referenced* by `target`'s survey questions must also be referenced in `dev`'s survey questions. |
 | `choices` | For every shared list, every choice option in `target` must exist in the same list in `dev`. |
-| `labels` | Translation columns in `target` and `dev` must be well-formed and language-consistent (runs `check_labels()` on each form). |
+| `labels` | Each form's translation columns are checked independently for malformed column names (bare or incorrectly formatted), survey–choices label language mismatches, non-label field language mismatches, and a missing `default_language` in the `settings` sheet (runs `check_labels()` on each form). |
 
 All checks return a tidy tibble — one row per issue — so results can be
 filtered, counted, and passed to downstream reporting tools.
 
-------------------------------------------------------------------------
+---
 
 ## Setup
 
+
 ``` r
 library(idem)
+#> Error in `library()`:
+#> ! there is no package called 'idem'
 ```
 
-idem ships with a sample XLSForm. We will use it as our reference
-throughout this tutorial.
+idem ships with a sample XLSForm. We will use it as our reference throughout
+this tutorial.
+
 
 ``` r
 path <- system.file("extdata/form.xlsx", package = "idem")
 target <- read_xlsform(path, optional_sheets = "settings")
+#> Error in `read_xlsform()`:
+#> ! could not find function "read_xlsform"
 target
-#> <xlsform> '/tmp/RtmpjxxefJ/temp_libpath47bb63b65ef05/idem/extdata/form.xlsx'
-#> • survey: 315 rows
-#> • choices: 2497 rows
-#> • settings: 1 row
+#> Error:
+#> ! object 'target' not found
 ```
 
-------------------------------------------------------------------------
+---
 
 ## Exploring a form
 
@@ -96,230 +103,109 @@ contents of any form.
 
 ### Question names
 
+
 ``` r
 xlsform_questions(target) |> head(15)
-#>  [1] "audit"           "start"           "end"             "today"          
-#>  [5] "deviceid"        "instance_name"   "recall_date"     "recall_event"   
-#>  [9] "recall_month"    "recall_event_en" "recall_event_fr" "introduction"   
-#> [13] "survey_modality" "enum_id"         "enum_gender"
+#> Error in `xlsform_questions()`:
+#> ! could not find function "xlsform_questions"
 ```
 
 ### Choice lists referenced in the survey
 
-These are the list names extracted from the `type` column — the second
-token in values like `select_one l_yn`.
+These are the list names extracted from the `type` column — the second token
+in values like `select_one l_yn`.
+
 
 ``` r
 xlsform_list_names(target)
-#>  [1] "l_survey_modality"                         
-#>  [2] "l_enum_id"                                 
-#>  [3] "l_gender"                                  
-#>  [4] "l_country"                                 
-#>  [5] "l_admin1"                                  
-#>  [6] "l_admin2"                                  
-#>  [7] "l_admin3"                                  
-#>  [8] "l_admin4"                                  
-#>  [9] "l_cluster_id"                              
-#> [10] "l_yn"                                      
-#> [11] "l_setting"                                 
-#> [12] "l_aap_priority_challenge"                  
-#> [13] "l_aap_priority_support_ngo"                
-#> [14] "l_aap_preferred_modality"                  
-#> [15] "l_yn_dnk_pnta"                             
-#> [16] "l_aap_received_assistance_date"            
-#> [17] "l_edu_level_grade"                         
-#> [18] "l_edu_barrier"                             
-#> [19] "l_snfi_shelter_type"                       
-#> [20] "l_snfi_shelter_type_individual"            
-#> [21] "l_snfi_shelter_issue"                      
-#> [22] "l_snfi_fds_cooking"                        
-#> [23] "l_snfi_fds_cooking_issue"                  
-#> [24] "l_snfi_fds"                                
-#> [25] "l_snfi_fds_sleeping_issue"                 
-#> [26] "l_snfi_fds_storing"                        
-#> [27] "l_snfi_fds_storing_issue"                  
-#> [28] "l_energy_lighting_source"                  
-#> [29] "l_hlp_occupancy"                           
-#> [30] "l_hlp_threat_eviction"                     
-#> [31] "l_wash_drinking_water_source"              
-#> [32] "l_wash_drinking_water_time_yn"             
-#> [33] "l_wash_drinking_water_time_sl"             
-#> [34] "l_wash_hwise"                              
-#> [35] "l_wash_sanitation_facility"                
-#> [36] "l_wash_handwashing_facility"               
-#> [37] "l_wash_handwashing_facility_observed_water"
-#> [38] "l_wash_soap_observed"                      
-#> [39] "l_wash_handwashing_facility_reported"      
-#> [40] "l_wash_soap_type"                          
-#> [41] "l_fsl_hhs"                                 
-#> [42] "l_fsl_source_food"                         
-#> [43] "l_fsl_lcsi"                                
-#> [44] "l_fsl_lcsi_other"                          
-#> [45] "l_fsl_lcsi_en_other"                       
-#> [46] "l_cm_expenditure_frequent"                 
-#> [47] "l_cm_expenditure_infrequent"               
-#> [48] "l_health_ind_healthcare_needed_type"       
-#> [49] "l_nut_ind_under5_sick_symptoms"            
-#> [50] "l_nut_ind_under5_sick_location"            
-#> [51] "l_prot_perceived_risk"                     
-#> [52] "l_prot_needs_1_services"                   
-#> [53] "l_prot_needs_1_justice"                    
-#> [54] "l_prot_needs_2_activities"                 
-#> [55] "l_prot_needs_2_social"                     
-#> [56] "l_prot_needs_3_movement"                   
-#> [57] "l_prot_child_sep_reason"
+#> Error in `xlsform_list_names()`:
+#> ! could not find function "xlsform_list_names"
 ```
 
 ### Choice lists defined in the choices sheet
 
+
 ``` r
 xlsform_choices_list_names(target)
-#>  [1] "l_survey_modality"                         
-#>  [2] "l_enum_id"                                 
-#>  [3] "l_gender"                                  
-#>  [4] "l_country"                                 
-#>  [5] "l_admin3"                                  
-#>  [6] "l_admin4"                                  
-#>  [7] "l_cluster_id"                              
-#>  [8] "l_yn"                                      
-#>  [9] "l_yn_dnk_pnta"                             
-#> [10] "l_setting"                                 
-#> [11] "l_ind_age_under1"                          
-#> [12] "l_edu_level_grade"                         
-#> [13] "l_edu_barrier"                             
-#> [14] "l_fsl_hhs"                                 
-#> [15] "l_fsl_source_food"                         
-#> [16] "l_fsl_lcsi"                                
-#> [17] "l_fsl_lcsi_other"                          
-#> [18] "l_fsl_lcsi_en_other"                       
-#> [19] "l_cm_income_source"                        
-#> [20] "l_nut_ind_under5_sick_symptoms"            
-#> [21] "l_nut_ind_under5_sick_location"            
-#> [22] "l_aap_priority_challenge"                  
-#> [23] "l_aap_priority_support_ngo"                
-#> [24] "l_aap_preferred_modality"                  
-#> [25] "l_aap_received_assistance_date"            
-#> [26] "l_snfi_shelter_type"                       
-#> [27] "l_snfi_shelter_type_individual"            
-#> [28] "l_snfi_shelter_issue"                      
-#> [29] "l_snfi_fds_cooking"                        
-#> [30] "l_snfi_fds_cooking_issue"                  
-#> [31] "l_snfi_fds"                                
-#> [32] "l_snfi_fds_storing"                        
-#> [33] "l_snfi_fds_sleeping_issue"                 
-#> [34] "l_snfi_fds_storing_issue"                  
-#> [35] "l_snfi_fds_personal_hygiene_issue"         
-#> [36] "l_hlp_threat_eviction"                     
-#> [37] "l_wash_drinking_water_source"              
-#> [38] "l_wash_drinking_water_time_yn"             
-#> [39] "l_wash_drinking_water_time_sl"             
-#> [40] "l_wash_hwise"                              
-#> [41] "l_wash_sanitation_facility"                
-#> [42] "l_wash_handwashing_facility"               
-#> [43] "l_wash_handwashing_facility_observed_water"
-#> [44] "l_wash_handwashing_facility_observed_soap" 
-#> [45] "l_wash_handwashing_facility_reported"      
-#> [46] "l_wash_soap_observed"                      
-#> [47] "l_wash_soap_type"                          
-#> [48] "l_health_ind_healthcare_needed_type"       
-#> [49] "l_prot_perceived_risk"                     
-#> [50] "l_energy_lighting_source"                  
-#> [51] "l_hlp_occupancy"                           
-#> [52] "l_prot_child_sep_reason"                   
-#> [53] "l_prot_needs_1_services"                   
-#> [54] "l_prot_needs_1_justice"                    
-#> [55] "l_prot_needs_2_activities"                 
-#> [56] "l_prot_needs_2_social"                     
-#> [57] "l_prot_needs_3_movement"                   
-#> [58] "l_cm_expenditure_frequent"                 
-#> [59] "l_cm_expenditure_infrequent"               
-#> [60] "l_admin1"                                  
-#> [61] "l_admin2"
+#> Error in `xlsform_choices_list_names()`:
+#> ! could not find function "xlsform_choices_list_names"
 ```
 
 ### Choice options per list
 
+
 ``` r
 xlsform_choices(target)[["l_yn"]]
-#> [1] "yes" "no"
+#> Error in `xlsform_choices()`:
+#> ! could not find function "xlsform_choices"
 ```
 
-------------------------------------------------------------------------
+---
 
 ## Checking translations
 
-Translated columns follow the convention `field::Language name (code)`,
-e.g. `label::English (en)` or `hint::Français (fr)`. The parenthesised
-code must be a lowercase [IANA language
-subtag](https://www.iana.org/assignments/language-subtag-registry) — use
-that registry to look up the correct code for a given language.
+Translated columns follow the convention `field::Language name (code)`, e.g.
+`label::English (en)` or `hint::Français (fr)`. The parenthesised code must
+be a lowercase [IANA language subtag](
+https://www.iana.org/assignments/language-subtag-registry) — use that
+registry to look up the correct code for a given language.
 
 ### Declared translations
 
-`xlsform_translations()` extracts every translated column from a form as
-a tidy tibble — one row per field–language combination.
+`xlsform_translations()` extracts every translated column from a form as a
+tidy tibble — one row per field–language combination.
+
 
 ``` r
 xlsform_translations(target)
-#> # A tibble: 8 × 4
-#>   sheet   field              language     column                          
-#>   <chr>   <chr>              <chr>        <chr>                           
-#> 1 survey  label              english (en) label::english (en)             
-#> 2 survey  label              french (fr)  label::french (fr)              
-#> 3 survey  hint               english (en) hint::english (en)              
-#> 4 survey  hint               french (fr)  hint::french (fr)               
-#> 5 survey  constraint_message english (en) constraint_message::english (en)
-#> 6 survey  constraint_message french (fr)  constraint_message::french (fr) 
-#> 7 choices label              english (en) label::english (en)             
-#> 8 choices label              french (fr)  label::french (fr)
+#> Error in `xlsform_translations()`:
+#> ! could not find function "xlsform_translations"
 ```
 
 ### Translation consistency
 
-`check_labels()` inspects a single form for four classes of translation
-issue:
+`check_labels()` inspects a single form for four classes of translation issue:
 
-- **Bare or malformed column (error)** — a translatable column
-  (e.g. `label`, `hint`) is present either without a `::language (code)`
-  suffix (bare, e.g. `label`) or with a malformed suffix that does not
-  follow the `field::Language (code)` convention (e.g. `label::English`
-  without an ISO code, `label::French (FR)` with an uppercase code,
-  `label:Kreyol` with a single colon).
-- **Survey–choices label language mismatch (error)** — the set of
-  languages declared on `label` columns in the `survey` sheet must
-  exactly match those declared on `label` columns in the `choices`
-  sheet.
-- **Non-label field language mismatch (error)** — a non-`label` field
-  (e.g. `hint`, `constraint_message`) is declared in a language not
-  present on any `label` column in `survey`.
-- **Missing `default_language` (warning)** — the form declares more than
-  one label language but no `default_language` is set in the `settings`
-  sheet. Load the form with `optional_sheets = "settings"` to enable
-  this check.
+- **Bare or malformed column (error)** — a translatable column (e.g. `label`,
+  `hint`) is present either without a `::language (code)` suffix (bare, e.g.
+  `label`) or with a malformed suffix that does not follow the
+  `field::Language (code)` convention (e.g. `label::English` without an ISO
+  code, `label::French (FR)` with an uppercase code, `label:Kreyol` with a
+  single colon).
+- **Survey–choices label language mismatch (error)** — the set of languages
+  declared on `label` columns in the `survey` sheet must exactly match those
+  declared on `label` columns in the `choices` sheet.
+- **Non-label field language mismatch (error)** — a non-`label` field (e.g.
+  `hint`, `constraint_message`) is declared in a language not present on any
+  `label` column in `survey`.
+- **Missing `default_language` (warning)** — the form declares more than one
+  label language but no `default_language` is set in the `settings` sheet.
+  Load the form with `optional_sheets = "settings"` to enable this check.
 
-The fixture form is clean (settings sheet loaded, `default_language` is
-set):
+The fixture form is clean (settings sheet loaded, `default_language` is set):
+
 
 ``` r
 check_labels(target)
-#> # A tibble: 0 × 5
-#> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
-#> #   detail <chr>
+#> Error in `check_labels()`:
+#> ! could not find function "check_labels"
 ```
 
 A multi-language form loaded *without* the settings sheet triggers the
 `default_language` warning:
 
+
 ``` r
 target_no_settings <- read_xlsform(path)
+#> Error in `read_xlsform()`:
+#> ! could not find function "read_xlsform"
 check_labels(target_no_settings)
-#> # A tibble: 1 × 5
-#>   check  severity name  list_name detail                                        
-#>   <chr>  <chr>    <chr> <chr>     <chr>                                         
-#> 1 labels warning  <NA>  <NA>      "Form has 2 languages (\"english (en)\", \"fr…
+#> Error in `check_labels()`:
+#> ! could not find function "check_labels"
 ```
 
 A form with a bare `label` column and a mismatched `hint` language:
+
 
 ``` r
 bad <- xlsform(
@@ -329,11 +215,11 @@ bad <- xlsform(
     label                 = "Name"
   )
 )
+#> Error in `xlsform()`:
+#> ! could not find function "xlsform"
 check_labels(bad)
-#> # A tibble: 1 × 5
-#>   check  severity name  list_name detail                                        
-#>   <chr>  <chr>    <chr> <chr>     <chr>                                         
-#> 1 labels error    label <NA>      "\"label\" is a bare field — use a language s…
+#> Error in `check_labels()`:
+#> ! could not find function "check_labels"
 
 mismatch <- xlsform(
   survey = tibble::tibble(
@@ -343,232 +229,276 @@ mismatch <- xlsform(
     `hint::Spanish (es)`  = "Tu nombre"
   )
 )
+#> Error in `xlsform()`:
+#> ! could not find function "xlsform"
 check_labels(mismatch)
-#> # A tibble: 1 × 5
-#>   check  severity name  list_name detail                                        
-#>   <chr>  <chr>    <chr> <chr>     <chr>                                         
-#> 1 labels error    hint  <NA>      "\"hint::Spanish (es)\" uses language \"Spani…
+#> Error in `check_labels()`:
+#> ! could not find function "check_labels"
 ```
 
-------------------------------------------------------------------------
+---
 
 ## Validating forms
 
 ### The clean case — no issues
 
-A form is always a valid subset of itself. Running `validate_xlsform()`
-against an identical form returns an empty tibble.
+A form is always a valid subset of itself. Running `validate_xlsform()` against
+an identical form returns an empty tibble.
+
 
 ``` r
 validate_xlsform(target, target)
-#> # A tibble: 0 × 5
-#> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
-#> #   detail <chr>
+#> Error in `validate_xlsform()`:
+#> ! could not find function "validate_xlsform"
 ```
 
-### What is and isn’t flagged
+### What is and isn't flagged
 
-The following examples make the subset rule concrete by demonstrating
-the **passing direction** for each check: `dev` carrying extra content
-that `target` doesn’t require. In every case the result is an empty
-tibble.
+The following examples make the subset rule concrete by demonstrating the
+**passing direction** for each check: `dev` carrying extra content that
+`target` doesn't require. In every case the result is an empty tibble.
+
 
 ``` r
 # dev has an extra question that target doesn't need — passes
 dev_extra_q <- target$survey[1L, ]
+#> Error:
+#> ! object 'target' not found
 dev_extra_q$name <- "dev_only_question"
+#> Error:
+#> ! object 'dev_extra_q' not found
 dev_with_extra_q <- xlsform(
   survey  = rbind(target$survey, dev_extra_q),
   choices = target$choices
 )
+#> Error in `xlsform()`:
+#> ! could not find function "xlsform"
 validate_question_names(target, dev_with_extra_q) # 0 issues — target is a valid subset
-#> # A tibble: 0 × 5
-#> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
-#> #   detail <chr>
+#> Error in `validate_question_names()`:
+#> ! could not find function "validate_question_names"
 
 # dev defines an extra choice list that target doesn't use — passes
 dev_extra_list <- target$choices[target$choices$list_name == "l_yn" &
   !is.na(target$choices$list_name), ]
+#> Error:
+#> ! object 'target' not found
 dev_extra_list$list_name <- "l_dev_only"
+#> Error:
+#> ! object 'dev_extra_list' not found
 dev_with_extra_list <- xlsform(
   survey  = target$survey,
   choices = rbind(target$choices, dev_extra_list)
 )
+#> Error in `xlsform()`:
+#> ! could not find function "xlsform"
 validate_list_names(target, dev_with_extra_list) # 0 issues — target need not use every list in dev
-#> # A tibble: 0 × 5
-#> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
-#> #   detail <chr>
+#> Error in `validate_list_names()`:
+#> ! could not find function "validate_list_names"
 
 # dev references an extra list in its survey that target doesn't — passes
 dev_survey_extra <- target$survey
+#> Error:
+#> ! object 'target' not found
 dev_survey_extra$type[dev_survey_extra$type == "text"][1L] <- "select_one l_dev_only"
+#> Error:
+#> ! object 'dev_survey_extra' not found
 dev_with_extra_ref <- xlsform(
   survey  = dev_survey_extra,
   choices = rbind(target$choices, dev_extra_list)
 )
+#> Error in `xlsform()`:
+#> ! could not find function "xlsform"
 validate_survey_list_names(target, dev_with_extra_ref) # 0 issues — target simply doesn't use that list
-#> # A tibble: 0 × 5
-#> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
-#> #   detail <chr>
+#> Error in `validate_survey_list_names()`:
+#> ! could not find function "validate_survey_list_names"
 
 # dev has an extra choice option in a shared list that target doesn't — passes
 dev_extra_opt <- target$choices[target$choices$list_name == "l_yn" &
   !is.na(target$choices$list_name), ][1L, ]
+#> Error:
+#> ! object 'target' not found
 dev_extra_opt$name <- "not_applicable"
+#> Error:
+#> ! object 'dev_extra_opt' not found
 dev_with_extra_opt <- xlsform(
   survey  = target$survey,
   choices = rbind(target$choices, dev_extra_opt)
 )
+#> Error in `xlsform()`:
+#> ! could not find function "xlsform"
 validate_choices(target, dev_with_extra_opt) # 0 issues — target uses a subset of available options
-#> # A tibble: 0 × 5
-#> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
-#> #   detail <chr>
+#> Error in `validate_choices()`:
+#> ! could not find function "validate_choices"
 ```
 
-All four return empty tibbles — no issues — confirming that `dev` being
-a superset of `target` is always allowed.
+All four return empty tibbles — no issues — confirming that `dev` being a
+superset of `target` is always allowed.
 
 ### Building a target form with issues
 
 In practice you load both forms from disk:
 
-``` r
+```r
 target <- read_xlsform("path/to/target.xlsx")
 dev    <- read_xlsform("path/to/dev.xlsx")
 ```
 
-For this tutorial we construct a `target` that has content `dev` is
-missing, introducing one example of each issue type.
+For this tutorial we construct a `target` that has content `dev` is missing,
+introducing one example of each issue type.
+
 
 ``` r
 # 1. target requires a question dev doesn't have
 extra_q <- target$survey[1L, ]
+#> Error:
+#> ! object 'target' not found
 extra_q$name <- "required_indicator"
+#> Error:
+#> ! object 'extra_q' not found
 target_survey <- rbind(target$survey, extra_q)
+#> Error:
+#> ! object 'target' not found
 
 # 2. target requires a choice option dev is missing (in the 'l_yn' list)
 extra_opt <- target$choices[target$choices$list_name == "l_yn" &
   !is.na(target$choices$list_name), ][1L, ]
+#> Error:
+#> ! object 'target' not found
 extra_opt$name <- "mandatory_option"
+#> Error:
+#> ! object 'extra_opt' not found
 
 # 3. target defines a choice list that dev's choices sheet doesn't have
 new_list <- target$choices[target$choices$list_name == "l_yn" &
   !is.na(target$choices$list_name), ][1:2, ]
+#> Error:
+#> ! object 'target' not found
 new_list$list_name <- "l_required_scale"
+#> Error:
+#> ! object 'new_list' not found
 new_list$name <- c("low", "high")
+#> Error:
+#> ! object 'new_list' not found
 
 target_choices <- rbind(target$choices, extra_opt, new_list)
+#> Error:
+#> ! object 'target' not found
 
 # 4. target references a list in its survey that dev's survey doesn't have
 target_survey$type[target_survey$type == "text"][1L] <- "select_one l_required_scale"
+#> Error:
+#> ! object 'target_survey' not found
 
 # Build a dev form that is the original (without the additions above)
 # so that it is missing everything target now requires
 dev <- xlsform(survey = target$survey, choices = target$choices)
+#> Error in `xlsform()`:
+#> ! could not find function "xlsform"
 
 # Re-assign target with all the additions
 target_with_issues <- xlsform(survey = target_survey, choices = target_choices)
+#> Error in `xlsform()`:
+#> ! could not find function "xlsform"
 ```
 
 ### Running all checks at once
 
-`validate_xlsform()` runs every check — including `"labels"` on both
-forms — and returns a combined tibble.
+`validate_xlsform()` runs every check — including `"labels"` on both forms —
+and returns a combined tibble.
+
 
 ``` r
 issues <- validate_xlsform(target_with_issues, dev)
+#> Error in `validate_xlsform()`:
+#> ! could not find function "validate_xlsform"
 knitr::kable(issues)
+#> Error:
+#> ! object 'issues' not found
 ```
 
-| check | severity | name | list_name | detail |
-|:---|:---|:---|:---|:---|
-| question_names | error | required_indicator | NA | Question ‘required_indicator’ is present in target but not in dev. |
-| list_names | error | l_required_scale | NA | List ‘l_required_scale’ is defined in target’s choices but not in dev’s choices. |
-| survey_list_names | error | l_required_scale | NA | List ‘l_required_scale’ is referenced in target’s survey but not in dev’s survey. |
-| choices | error | mandatory_option | l_yn | Choice ‘mandatory_option’ in list ‘l_yn’ is present in target but not in dev. |
-| labels | warning | NA | NA | Form has 2 languages (“english (en)”, “french (fr)”) but no default_language is set in the settings sheet |
-| labels | warning | NA | NA | Form has 2 languages (“english (en)”, “french (fr)”) but no default_language is set in the settings sheet |
-
-------------------------------------------------------------------------
+---
 
 ## Individual checks
 
-Each check can also be run in isolation when you only need a focused
-result.
+Each check can also be run in isolation when you only need a focused result.
 
 ### `validate_question_names()`
 
 Checks that every question name in `target` exists in `dev`.
 
+
 ``` r
 result_qn <- validate_question_names(target_with_issues, dev)
+#> Error in `validate_question_names()`:
+#> ! could not find function "validate_question_names"
 knitr::kable(result_qn)
+#> Error:
+#> ! object 'result_qn' not found
 ```
-
-| check | severity | name | list_name | detail |
-|:---|:---|:---|:---|:---|
-| question_names | error | required_indicator | NA | Question ‘required_indicator’ is present in target but not in dev. |
 
 ### `validate_list_names()`
 
-Checks that every choice list *defined* in `target`’s choices sheet also
-exists in `dev`’s choices sheet.
+Checks that every choice list *defined* in `target`'s choices sheet also
+exists in `dev`'s choices sheet.
+
 
 ``` r
 result_ln <- validate_list_names(target_with_issues, dev)
+#> Error in `validate_list_names()`:
+#> ! could not find function "validate_list_names"
 knitr::kable(result_ln)
+#> Error:
+#> ! object 'result_ln' not found
 ```
-
-| check | severity | name | list_name | detail |
-|:---|:---|:---|:---|:---|
-| list_names | error | l_required_scale | NA | List ‘l_required_scale’ is defined in target’s choices but not in dev’s choices. |
 
 ### `validate_survey_list_names()`
 
-Checks that every choice list *referenced* in `target`’s survey
-questions is also referenced in `dev`’s survey questions.
+Checks that every choice list *referenced* in `target`'s survey questions
+is also referenced in `dev`'s survey questions.
 
-This is complementary to `validate_list_names()`: a list might be
-defined in the choices sheet but never used — or, as in our example, a
-question type changed from `text` to `select_one l_required_scale`
-without a matching entry in dev’s survey.
+This is complementary to `validate_list_names()`: a list might be defined in
+the choices sheet but never used — or, as in our example, a question type
+changed from `text` to `select_one l_required_scale` without a matching entry
+in dev's survey.
+
 
 ``` r
 result_sln <- validate_survey_list_names(target_with_issues, dev)
+#> Error in `validate_survey_list_names()`:
+#> ! could not find function "validate_survey_list_names"
 knitr::kable(result_sln)
+#> Error:
+#> ! object 'result_sln' not found
 ```
-
-| check | severity | name | list_name | detail |
-|:---|:---|:---|:---|:---|
-| survey_list_names | error | l_required_scale | NA | List ‘l_required_scale’ is referenced in target’s survey but not in dev’s survey. |
 
 ### `validate_choices()`
 
-For every choice list present in *both* forms, checks that all options
-in `target` also exist in `dev`.
+For every choice list present in *both* forms, checks that all options in
+`target` also exist in `dev`.
 
-Note: lists that exist only in `target` (caught by
-`validate_list_names()`) are not reported here — this check focuses on
-options within shared lists.
+Note: lists that exist only in `target` (caught by `validate_list_names()`)
+are not reported here — this check focuses on options within shared lists.
+
 
 ``` r
 result_ch <- validate_choices(target_with_issues, dev)
+#> Error in `validate_choices()`:
+#> ! could not find function "validate_choices"
 knitr::kable(result_ch)
+#> Error:
+#> ! object 'result_ch' not found
 ```
-
-| check | severity | name | list_name | detail |
-|:---|:---|:---|:---|:---|
-| choices | error | mandatory_option | l_yn | Choice ‘mandatory_option’ in list ‘l_yn’ is present in target but not in dev. |
 
 ### `check_labels()`
 
-Unlike the `validate_*()` functions, `check_labels()` operates on a
-**single** form and checks translation column consistency independently.
-When called via `validate_xlsform()` with `checks = "labels"`, it runs
-on both `target` and `dev` and combines the results.
+Unlike the `validate_*()` functions, `check_labels()` operates on a **single**
+form and checks translation column consistency independently. When called via
+`validate_xlsform()` with `checks = "labels"`, it runs on both `target` and
+`dev` and combines the results.
 
-Here `dev_bad_labels` has a bare `label` column and a hint in a language
-not declared on any label column:
+Here `dev_bad_labels` has a bare `label` column and a hint in a language not
+declared on any label column:
+
 
 ``` r
 dev_bad_labels <- xlsform(
@@ -579,20 +509,20 @@ dev_bad_labels <- xlsform(
     `hint::Spanish (es)` = "Tu nombre"
   )
 )
+#> Error in `xlsform()`:
+#> ! could not find function "xlsform"
 validate_xlsform(target_with_issues, dev_bad_labels, checks = "labels")
-#> # A tibble: 2 × 5
-#>   check  severity name  list_name detail                                        
-#>   <chr>  <chr>    <chr> <chr>     <chr>                                         
-#> 1 labels warning  <NA>  <NA>      "Form has 2 languages (\"english (en)\", \"fr…
-#> 2 labels error    label <NA>      "\"label\" is a bare field — use a language s…
+#> Error in `validate_xlsform()`:
+#> ! could not find function "validate_xlsform"
 ```
 
-------------------------------------------------------------------------
+---
 
 ## Running a subset of checks
 
-Pass a character vector to the `checks` argument to run only the checks
-you need.
+Pass a character vector to the `checks` argument to run only the checks you
+need.
+
 
 ``` r
 validate_xlsform(
@@ -600,37 +530,29 @@ validate_xlsform(
   checks = c("question_names", "choices")
 ) |>
   knitr::kable()
+#> Error in `validate_xlsform()`:
+#> ! could not find function "validate_xlsform"
 ```
 
-| check | severity | name | list_name | detail |
-|:---|:---|:---|:---|:---|
-| question_names | error | required_indicator | NA | Question ‘required_indicator’ is present in target but not in dev. |
-| choices | error | mandatory_option | l_yn | Choice ‘mandatory_option’ in list ‘l_yn’ is present in target but not in dev. |
-
-------------------------------------------------------------------------
+---
 
 ## Working with results
 
-Because `validate_xlsform()` returns a plain tibble, standard data
-manipulation works directly on the output.
+Because `validate_xlsform()` returns a plain tibble, standard data manipulation
+works directly on the output.
+
 
 ``` r
 # Count issues by check
 issues |>
   dplyr::count(check, severity, name = "n_issues")
-#> # A tibble: 5 × 3
-#>   check             severity n_issues
-#>   <chr>             <chr>       <int>
-#> 1 choices           error           1
-#> 2 labels            warning         2
-#> 3 list_names        error           1
-#> 4 question_names    error           1
-#> 5 survey_list_names error           1
+#> Error:
+#> ! object 'issues' not found
 ```
 
 ## Comparable / Similar tools
 
-- <https://github.com/williameoswald/surveydesignr>
-- <https://github.com/unhcr-americas/XlsFormUtil/blob/HEAD/R/fct_xlsform_compare.R>
-- <https://github.com/PovertyAction/ipacheckscto>
-- <https://github.com/PMA-2020/xform-test>
+* https://github.com/williameoswald/surveydesignr
+* https://github.com/unhcr-americas/XlsFormUtil/blob/HEAD/R/fct_xlsform_compare.R
+* https://github.com/PovertyAction/ipacheckscto
+* https://github.com/PMA-2020/xform-test
