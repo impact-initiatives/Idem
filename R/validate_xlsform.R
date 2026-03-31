@@ -117,10 +117,15 @@ validate_xlsform <- function(
     survey_list_names = validate_survey_list_names,
     choices = validate_choices,
     labels = \(target, dev) {
-      purrr::list_rbind(list(
-        check_labels(target),
-        check_labels(dev)
-      ))
+      target_issues <- check_labels(target)
+      dev_issues <- check_labels(dev)
+      if (nrow(target_issues) > 0L) {
+        target_issues$detail <- paste0("[target] ", target_issues$detail)
+      }
+      if (nrow(dev_issues) > 0L) {
+        dev_issues$detail <- paste0("[dev] ", dev_issues$detail)
+      }
+      purrr::list_rbind(list(target_issues, dev_issues))
     }
   )
 
