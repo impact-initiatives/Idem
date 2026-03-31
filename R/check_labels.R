@@ -128,13 +128,26 @@ check_labels.default <- function(x, ...) {
 #' @export
 #' @rdname check_labels
 check_labels.xlsform <- function(x, ...) {
-  empty <- tibble::tibble(
-    check = character(),
-    severity = character(),
-    name = character(),
-    list_name = character(),
-    detail = character()
-  )
+  purrr::list_rbind(list(
+    .check_labels_malformed(x),
+    .check_labels_survey_choices_sym(x),
+    .check_labels_nonlabel_mismatch(x),
+    .check_labels_default_language(x)
+  ))
+}
+
+#' Check A: bare or malformed translation columns
+#'
+#' Detects columns in the `survey` sheet (all translatable fields) and the
+#' `choices` sheet (`label` only) that look like a translation attempt but do
+#' not follow the `field::Language (code)` convention.
+#'
+#' @param x An `xlsform` object.
+#' @return A 5-column tibble of errors; zero rows when no issues are found.
+#' @keywords internal
+#' @export
+.check_labels_malformed <- function(x) {
+  empty <- .empty_check_tibble()
 
   field_prefix_pattern <- paste0(
     "^(",
@@ -142,13 +155,9 @@ check_labels.xlsform <- function(x, ...) {
     ")"
   )
 
-  issues <- list()
-
-  # -- Check A: bare or malformed translation columns ------------------------
-  # Sheets to inspect: survey (all fields), choices (label only)
   sheets_to_check <- intersect(c("survey", "choices"), names(x))
 
-  issues$malformed <- purrr::map(
+  purrr::map(
     .x = sheets_to_check,
     .f = \(sheet) {
       cols <- names(x[[sheet]])
@@ -203,11 +212,21 @@ check_labels.xlsform <- function(x, ...) {
     }
   ) |>
     purrr::list_rbind()
+}
 
-  # -- Check B: survey <-> choices label language symmetry -------------------
-  # The set of languages on label columns in survey must exactly match the set
-  # on label columns in choices. This check is skipped when there is no
-  # choices sheet.
+#' Check B: survey ↔ choices label language symmetry
+#'
+#' The set of languages declared on `label` columns in the `survey` sheet must
+#' exactly match the set on `label` columns in the `choices` sheet. This check
+#' is skipped when the form has no `choices` sheet.
+#'
+#' @param x An `xlsform` object.
+#' @return A 5-column tibble of errors; zero rows when no issues are found.
+#' @keywords internal
+#' @export
+# nolint start: object_length_linter, line_length_linter.
+.check_labels_survey_choices_sym <- function(x) {
+  # nolint end
   translations <- xlsform_translations(x)
   survey_translations <- translations[translations$sheet == "survey", ]
   choices_translations <- translations[translations$sheet == "choices", ]
@@ -216,115 +235,173 @@ check_labels.xlsform <- function(x, ...) {
     survey_translations$language[survey_translations$field == "label"]
   )
 
-  if ("choices" %in% names(x) && length(survey_label_langs) > 0L) {
-    choices_label_langs <- unique(
-      choices_translations$language[choices_translations$field == "label"]
-    )
-
-    only_in_survey <- setdiff(survey_label_langs, choices_label_langs)
-    only_in_choices <- setdiff(choices_label_langs, survey_label_langs)
-
-    sym_rows <- c(
-      if (length(only_in_survey) > 0L) {
-        paste0(
-          "Language \"",
-          only_in_survey,
-          "\" is declared on survey label columns but not on choices",
-          " label columns"
-        )
-      },
-      if (length(only_in_choices) > 0L) {
-        paste0(
-          "Language \"",
-          only_in_choices,
-          "\" is declared on choices label columns but not on survey",
-          " label columns"
-        )
-      }
-    )
-
-    if (length(sym_rows) > 0L) {
-      issues$sym <- tibble::tibble(
-        check = "labels",
-        severity = "error",
-        name = NA_character_,
-        list_name = NA_character_,
-        detail = sym_rows
-      )
-    }
+  if (!("choices" %in% names(x)) || length(survey_label_langs) == 0L) {
+    return(.empty_check_tibble())
   }
 
-  # -- Check C: non-label field language mismatch ----------------------------
-  # Languages declared on survey label columns form the reference set.
-  # Any other translatable field in survey using a language outside that set
-  # is an error.
+  choices_label_langs <- unique(
+    choices_translations$language[choices_translations$field == "label"]
+  )
+
+  only_in_survey <- setdiff(survey_label_langs, choices_label_langs)
+  only_in_choices <- setdiff(choices_label_langs, survey_label_langs)
+
+  sym_rows <- c(
+    if (length(only_in_survey) > 0L) {
+      paste0(
+        "Language \"",
+        only_in_survey,
+        "\" is declared on survey label columns but not on choices",
+        " label columns"
+      )
+    },
+    if (length(only_in_choices) > 0L) {
+      paste0(
+        "Language \"",
+        only_in_choices,
+        "\" is declared on choices label columns but not on survey",
+        " label columns"
+      )
+    }
+  )
+
+  if (length(sym_rows) == 0L) {
+    return(.empty_check_tibble())
+  }
+
+  tibble::tibble(
+    check = "labels",
+    severity = "error",
+    name = NA_character_,
+    list_name = NA_character_,
+    detail = sym_rows
+  )
+}
+
+#' Check C: non-label field language mismatch
+#'
+#' Languages declared on survey `label` columns form the reference set. Any
+#' other translatable field in `survey` (e.g. `hint`, `constraint_message`)
+#' that uses a language outside that set is an error.
+#'
+#' @param x An `xlsform` object.
+#' @return A 5-column tibble of errors; zero rows when no issues are found.
+#' @keywords internal
+#' @export
+# nolint start: object_length_linter.
+.check_labels_nonlabel_mismatch <- function(x) {
+  # nolint end
+  translations <- xlsform_translations(x)
+  survey_translations <- translations[translations$sheet == "survey", ]
+
+  survey_label_langs <- unique(
+    survey_translations$language[survey_translations$field == "label"]
+  )
+
   non_label <- survey_translations[survey_translations$field != "label", ]
 
-  if (length(survey_label_langs) > 0L && nrow(non_label) > 0L) {
-    mismatched <- non_label[!non_label$language %in% survey_label_langs, ]
-
-    if (nrow(mismatched) > 0L) {
-      label_langs_fmt <- paste(
-        paste0("\"", survey_label_langs, "\""),
-        collapse = ", "
-      )
-      issues$mismatch <- tibble::tibble(
-        check = "labels",
-        severity = "error",
-        name = mismatched$field,
-        list_name = NA_character_,
-        detail = paste0(
-          "\"",
-          mismatched$column,
-          "\" uses language \"",
-          mismatched$language,
-          "\" not declared on any survey label column",
-          " (declared: ",
-          label_langs_fmt,
-          ")"
-        )
-      )
-    }
+  if (length(survey_label_langs) == 0L || nrow(non_label) == 0L) {
+    return(.empty_check_tibble())
   }
 
-  # -- Check D: missing default_language -------------------------------------
-  # Only fires when the form has more than one distinct label language.
-  if (length(survey_label_langs) > 1L) {
-    settings <- x[["settings"]]
-    default_lang <- if (
-      !is.null(settings) &&
-        "default_language" %in% names(settings) &&
-        nrow(settings) >= 1L &&
-        length(settings[["default_language"]]) >= 1L
-    ) {
-      settings[["default_language"]][[1L]]
-    } else {
-      NA_character_
-    }
+  mismatched <- non_label[!non_label$language %in% survey_label_langs, ]
 
-    has_default <- !is.na(default_lang) &&
-      nzchar(stringr::str_trim(default_lang))
-
-    if (!has_default) {
-      langs_fmt <- paste(
-        paste0("\"", survey_label_langs, "\""),
-        collapse = ", "
-      )
-      issues$default_lang <- tibble::tibble(
-        check = "labels",
-        severity = "warning",
-        name = NA_character_,
-        list_name = NA_character_,
-        detail = paste0(
-          "Form has ",
-          length(survey_label_langs),
-          " languages (",
-          langs_fmt,
-          ") but no default_language is set in the settings sheet"
-        )
-      )
-    }
+  if (nrow(mismatched) == 0L) {
+    return(.empty_check_tibble())
   }
 
-  purrr::list_rbind(issues)
+  label_langs_fmt <- paste(
+    paste0("\"", survey_label_langs, "\""),
+    collapse = ", "
+  )
+
+  tibble::tibble(
+    check = "labels",
+    severity = "error",
+    name = mismatched$field,
+    list_name = NA_character_,
+    detail = paste0(
+      "\"",
+      mismatched$column,
+      "\" uses language \"",
+      mismatched$language,
+      "\" not declared on any survey label column",
+      " (declared: ",
+      label_langs_fmt,
+      ")"
+    )
+  )
+}
+
+#' Check D: missing default_language
+#'
+#' When a form declares more than one label language, XLSForm best practice
+#' requires a `default_language` entry in the `settings` sheet. This check
+#' fires when that entry is absent, `NA`, or empty.
+#'
+#' @param x An `xlsform` object.
+#' @return A 5-column tibble with one warning row, or zero rows when no issue
+#'   is found.
+#' @keywords internal
+#' @export
+.check_labels_default_language <- function(x) {
+  translations <- xlsform_translations(x)
+  survey_translations <- translations[translations$sheet == "survey", ]
+
+  survey_label_langs <- unique(
+    survey_translations$language[survey_translations$field == "label"]
+  )
+
+  if (length(survey_label_langs) <= 1L) {
+    return(.empty_check_tibble())
+  }
+
+  settings <- x[["settings"]]
+  default_lang <- if (
+    !is.null(settings) &&
+      "default_language" %in% names(settings) &&
+      nrow(settings) >= 1L &&
+      length(settings[["default_language"]]) >= 1L
+  ) {
+    settings[["default_language"]][[1L]]
+  } else {
+    NA_character_
+  }
+
+  has_default <- !is.na(default_lang) &&
+    nzchar(stringr::str_trim(default_lang))
+
+  if (has_default) {
+    return(.empty_check_tibble())
+  }
+
+  langs_fmt <- paste(
+    paste0("\"", survey_label_langs, "\""),
+    collapse = ", "
+  )
+
+  tibble::tibble(
+    check = "labels",
+    severity = "warning",
+    name = NA_character_,
+    list_name = NA_character_,
+    detail = paste0(
+      "Form has ",
+      length(survey_label_langs),
+      " languages (",
+      langs_fmt,
+      ") but no default_language is set in the settings sheet"
+    )
+  )
+}
+
+
+.empty_check_tibble <- function() {
+  tibble::tibble(
+    check = character(),
+    severity = character(),
+    name = character(),
+    list_name = character(),
+    detail = character()
+  )
 }
