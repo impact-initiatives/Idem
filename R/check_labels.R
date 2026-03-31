@@ -192,22 +192,22 @@ check_labels.xlsform <- function(x, ...) {
       detail <- ifelse(
         is_bare,
         paste0(
-          "\"",
+          "'",
           bad_cols,
-          "\" is a bare field -- use a language suffix, ",
-          "e.g. ",
+          "' is a bare field with no language suffix.",
+          " Use a translated column instead, e.g. '",
           field,
-          "::English (en)"
+          "::English (en)'."
         ),
         paste0(
-          "\"",
+          "'",
           bad_cols,
-          "\" is not a valid translated column -- ",
-          "expected ",
+          "' is not a valid translated column.",
+          " Expected '",
           field,
-          "::Language (code), e.g. ",
+          "::Language (code)', e.g. '",
           field,
-          "::English (en)"
+          "::English (en)'."
         )
       )
 
@@ -258,18 +258,18 @@ check_labels.xlsform <- function(x, ...) {
   sym_rows <- c(
     if (length(only_in_survey) > 0L) {
       paste0(
-        "Language \"",
+        "Language '",
         only_in_survey,
-        "\" is declared on survey label columns but not on choices",
-        " label columns"
+        "' is declared on survey label columns",
+        " but not on choices label columns."
       )
     },
     if (length(only_in_choices) > 0L) {
       paste0(
-        "Language \"",
+        "Language '",
         only_in_choices,
-        "\" is declared on choices label columns but not on survey",
-        " label columns"
+        "' is declared on choices label columns",
+        " but not on survey label columns."
       )
     }
   )
@@ -320,7 +320,7 @@ check_labels.xlsform <- function(x, ...) {
   }
 
   label_langs_fmt <- paste(
-    paste0("\"", survey_label_langs, "\""),
+    paste0("'", survey_label_langs, "'"),
     collapse = ", "
   )
 
@@ -330,14 +330,14 @@ check_labels.xlsform <- function(x, ...) {
     name = mismatched$field,
     list_name = NA_character_,
     detail = paste0(
-      "\"",
+      "'",
       mismatched$column,
-      "\" uses language \"",
+      "' uses language '",
       mismatched$language,
-      "\" not declared on any survey label column",
+      "' which is not declared on any survey label column",
       " (declared: ",
       label_langs_fmt,
-      ")"
+      ")."
     )
   )
 }
@@ -385,7 +385,7 @@ check_labels.xlsform <- function(x, ...) {
   }
 
   langs_fmt <- paste(
-    paste0("\"", survey_label_langs, "\""),
+    paste0("'", survey_label_langs, "'"),
     collapse = ", "
   )
 
@@ -397,9 +397,9 @@ check_labels.xlsform <- function(x, ...) {
     detail = paste0(
       "Form has ",
       length(survey_label_langs),
-      " languages (",
+      " label languages (",
       langs_fmt,
-      ") but no default_language is set in the settings sheet"
+      ") but no 'default_language' is set in the settings sheet."
     )
   )
 }
