@@ -38,14 +38,20 @@ translatable_fields <- c(
 #'
 #' ## Checks performed
 #'
-#' **Bare or malformed column (error)** -- A translatable field is present
-#' either as a plain column with no suffix (e.g. `label`, `hint`) or as a
-#' malformed translation attempt that does not follow the
-#' `field::Language (code)` convention (e.g. `label::English` without an ISO
-#' code, `label::French (FR)` with an uppercase code, `label:Kreyol` with a
-#' single colon). The user must use an explicitly language-tagged column such
-#' as `label::English (en)`. Applies to `label` in both the `survey` and
+#' **Bare column (error)** -- A translatable field is present as a plain
+#' column with no language suffix (e.g. `label`, `hint`, `image`). The column
+#' must be renamed to use an explicit language tag such as
+#' `label::English (en)`. Applies to `label` in both the `survey` and
 #' `choices` sheets; applies to all other fields in `survey` only.
+#'
+#' **Malformed translation column (error)** -- A column looks like a
+#' translation attempt (starts with a recognised field prefix followed by `:`
+#' or `::`) but does not follow the `field::Language (code)` convention.
+#' Common causes: missing parenthesised ISO code (e.g. `label::English`),
+#' uppercase code (e.g. `label::French (FR)`), or a single-colon separator
+#' (e.g. `label:Kreyol`). The code inside the parentheses must be a lowercase
+#' IANA language subtag. Applies to `label` in both the `survey` and `choices`
+#' sheets; applies to all other fields in `survey` only.
 #'
 #' **Survey-choices label language mismatch (error)** -- The set of languages
 #' declared on `label` columns in the `survey` sheet must exactly match the

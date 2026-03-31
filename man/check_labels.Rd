@@ -34,14 +34,20 @@ column names, so \code{" label::English (en) "} is treated the same as
 \code{"label::English (en)"}.
 \subsection{Checks performed}{
 
-\strong{Bare or malformed column (error)} -- A translatable field is present
-either as a plain column with no suffix (e.g. \code{label}, \code{hint}) or as a
-malformed translation attempt that does not follow the
-\code{field::Language (code)} convention (e.g. \code{label::English} without an ISO
-code, \code{label::French (FR)} with an uppercase code, \code{label:Kreyol} with a
-single colon). The user must use an explicitly language-tagged column such
-as \code{label::English (en)}. Applies to \code{label} in both the \code{survey} and
+\strong{Bare column (error)} -- A translatable field is present as a plain
+column with no language suffix (e.g. \code{label}, \code{hint}, \code{image}). The column
+must be renamed to use an explicit language tag such as
+\code{label::English (en)}. Applies to \code{label} in both the \code{survey} and
 \code{choices} sheets; applies to all other fields in \code{survey} only.
+
+\strong{Malformed translation column (error)} -- A column looks like a
+translation attempt (starts with a recognised field prefix followed by \code{:}
+or \code{::}) but does not follow the \code{field::Language (code)} convention.
+Common causes: missing parenthesised ISO code (e.g. \code{label::English}),
+uppercase code (e.g. \code{label::French (FR)}), or a single-colon separator
+(e.g. \code{label:Kreyol}). The code inside the parentheses must be a lowercase
+IANA language subtag. Applies to \code{label} in both the \code{survey} and \code{choices}
+sheets; applies to all other fields in \code{survey} only.
 
 \strong{Survey-choices label language mismatch (error)} -- The set of languages
 declared on \code{label} columns in the \code{survey} sheet must exactly match the
