@@ -194,7 +194,10 @@ check_labels.xlsform <- function(x, ...) {
         paste0(
           "'",
           bad_cols,
-          "' is a bare field with no language suffix.",
+          "' is a bare field with no language suffix",
+          " (",
+          sheet,
+          " sheet).",
           " Use a translated column instead, e.g. '",
           field,
           "::English (en)'."
@@ -202,7 +205,10 @@ check_labels.xlsform <- function(x, ...) {
         paste0(
           "'",
           bad_cols,
-          "' is not a valid translated column.",
+          "' is not a valid translated column",
+          " (",
+          sheet,
+          " sheet).",
           " Expected '",
           field,
           "::Language (code)', e.g. '",
