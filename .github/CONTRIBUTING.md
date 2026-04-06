@@ -38,18 +38,18 @@ gitGraph
    branch release/v0.2.0
    checkout release/v0.2.0
 
-   branch 5-add-validation
-   checkout 5-add-validation
+   branch "5-add-validation"
+   checkout "5-add-validation"
    commit id: "feat: add validation"
    commit id: "test: cover validation"
    checkout release/v0.2.0
-   merge 5-add-validation id: "Merge #5"
+   merge "5-add-validation" id: "Merge #5"
 
-   branch 6-fix-edge-case
-   checkout 6-fix-edge-case
+   branch "6-fix-edge-case"
+   checkout "6-fix-edge-case"
    commit id: "fix: edge case"
    checkout release/v0.2.0
-   merge 6-fix-edge-case id: "Merge #6"
+   merge "6-fix-edge-case" id: "Merge #6"
 
    checkout main
    merge release/v0.2.0 id: "v0.2.0" tag: "v0.2.0"
