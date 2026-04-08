@@ -14,6 +14,47 @@ easier to diagnose and to write a unit test later. The tidyverse guide on
 [how to create a great issue](https://code-review.tidyverse.org/issues/) has
 useful advice.
 
+## Prerequisites
+
+The following tools must be available on your `PATH` before following the
+contribution workflow. Install them once and they will work across all
+projects.
+
+### uv
+
+[uv](https://docs.astral.sh/uv/getting-started/installation/) is a Python
+package manager used to install the other tools:
+
+```sh
+# macOS / Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+See the [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/)
+for Windows and other options.
+
+### pre-commit
+
+[pre-commit](https://pre-commit.com/) runs the hook scripts before each
+commit. Install it via uv (recommended):
+
+```sh
+uv tool install pre-commit
+```
+
+Alternatives: `pip install pre-commit` or `brew install pre-commit`.
+
+### air
+
+[air](https://posit-dev.github.io/air/) is the R code formatter used by the
+`air-format` hook. Install it via uv (recommended):
+
+```sh
+uv tool install air-formatter
+```
+
+Alternatives: `pip install air-formatter` or `brew install air-formatter`.
+
 ## Branching model
 
 This repository uses a **release-branch workflow**:
@@ -85,7 +126,7 @@ open an issue rather than continuing.
 
 ### 3. Create a branch
 
-Cut your branch from the active release branch:
+Create your branch **from the active release branch**:
 
 ```r
 usethis::pr_init("7-brief-description-of-change")
@@ -98,9 +139,15 @@ git fetch upstream
 git checkout -b 7-brief-description-of-change upstream/release/vX.Y.Z
 ```
 
-### 4. Make changes, commit, and push
+### 4. Make changes and commit
 
 Follow the [commit message format](#commit-message-format) described below.
+Each commit should be a coherent, self-contained unit of work. The PR as a
+whole should address just one thing — see the tidyverse guide on
+[focused PRs](https://code-review.tidyverse.org/author/focused.html).
+
+### 5. Push and open a PR
+
 When ready, push and open a PR:
 
 ```r
@@ -118,10 +165,13 @@ change. The PR body must contain `Fixes #<issue-number>`.
 
 ## Pre-commit hooks
 
+[Pre-commit hooks](https://pre-commit.com/) are tests that run each time you
+attempt to commit. If the tests pass, the commit will be made, otherwise not.
+
 This repository uses [pre-commit](https://pre-commit.com/) to run automated
 checks before each commit. The hook scripts are not committed to the
 repository — every contributor must install them locally after cloning. The
-steps below are required, not optional: without them the hooks will not run.
+steps below are **required, not optional**: without them the hooks will not run.
 
 ### 1. Install the precommit R package and activate the hooks
 
@@ -135,30 +185,32 @@ install.packages("precommit")
 precommit::use_precommit()
 ```
 
-`precommit::use_precommit()` installs the pre-commit framework if needed and
-writes the hook scripts into `.git/hooks/`. You only need to do this once per
-clone.
+`precommit::use_precommit()` writes the hook scripts into `.git/hooks/`. The
+pre-commit framework must already be installed — see
+[Prerequisites](#prerequisites) if you have not done so yet. You only need to
+run this once per clone.
 
 ### 2. Activate the commit-msg hook
 
-The `precommit` R package only activates the `pre-commit` stage. This
-repository also uses a `commit-msg` hook to validate commit message format.
+By default, the `precommit` R package only activates the `pre-commit` hook,
+which runs checks on your code before each commit. Other hooks, like
+`commit-msg` to validate commit messages, must be activated separately.
 Activate it with one additional command in your terminal:
 
 ```sh
 pre-commit install --hook-type commit-msg
 ```
 
+Run this command from the root of the cloned repository.
+
+This hook enforces the [Conventional Commits](https://www.conventionalcommits.org/)
+format — see [Commit message format](#commit-message-format) below for the
+rules and allowed types.
+
 ### 3. Install air
 
-The `air-format` hook is a local hook — unlike the other hooks, it is not
-managed by the `precommit` R package and will not work unless the `air` binary
-is available on your `PATH`. Install it via
-[uv](https://docs.astral.sh/uv/getting-started/installation/):
-
-```sh
-uv tool install air-formatter
-```
+The `air-format` hook requires the `air` binary on your `PATH` — see
+[Prerequisites](#prerequisites) if you have not installed it yet.
 
 ### Run hooks manually
 

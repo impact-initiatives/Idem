@@ -19,6 +19,7 @@ dev's
 devtools
 dplyr
 fmt
+formatter
 GeoJSON
 ghedamsi
 GHEDAMSI
@@ -52,6 +53,7 @@ pkgdown
 pre
 precommit
 prek
+PRs
 purrr
 Rbuildignore
 rdrr
