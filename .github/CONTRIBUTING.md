@@ -53,7 +53,7 @@ Alternatives: `pip install pre-commit` or `brew install pre-commit`.
 uv tool install air-formatter
 ```
 
-Alternatives: `pip install air-formatter` or `brew install air-formatter`.
+Alternatives: `pip install air-formatter` or `brew install air` (macOS only).
 
 ## Branching model
 
@@ -124,19 +124,17 @@ devtools::check()
 R CMD check must pass cleanly before you make any changes. If it does not,
 open an issue rather than continuing.
 
+Before moving on, install the pre-commit hooks — see
+[Pre-commit hooks](#pre-commit-hooks) below. The hooks must be in place before
+you make your first commit.
+
 ### 3. Create a branch
 
 Create your branch **from the active release branch**:
 
-```r
-usethis::pr_init("7-brief-description-of-change")
-```
-
-Or with plain git:
-
 ```sh
 git fetch upstream
-git checkout -b 7-brief-description-of-change upstream/release/vX.Y.Z
+git checkout -b <issue-number>-brief-description-of-change upstream/release/vX.Y.Z
 ```
 
 ### 4. Make changes and commit
@@ -188,7 +186,8 @@ precommit::use_precommit()
 `precommit::use_precommit()` writes the hook scripts into `.git/hooks/`. The
 pre-commit framework must already be installed — see
 [Prerequisites](#prerequisites) if you have not done so yet. You only need to
-run this once per clone.
+run this once per clone. If prompted to run `pre-commit install --hook-type
+commit-msg`, continue to step 2 below.
 
 ### 2. Activate the commit-msg hook
 
@@ -207,7 +206,7 @@ This hook enforces the [Conventional Commits](https://www.conventionalcommits.or
 format — see [Commit message format](#commit-message-format) below for the
 rules and allowed types.
 
-### 3. Install air
+### 3. Verify air is installed
 
 The `air-format` hook requires the `air` binary on your `PATH` — see
 [Prerequisites](#prerequisites) if you have not installed it yet.
