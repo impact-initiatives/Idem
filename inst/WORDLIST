@@ -19,12 +19,15 @@ dev's
 devtools
 dplyr
 fmt
+formatter
 GeoJSON
 ghedamsi
 GHEDAMSI
+gitGraph
 github
 gitignore
 gsk
+hardcoded
 http
 https
 impl
@@ -51,6 +54,7 @@ pkgdown
 pre
 precommit
 prek
+PRs
 purrr
 Rbuildignore
 rdrr
@@ -73,6 +77,7 @@ tibbles
 tidyr
 tidyverse
 toml
+usethis
 uv
 uvx
 validators
