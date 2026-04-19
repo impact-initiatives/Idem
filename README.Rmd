@@ -308,6 +308,39 @@ validate_xlsform(
 
 ---
 
+## Skipping lists with `passing_lists`
+
+Some choice lists — admin boundaries, enumerator IDs, country lists — are
+expected to differ between a target and a dev form and should not be flagged.
+`validate_choices()` and `validate_xlsform()` accept a `passing_lists` argument
+for this purpose. The default is `idem_passing_lists`, a named vector you can
+inspect directly:
+
+```{r passing-lists-default}
+idem_passing_lists
+```
+
+Any list named in `passing_lists` is excluded from the options comparison.
+To extend the default with a project-specific list, pass a combined vector:
+
+```{r passing-lists-extend}
+validate_choices(
+  target, dev,
+  passing_lists = c(idem_passing_lists, "l_my_project_list")
+)
+```
+
+To disable all bypasses and compare every shared list, pass `character(0)`:
+
+```{r passing-lists-disable, eval = FALSE}
+validate_choices(target, dev, passing_lists = character(0))
+```
+
+The same argument is available on `validate_xlsform()` and is forwarded to the
+`choices` check automatically.
+
+---
+
 ## Working with results
 
 Because `validate_xlsform()` returns a plain tibble, standard data manipulation

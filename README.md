@@ -1,22 +1,26 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+
 
 # idem
 
 <!-- badges: start -->
-
 [![R-CMD-check](https://github.com/impact-initiatives/idem/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/impact-initiatives/idem/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-idem helps you validate XLSForm files against an authoritative reference
-form. It is designed for workflows where a canonical form is maintained
-centrally and partner or localised copies must stay in sync with it —
-catching drift in question names, choice lists, and answer options
-before it causes problems in data collection or analysis.
+idem helps you validate XLSForm files against an authoritative reference form.
+It is designed for workflows where a canonical form is maintained centrally and
+partner or localised copies must stay in sync with it — catching drift in
+question names, choice lists, and answer options before it causes problems in
+data collection or analysis.
 
 ## Installation
 
-``` r
+```r
 # install.packages("pak")
 pak::pak("impact-initiatives/idem")
 ```
@@ -25,65 +29,68 @@ pak::pak("impact-initiatives/idem")
 
 ### `target` — the authoritative reference form
 
-The **`target`** form is the canonical, centrally maintained XLSForm. It
-defines the full set of permitted questions, choice lists, and answer
-options for a given data collection exercise. Think of it as the source
-of truth: what *can* legally appear in any deployed copy of the form.
+The **`target`** form is the canonical, centrally maintained XLSForm. It defines
+the full set of permitted questions, choice lists, and answer options for a given
+data collection exercise. Think of it as the source of truth: what *can* legally
+appear in any deployed copy of the form.
 
 ### `dev` — the form being validated
 
-The **`dev`** form is the copy you want to check — a localised
-adaptation, a partner’s version, or a form deployed in a specific
-context. It is validated *against* `target` to confirm it stays within
-the boundaries that `target` defines.
+The **`dev`** form is the copy you want to check — a localised adaptation, a
+partner's version, or a form deployed in a specific context. It is validated
+*against* `target` to confirm it stays within the boundaries that `target`
+defines.
 
 ### The rule: target must be a subset of dev
 
-idem enforces one rule: **everything present in `target` must also exist
-in `dev`**. In other words, `target` is a valid *subset* of `dev`.
+idem enforces one rule: **everything present in `target` must also exist in
+`dev`**. In other words, `target` is a valid *subset* of `dev`.
 
 This means:
 
-- `dev` is allowed to have questions, lists, or options that `target`
-  does not have — that is expected and fine.
-- `dev` is **not** allowed to be missing questions, lists, or options
-  that `target` requires — those gaps are flagged as errors.
+- `dev` is allowed to have questions, lists, or options that `target` does not
+  have — that is expected and fine.
+- `dev` is **not** allowed to be missing questions, lists, or options that
+  `target` requires — those gaps are flagged as errors.
 
 ## The checks
 
 Four checks apply this rule to different parts of the form:
 
 | Check | What is tested |
-|----|----|
+|---|---|
 | `question_names` | Every question name in `target` must exist in `dev`. |
-| `list_names` | Every choice list *defined* in `target`’s choices sheet must also be defined in `dev`’s choices sheet. |
-| `survey_list_names` | Every choice list *referenced* by `target`’s survey questions must also be referenced in `dev`’s survey questions. |
+| `list_names` | Every choice list *defined* in `target`'s choices sheet must also be defined in `dev`'s choices sheet. |
+| `survey_list_names` | Every choice list *referenced* by `target`'s survey questions must also be referenced in `dev`'s survey questions. |
 | `choices` | For every shared list, every choice option in `target` must exist in the same list in `dev`. |
 
 All checks return a tidy tibble — one row per issue — so results can be
 filtered, counted, and passed to downstream reporting tools.
 
-------------------------------------------------------------------------
+---
 
 ## Setup
+
 
 ``` r
 library(idem)
 ```
 
-idem ships with a sample XLSForm. We will use it as our reference
-throughout this tutorial.
+idem ships with a sample XLSForm. We will use it as our reference throughout
+this tutorial.
+
 
 ``` r
 path <- system.file("extdata/form.xlsx", package = "idem")
 target <- read_xlsform(path)
 target
-#> <xlsform> '/tmp/Rtmptnm12L/temp_libpath3c5523573ac07/idem/extdata/form.xlsx'
+#> <xlsform>
+#> '/home/ig/Projects/00_global/01_package_maintenance/Idem/inst/extdata/form.xlsx'
 #> • survey: 315 rows
 #> • choices: 2497 rows
 ```
 
-------------------------------------------------------------------------
+---
 
 ## Exploring a form
 
@@ -91,6 +98,7 @@ Before running validation, the extractor functions let you inspect the
 contents of any form.
 
 ### Question names
+
 
 ``` r
 xlsform_questions(target) |> head(15)
@@ -102,8 +110,9 @@ xlsform_questions(target) |> head(15)
 
 ### Choice lists referenced in the survey
 
-These are the list names extracted from the `type` column — the second
-token in values like `select_one l_yn`.
+These are the list names extracted from the `type` column — the second token
+in values like `select_one l_yn`.
+
 
 ``` r
 xlsform_list_names(target)
@@ -167,6 +176,7 @@ xlsform_list_names(target)
 ```
 
 ### Choice lists defined in the choices sheet
+
 
 ``` r
 xlsform_choices_list_names(target)
@@ -235,19 +245,21 @@ xlsform_choices_list_names(target)
 
 ### Choice options per list
 
+
 ``` r
 xlsform_choices(target)[["l_yn"]]
 #> [1] "yes" "no"
 ```
 
-------------------------------------------------------------------------
+---
 
 ## Validating forms
 
 ### The clean case — no issues
 
-A form is always a valid subset of itself. Running `validate_xlsform()`
-against an identical form returns an empty tibble.
+A form is always a valid subset of itself. Running `validate_xlsform()` against
+an identical form returns an empty tibble.
+
 
 ``` r
 validate_xlsform(target, target)
@@ -256,12 +268,12 @@ validate_xlsform(target, target)
 #> #   detail <chr>
 ```
 
-### What is and isn’t flagged
+### What is and isn't flagged
 
-The following examples make the subset rule concrete by demonstrating
-the **passing direction** for each check: `dev` carrying extra content
-that `target` doesn’t require. In every case the result is an empty
-tibble.
+The following examples make the subset rule concrete by demonstrating the
+**passing direction** for each check: `dev` carrying extra content that
+`target` doesn't require. In every case the result is an empty tibble.
+
 
 ``` r
 # dev has an extra question that target doesn't need — passes
@@ -315,20 +327,21 @@ validate_choices(target, dev_with_extra_opt) # 0 issues — target uses a subset
 #> #   detail <chr>
 ```
 
-All four return empty tibbles — no issues — confirming that `dev` being
-a superset of `target` is always allowed.
+All four return empty tibbles — no issues — confirming that `dev` being a
+superset of `target` is always allowed.
 
 ### Building a target form with issues
 
 In practice you load both forms from disk:
 
-``` r
+```r
 target <- read_xlsform("path/to/target.xlsx")
 dev    <- read_xlsform("path/to/dev.xlsx")
 ```
 
-For this tutorial we construct a `target` that has content `dev` is
-missing, introducing one example of each issue type.
+For this tutorial we construct a `target` that has content `dev` is missing,
+introducing one example of each issue type.
+
 
 ``` r
 # 1. target requires a question dev doesn't have
@@ -364,95 +377,119 @@ target_with_issues <- xlsform(survey = target_survey, choices = target_choices)
 
 `validate_xlsform()` runs every check and returns a combined tibble.
 
+
 ``` r
 issues <- validate_xlsform(target_with_issues, dev)
 knitr::kable(issues)
 ```
 
-| check | severity | name | list_name | detail |
-|:---|:---|:---|:---|:---|
-| question_names | error | required_indicator | NA | Question ‘required_indicator’ is present in target but not in dev. |
-| list_names | error | l_required_scale | NA | List ‘l_required_scale’ is defined in target’s choices but not in dev’s choices. |
-| survey_list_names | error | l_required_scale | NA | List ‘l_required_scale’ is referenced in target’s survey but not in dev’s survey. |
-| choices | error | mandatory_option | l_yn | Choice ‘mandatory_option’ in list ‘l_yn’ is present in target but not in dev. |
 
-------------------------------------------------------------------------
+
+|check             |severity |name               |list_name |detail                                                                            |
+|:-----------------|:--------|:------------------|:---------|:---------------------------------------------------------------------------------|
+|question_names    |error    |required_indicator |NA        |Question 'required_indicator' is present in target but not in dev.                |
+|list_names        |error    |l_required_scale   |NA        |List 'l_required_scale' is defined in target's choices but not in dev's choices.  |
+|survey_list_names |error    |l_required_scale   |NA        |List 'l_required_scale' is referenced in target's survey but not in dev's survey. |
+|choices           |error    |mandatory_option   |l_yn      |Choice 'mandatory_option' in list 'l_yn' is present in target but not in dev.     |
+
+
+
+---
 
 ## Individual checks
 
-Each check can also be run in isolation when you only need a focused
-result.
+Each check can also be run in isolation when you only need a focused result.
 
 ### `validate_question_names()`
 
 Checks that every question name in `target` exists in `dev`.
+
 
 ``` r
 result_qn <- validate_question_names(target_with_issues, dev)
 knitr::kable(result_qn)
 ```
 
-| check | severity | name | list_name | detail |
-|:---|:---|:---|:---|:---|
-| question_names | error | required_indicator | NA | Question ‘required_indicator’ is present in target but not in dev. |
+
+
+|check          |severity |name               |list_name |detail                                                             |
+|:--------------|:--------|:------------------|:---------|:------------------------------------------------------------------|
+|question_names |error    |required_indicator |NA        |Question 'required_indicator' is present in target but not in dev. |
+
+
 
 ### `validate_list_names()`
 
-Checks that every choice list *defined* in `target`’s choices sheet also
-exists in `dev`’s choices sheet.
+Checks that every choice list *defined* in `target`'s choices sheet also
+exists in `dev`'s choices sheet.
+
 
 ``` r
 result_ln <- validate_list_names(target_with_issues, dev)
 knitr::kable(result_ln)
 ```
 
-| check | severity | name | list_name | detail |
-|:---|:---|:---|:---|:---|
-| list_names | error | l_required_scale | NA | List ‘l_required_scale’ is defined in target’s choices but not in dev’s choices. |
+
+
+|check      |severity |name             |list_name |detail                                                                           |
+|:----------|:--------|:----------------|:---------|:--------------------------------------------------------------------------------|
+|list_names |error    |l_required_scale |NA        |List 'l_required_scale' is defined in target's choices but not in dev's choices. |
+
+
 
 ### `validate_survey_list_names()`
 
-Checks that every choice list *referenced* in `target`’s survey
-questions is also referenced in `dev`’s survey questions.
+Checks that every choice list *referenced* in `target`'s survey questions
+is also referenced in `dev`'s survey questions.
 
-This is complementary to `validate_list_names()`: a list might be
-defined in the choices sheet but never used — or, as in our example, a
-question type changed from `text` to `select_one l_required_scale`
-without a matching entry in dev’s survey.
+This is complementary to `validate_list_names()`: a list might be defined in
+the choices sheet but never used — or, as in our example, a question type
+changed from `text` to `select_one l_required_scale` without a matching entry
+in dev's survey.
+
 
 ``` r
 result_sln <- validate_survey_list_names(target_with_issues, dev)
 knitr::kable(result_sln)
 ```
 
-| check | severity | name | list_name | detail |
-|:---|:---|:---|:---|:---|
-| survey_list_names | error | l_required_scale | NA | List ‘l_required_scale’ is referenced in target’s survey but not in dev’s survey. |
+
+
+|check             |severity |name             |list_name |detail                                                                            |
+|:-----------------|:--------|:----------------|:---------|:---------------------------------------------------------------------------------|
+|survey_list_names |error    |l_required_scale |NA        |List 'l_required_scale' is referenced in target's survey but not in dev's survey. |
+
+
 
 ### `validate_choices()`
 
-For every choice list present in *both* forms, checks that all options
-in `target` also exist in `dev`.
+For every choice list present in *both* forms, checks that all options in
+`target` also exist in `dev`.
 
-Note: lists that exist only in `target` (caught by
-`validate_list_names()`) are not reported here — this check focuses on
-options within shared lists.
+Note: lists that exist only in `target` (caught by `validate_list_names()`)
+are not reported here — this check focuses on options within shared lists.
+
 
 ``` r
 result_ch <- validate_choices(target_with_issues, dev)
 knitr::kable(result_ch)
 ```
 
-| check | severity | name | list_name | detail |
-|:---|:---|:---|:---|:---|
-| choices | error | mandatory_option | l_yn | Choice ‘mandatory_option’ in list ‘l_yn’ is present in target but not in dev. |
 
-------------------------------------------------------------------------
+
+|check   |severity |name             |list_name |detail                                                                        |
+|:-------|:--------|:----------------|:---------|:-----------------------------------------------------------------------------|
+|choices |error    |mandatory_option |l_yn      |Choice 'mandatory_option' in list 'l_yn' is present in target but not in dev. |
+
+
+
+---
 
 ## Running a subset of checks
 
-Pass a character vector to the `checks` argument to run only the checks
-you need.
+Pass a character vector to the `checks` argument to run only the checks you
+need.
+
 
 ``` r
 validate_xlsform(
@@ -462,17 +499,63 @@ validate_xlsform(
   knitr::kable()
 ```
 
-| check | severity | name | list_name | detail |
-|:---|:---|:---|:---|:---|
-| question_names | error | required_indicator | NA | Question ‘required_indicator’ is present in target but not in dev. |
-| choices | error | mandatory_option | l_yn | Choice ‘mandatory_option’ in list ‘l_yn’ is present in target but not in dev. |
 
-------------------------------------------------------------------------
+
+|check          |severity |name               |list_name |detail                                                                        |
+|:--------------|:--------|:------------------|:---------|:-----------------------------------------------------------------------------|
+|question_names |error    |required_indicator |NA        |Question 'required_indicator' is present in target but not in dev.            |
+|choices        |error    |mandatory_option   |l_yn      |Choice 'mandatory_option' in list 'l_yn' is present in target but not in dev. |
+
+
+
+---
+
+## Skipping lists with `passing_lists`
+
+Some choice lists — admin boundaries, enumerator IDs, country lists — are
+expected to differ between a target and a dev form and should not be flagged.
+`validate_choices()` and `validate_xlsform()` accept a `passing_lists` argument
+for this purpose. The default is `idem_passing_lists`, a named vector you can
+inspect directly:
+
+
+``` r
+idem_passing_lists
+#> [1] "l_admin1"     "l_admin2"     "l_admin3"     "l_admin4"     "l_cluster_id"
+#> [6] "l_country"    "l_enum_id"
+```
+
+Any list named in `passing_lists` is excluded from the options comparison.
+To extend the default with a project-specific list, pass a combined vector:
+
+
+``` r
+validate_choices(
+  target, dev,
+  passing_lists = c(idem_passing_lists, "l_my_project_list")
+)
+#> # A tibble: 0 × 5
+#> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
+#> #   detail <chr>
+```
+
+To disable all bypasses and compare every shared list, pass `character(0)`:
+
+
+``` r
+validate_choices(target, dev, passing_lists = character(0))
+```
+
+The same argument is available on `validate_xlsform()` and is forwarded to the
+`choices` check automatically.
+
+---
 
 ## Working with results
 
-Because `validate_xlsform()` returns a plain tibble, standard data
-manipulation works directly on the output.
+Because `validate_xlsform()` returns a plain tibble, standard data manipulation
+works directly on the output.
+
 
 ``` r
 # Count issues by check
@@ -489,7 +572,7 @@ issues |>
 
 ## Comparable / Similar tools
 
-- <https://github.com/williameoswald/surveydesignr>
-- <https://github.com/unhcr-americas/XlsFormUtil/blob/HEAD/R/fct_xlsform_compare.R>
-- <https://github.com/PovertyAction/ipacheckscto>
-- <https://github.com/PMA-2020/xform-test>
+* https://github.com/williameoswald/surveydesignr
+* https://github.com/unhcr-americas/XlsFormUtil/blob/HEAD/R/fct_xlsform_compare.R
+* https://github.com/PovertyAction/ipacheckscto
+* https://github.com/PMA-2020/xform-test
