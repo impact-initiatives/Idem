@@ -36,6 +36,9 @@
 #' @param checks A character vector of check names to run. Defaults to all
 #'   four checks:
 #'   `c("question_names", "list_names", "survey_list_names", "choices")`.
+#' @param passing_lists Passed to [validate_choices()]. A character vector of
+#'   list names whose choice options are not compared. Defaults to
+#'   [idem_passing_lists].
 #'
 #' @return A tibble with columns `check`, `severity`, `name`, `list_name`, and
 #'   `detail`. Has zero rows when no issues are found.
@@ -55,18 +58,28 @@
 #' # Run only a subset of checks
 #' validate_xlsform(target, target, checks = c("question_names", "choices"))
 #'
-#' # Introduce issues: dev is missing a question and a choice option that
-#' # target requires
+#' # Introduce issues: dev is missing a question and a choice option
+#' non_passing_row <- which(
+#'   !is.na(target$choices$list_name) &
+#'     !target$choices$list_name %in% idem_passing_lists
+#' )[1]
 #' dev_trimmed <- xlsform(
 #'   survey  = target$survey[-nrow(target$survey), ],
-#'   choices = target$choices[-nrow(target$choices), ]
+#'   choices = target$choices[-non_passing_row, ]
 #' )
 #' issues <- validate_xlsform(target, dev_trimmed)
 #' issues
+#'
+#' # Extend the default passing_lists with a project-specific list
+#' validate_xlsform(
+#'   target, target,
+#'   passing_lists = c(idem_passing_lists, "l_my_project_list")
+#' )
 validate_xlsform <- function(
   target,
   dev,
-  checks = c("question_names", "list_names", "survey_list_names", "choices")
+  checks = c("question_names", "list_names", "survey_list_names", "choices"),
+  passing_lists = idem_passing_lists
 ) {
   if (!inherits(target, "xlsform")) {
     cli::cli_abort(
@@ -101,7 +114,9 @@ validate_xlsform <- function(
     question_names = validate_question_names,
     list_names = validate_list_names,
     survey_list_names = validate_survey_list_names,
-    choices = validate_choices
+    choices = \(target, dev) {
+      validate_choices(target, dev, passing_lists = passing_lists)
+    }
   )
 
   results <- purrr::map(
