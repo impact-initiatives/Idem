@@ -313,7 +313,7 @@ validate_xlsform(
 Some choice lists — admin boundaries, enumerator IDs, country lists — are
 expected to differ between a target and a dev form and should not be flagged.
 `validate_choices()` and `validate_xlsform()` accept a `passing_lists` argument
-for this purpose. The default is `idem_passing_lists`, a named vector you can
+for this purpose. The default is `idem_passing_lists`, a character vector you can
 inspect directly:
 
 ```{r passing-lists-default}

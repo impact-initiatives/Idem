@@ -78,7 +78,7 @@ throughout this tutorial.
 path <- system.file("extdata/form.xlsx", package = "idem")
 target <- read_xlsform(path)
 target
-#> <xlsform> '/tmp/RtmpUB4vNh/temp_libpath1f46aee8cbfc2/idem/extdata/form.xlsx'
+#> <xlsform> '/tmp/Rtmppkq9Ty/temp_libpath1f7d554b21950f/idem/extdata/form.xlsx'
 #> • survey: 315 rows
 #> • choices: 2497 rows
 ```
@@ -475,7 +475,7 @@ Some choice lists — admin boundaries, enumerator IDs, country lists —
 are expected to differ between a target and a dev form and should not be
 flagged. `validate_choices()` and `validate_xlsform()` accept a
 `passing_lists` argument for this purpose. The default is
-`idem_passing_lists`, a named vector you can inspect directly:
+`idem_passing_lists`, a character vector you can inspect directly:
 
 ``` r
 idem_passing_lists
