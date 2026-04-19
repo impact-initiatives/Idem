@@ -330,7 +330,7 @@ validate_choices(
 )
 ```
 
-To disable all bypasses and compare every shared list, pass `character(0)`:
+To disable all bypasses and force the comparison between every shared list, pass `character(0)`:
 
 ```{r passing-lists-disable, eval = FALSE}
 validate_choices(target, dev, passing_lists = character(0))
