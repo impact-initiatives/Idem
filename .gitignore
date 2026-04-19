@@ -50,3 +50,6 @@ rsconnect/
 
 # Dev folder
 dev/*
+renv.lock
+renv/
+.Rprofile
