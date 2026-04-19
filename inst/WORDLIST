@@ -47,6 +47,7 @@ normalises
 ODK
 option’
 orchestrator
+param
 pkgdown
 pre
 precommit
