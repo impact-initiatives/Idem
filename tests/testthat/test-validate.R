@@ -298,6 +298,34 @@ test_that("validate_choices errors on non-xlsform inputs", {
   expect_error(validate_choices(x, list()), class = "rlang_error")
 })
 
+test_that("validate_choices errors on invalid passing_lists type", {
+  x <- fixture_xlsform()
+  expect_error(
+    validate_choices(x, x, passing_lists = 1L),
+    class = "rlang_error"
+  )
+  expect_error(
+    validate_choices(x, x, passing_lists = TRUE),
+    class = "rlang_error"
+  )
+  expect_error(
+    validate_choices(x, x, passing_lists = list("a")),
+    class = "rlang_error"
+  )
+  expect_error(
+    validate_choices(x, x, passing_lists = NULL),
+    class = "rlang_error"
+  )
+  expect_error(
+    validate_choices(x, x, passing_lists = NA_character_),
+    class = "rlang_error"
+  )
+  expect_error(
+    validate_choices(x, x, passing_lists = NA),
+    class = "rlang_error"
+  )
+})
+
 test_that("validate_choices skips passing lists by default", {
   plist <- idem_passing_lists[1]
   target <- xlsform(

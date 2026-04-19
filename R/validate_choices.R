@@ -70,6 +70,7 @@ validate_choices <- function(
       {.obj_type_friendly {dev}}."
     )
   }
+  check_character(passing_lists, allow_na = FALSE, allow_null = FALSE)
 
   target_choices <- xlsform_choices(target)
   dev_choices <- xlsform_choices(dev)
