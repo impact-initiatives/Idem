@@ -16,6 +16,7 @@ Imports:
     cli,
     purrr,
     readxl,
+    rlang (>= 1.2.0),
     stats,
     stringr,
     tibble,

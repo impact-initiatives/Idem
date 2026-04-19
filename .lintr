@@ -2,6 +2,8 @@ linters: linters_with_defaults(
     object_usage_linter = NULL
   )
 exclusions: list(
+    "R/import-standalone-obj-type.R",
+    "R/import-standalone-types-check.R",
     "R/read_xlsform.R" = list(
       line_length_linter = 50L
     ),

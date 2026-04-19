@@ -7,7 +7,8 @@
 validate_xlsform(
   target,
   dev,
-  checks = c("question_names", "list_names", "survey_list_names", "choices")
+  checks = c("question_names", "list_names", "survey_list_names", "choices"),
+  passing_lists = idem_passing_lists
 )
 }
 \arguments{
@@ -19,6 +20,10 @@ form.}
 \item{checks}{A character vector of check names to run. Defaults to all
 four checks:
 \code{c("question_names", "list_names", "survey_list_names", "choices")}.}
+
+\item{passing_lists}{Passed to \code{\link[=validate_choices]{validate_choices()}}. A character vector of
+list names whose choice options are not compared. Defaults to
+\link{idem_passing_lists}.}
 }
 \value{
 A tibble with columns \code{check}, \code{severity}, \code{name}, \code{list_name}, and
@@ -66,14 +71,23 @@ validate_xlsform(target, target)
 # Run only a subset of checks
 validate_xlsform(target, target, checks = c("question_names", "choices"))
 
-# Introduce issues: dev is missing a question and a choice option that
-# target requires
+# Introduce issues: dev is missing a question and a choice option
+non_passing_row <- which(
+  !is.na(target$choices$list_name) &
+    !target$choices$list_name \%in\% idem_passing_lists
+)[1]
 dev_trimmed <- xlsform(
   survey  = target$survey[-nrow(target$survey), ],
-  choices = target$choices[-nrow(target$choices), ]
+  choices = target$choices[-non_passing_row, ]
 )
 issues <- validate_xlsform(target, dev_trimmed)
 issues
+
+# Extend the default passing_lists with a project-specific list
+validate_xlsform(
+  target, target,
+  passing_lists = c(idem_passing_lists, "l_my_project_list")
+)
 }
 \seealso{
 \code{\link[=validate_question_names]{validate_question_names()}}, \code{\link[=validate_list_names]{validate_list_names()}},

@@ -289,13 +289,121 @@ test_that("validate_choices skips lists present only in target", {
     choice_names = "opt1"
   )
   result <- validate_choices(target, dev)
-  expect_true(all(result$list_name != "list_b" | nrow(result) == 0L))
+  expect_equal(nrow(result), 0L)
 })
 
 test_that("validate_choices errors on non-xlsform inputs", {
   x <- fixture_xlsform()
   expect_error(validate_choices(list(), x), class = "rlang_error")
   expect_error(validate_choices(x, list()), class = "rlang_error")
+})
+
+test_that("validate_choices errors on invalid passing_lists type", {
+  x <- fixture_xlsform()
+  expect_error(
+    validate_choices(x, x, passing_lists = 1L),
+    class = "rlang_error"
+  )
+  expect_error(
+    validate_choices(x, x, passing_lists = TRUE),
+    class = "rlang_error"
+  )
+  expect_error(
+    validate_choices(x, x, passing_lists = list("a")),
+    class = "rlang_error"
+  )
+  expect_error(
+    validate_choices(x, x, passing_lists = NULL),
+    class = "rlang_error"
+  )
+  expect_error(
+    validate_choices(x, x, passing_lists = NA_character_),
+    class = "rlang_error"
+  )
+  expect_error(
+    validate_choices(x, x, passing_lists = NA),
+    class = "rlang_error"
+  )
+})
+
+test_that("validate_choices skips passing lists by default", {
+  plist <- idem_passing_lists[1]
+  target <- xlsform(
+    survey = tibble::tibble(type = paste("select_one", plist), name = "q1"),
+    choices = tibble::tibble(
+      list_name = c(plist, plist),
+      name = c("opt1", "opt2")
+    )
+  )
+  dev <- xlsform(
+    survey = tibble::tibble(type = paste("select_one", plist), name = "q1"),
+    choices = tibble::tibble(list_name = plist, name = "opt1")
+  )
+  result <- validate_choices(target, dev)
+  expect_equal(nrow(result), 0L)
+})
+
+test_that("validate_choices skips passing list when dev options differ", {
+  plist <- idem_passing_lists[2]
+  target <- xlsform(
+    survey = tibble::tibble(type = paste("select_one", plist), name = "q1"),
+    choices = tibble::tibble(
+      list_name = c(plist, plist),
+      name = c("opt_a", "opt_b")
+    )
+  )
+  dev <- xlsform(
+    survey = tibble::tibble(type = paste("select_one", plist), name = "q1"),
+    choices = tibble::tibble(list_name = plist, name = "opt_x")
+  )
+  result <- validate_choices(target, dev)
+  expect_equal(nrow(result), 0L)
+})
+
+test_that("validate_choices flags missing opts when passing_lists is empty", {
+  plist <- idem_passing_lists[1]
+  target <- xlsform(
+    survey = tibble::tibble(type = paste("select_one", plist), name = "q1"),
+    choices = tibble::tibble(
+      list_name = c(plist, plist),
+      name = c("opt1", "opt2")
+    )
+  )
+  dev <- xlsform(
+    survey = tibble::tibble(type = paste("select_one", plist), name = "q1"),
+    choices = tibble::tibble(list_name = plist, name = "opt1")
+  )
+  result <- validate_choices(target, dev, passing_lists = character(0))
+  expect_equal(nrow(result), 1L)
+  expect_equal(result$name, "opt2")
+  expect_equal(result$list_name, plist)
+})
+
+test_that("validate_choices with custom passing_lists skips only that list", {
+  target <- xlsform(
+    survey = tibble::tibble(
+      type = c("select_one my_check", "select_one my_skip"),
+      name = c("q1", "q2")
+    ),
+    choices = tibble::tibble(
+      list_name = c("my_check", "my_check", "my_skip", "my_skip"),
+      name = c("opt1", "opt2", "opt3", "opt4")
+    )
+  )
+  dev <- xlsform(
+    survey = tibble::tibble(
+      type = c("select_one my_check", "select_one my_skip"),
+      name = c("q1", "q2")
+    ),
+    choices = tibble::tibble(
+      list_name = c("my_check", "my_skip"),
+      name = c("opt1", "opt3")
+    )
+  )
+  result <- validate_choices(target, dev, passing_lists = "my_skip")
+  expect_equal(nrow(result), 1L)
+  expect_equal(result$name, "opt2")
+  expect_equal(result$list_name, "my_check")
 })
 
 # ── validate_xlsform ──────────────────────────────────────────────────────────
@@ -357,6 +465,32 @@ test_that("validate_xlsform errors on non-xlsform inputs", {
   x <- fixture_xlsform()
   expect_error(validate_xlsform(list(), x), class = "rlang_error")
   expect_error(validate_xlsform(x, list()), class = "rlang_error")
+})
+
+test_that("validate_xlsform threads passing_lists to validate_choices", {
+  plist <- idem_passing_lists[1]
+  target <- xlsform(
+    survey = tibble::tibble(type = paste("select_one", plist), name = "q1"),
+    choices = tibble::tibble(
+      list_name = c(plist, plist),
+      name = c("opt1", "opt2")
+    )
+  )
+  dev <- xlsform(
+    survey = tibble::tibble(type = paste("select_one", plist), name = "q1"),
+    choices = tibble::tibble(list_name = plist, name = "opt1")
+  )
+  # default: plist is skipped — no issues
+  expect_equal(nrow(validate_xlsform(target, dev, checks = "choices")), 0L)
+  # passing_lists = character(0): nothing skipped — opt2 flagged
+  result <- validate_xlsform(
+    target,
+    dev,
+    checks = "choices",
+    passing_lists = character(0)
+  )
+  expect_equal(nrow(result), 1L)
+  expect_equal(result$name, "opt2")
 })
 
 # ── xlsform constructor ───────────────────────────────────────────────────────
@@ -490,9 +624,14 @@ test_that("validate_survey_list_names flags lists in target absent from dev", {
 
 test_that("validate_choices flags a choice option in target missing from dev", {
   target <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
+  # Find a row from a non-passing list
+  non_passing_row <- which(
+    !is.na(target$choices$list_name) &
+      !target$choices$list_name %in% idem_passing_lists
+  )[1]
   dev_trimmed <- xlsform(
     survey = target$survey,
-    choices = target$choices[-nrow(target$choices), ]
+    choices = target$choices[-non_passing_row, ]
   )
   result <- validate_choices(target, dev_trimmed)
   expect_s3_class(result, "tbl_df")

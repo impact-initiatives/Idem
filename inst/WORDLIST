@@ -47,6 +47,7 @@ normalises
 ODK
 option’
 orchestrator
+param
 pkgdown
 pre
 precommit
@@ -60,6 +61,7 @@ readxl
 recognised
 renv
 reprex
+rlang
 rmarkdown
 Rmd
 roxygen

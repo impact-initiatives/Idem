@@ -78,7 +78,7 @@ throughout this tutorial.
 path <- system.file("extdata/form.xlsx", package = "idem")
 target <- read_xlsform(path)
 target
-#> <xlsform> '/tmp/Rtmptnm12L/temp_libpath3c5523573ac07/idem/extdata/form.xlsx'
+#> <xlsform> '/tmp/Rtmppkq9Ty/temp_libpath1f7d554b21950f/idem/extdata/form.xlsx'
 #> • survey: 315 rows
 #> • choices: 2497 rows
 ```
@@ -466,6 +466,46 @@ validate_xlsform(
 |:---|:---|:---|:---|:---|
 | question_names | error | required_indicator | NA | Question ‘required_indicator’ is present in target but not in dev. |
 | choices | error | mandatory_option | l_yn | Choice ‘mandatory_option’ in list ‘l_yn’ is present in target but not in dev. |
+
+------------------------------------------------------------------------
+
+## Skipping lists with `passing_lists`
+
+Some choice lists — admin boundaries, enumerator IDs, country lists —
+are expected to differ between a target and a dev form and should not be
+flagged. `validate_choices()` and `validate_xlsform()` accept a
+`passing_lists` argument for this purpose. The default is
+`idem_passing_lists`, a character vector you can inspect directly:
+
+``` r
+idem_passing_lists
+#> [1] "l_admin1"     "l_admin2"     "l_admin3"     "l_admin4"     "l_cluster_id"
+#> [6] "l_country"    "l_enum_id"
+```
+
+Any list named in `passing_lists` is excluded from the options
+comparison. To extend the default with a project-specific list, pass a
+combined vector:
+
+``` r
+validate_choices(
+  target, dev,
+  passing_lists = c(idem_passing_lists, "l_my_project_list")
+)
+#> # A tibble: 0 × 5
+#> # ℹ 5 variables: check <chr>, severity <chr>, name <chr>, list_name <chr>,
+#> #   detail <chr>
+```
+
+To disable all bypasses and force the comparison between every shared
+list, pass `character(0)`:
+
+``` r
+validate_choices(target, dev, passing_lists = character(0))
+```
+
+The same argument is available on `validate_xlsform()` and is forwarded
+to the `choices` check automatically.
 
 ------------------------------------------------------------------------
 
