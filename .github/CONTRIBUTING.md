@@ -44,17 +44,6 @@ uv tool install pre-commit
 
 Alternatives: `pip install pre-commit` or `brew install pre-commit`.
 
-### air
-
-[air](https://posit-dev.github.io/air/) is the R code formatter used by the
-`air-format` hook. Install it via uv (recommended):
-
-```sh
-uv tool install air-formatter
-```
-
-Alternatives: `pip install air-formatter` or `brew install air` (macOS only).
-
 ## Branching model
 
 This repository uses a **release-branch workflow**:
@@ -205,11 +194,6 @@ Run this command from the root of the cloned repository.
 This hook enforces the [Conventional Commits](https://www.conventionalcommits.org/)
 format — see [Commit message format](#commit-message-format) below for the
 rules and allowed types.
-
-### 3. Verify air is installed
-
-The `air-format` hook requires the `air` binary on your `PATH` — see
-[Prerequisites](#prerequisites) if you have not installed it yet.
 
 ### Run hooks manually
 

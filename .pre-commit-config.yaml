@@ -73,15 +73,12 @@ repos:
     hooks:
     -   id: conventional-pre-commit
         stages: [commit-msg]
--   repo: local
+-   repo: https://github.com/posit-dev/air-pre-commit
+    rev: 0.9.0
     hooks:
     -   id: air-format
-        name: Air format
-        entry: air
-        args: [format, .]
-        language: system
-        types: [r]
-        pass_filenames: false
+-   repo: local
+    hooks:
     -   id: forbid-to-commit
         name: Don't commit common R artifacts
         entry: Cannot commit .Rhistory, .RData, .Rds or .rds.
