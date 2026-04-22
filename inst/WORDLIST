@@ -53,6 +53,7 @@ navbar
 noncommercially
 option’
 pkgdown
+pos
 pre
 purrr
 Rbuildignore
