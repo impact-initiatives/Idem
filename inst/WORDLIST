@@ -55,6 +55,7 @@ option’
 pkgdown
 pos
 pre
+prot
 purrr
 Rbuildignore
 rclone
