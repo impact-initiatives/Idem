@@ -3,9 +3,10 @@
 # Prerequisites:
 #   devtools::load_all() # nolint: commented_code_linter
 #
-# Or from the shell:
+# Or from the shell: # nolint start: commented_code_linter
 #   Rscript -e \
 #     "devtools::load_all(); source('data-raw/msna_template_required.R')"
+# nolint end
 path <- system.file("extdata/form.xlsx", package = "idem")
 
 survey_cols <- c(
