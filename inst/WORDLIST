@@ -1,6 +1,7 @@
 's
 aap
 Affero
+arf
 aut
 autoupdate
 checkUsage
@@ -61,6 +62,7 @@ pos
 pre
 prot
 purrr
+pyxform
 Rbuildignore
 rclone
 rda
@@ -91,8 +93,11 @@ tibbles
 tidyr
 toml
 uvx
+wip
 WIPO
 WORDLIST
+xform
+xls
 xlsform
 XLSForm
 XLSForm's
