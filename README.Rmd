@@ -82,13 +82,47 @@ filtered, counted, and passed to downstream reporting tools.
 library(idem)
 ```
 
-idem ships with a sample XLSForm. We will use it as our reference throughout
-this tutorial.
+---
+
+## The bundled MSNA reference form
+
+idem ships with `msna_template_required`: a pre-loaded `xlsform` object
+containing the **required questions** from the MSNA template form. It is
+the canonical reference against which mission-contextualized forms are
+validated — you do not need to load the template separately.
+
+```{r bundled-dataset}
+msna_template_required
+```
+
+```{r bundled-questions}
+xlsform_questions(msna_template_required) |> head(10)
+```
+
+To validate a mission form against it, pass `msna_template_required` directly
+as `target`:
+
+```r
+dev <- read_xlsform("path/to/mission_form.xlsx")
+issues <- validate_xlsform(target = msna_template_required, dev = dev)
+issues
+```
+
+Any row in the output flags content that the mission form is missing relative
+to the MSNA standard. An empty tibble means the form is fully compliant.
+
+The dataset is versioned alongside the package —
+`attr(msna_template_required, "version")` records which release it was
+generated from, so results are always reproducible and traceable to a specific
+snapshot of the template.
+
+We use `msna_template_required` as `target` throughout the rest of this
+tutorial. Forms to validate are loaded from disk with `read_xlsform()`:
 
 ```{r load-form}
 path <- system.file("extdata/form.xlsx", package = "idem")
-target <- read_xlsform(path)
-target
+target <- msna_template_required
+dev    <- read_xlsform(path)
 ```
 
 ---
