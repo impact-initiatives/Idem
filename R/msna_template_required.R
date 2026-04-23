@@ -8,7 +8,7 @@
 #' @format An `xlsform` object — a named list of two tibbles with class
 #'   `c("xlsform", "list")`:
 #'
-#'   **`survey`** — 689 rows × 17 columns:
+#'   **`survey`** — 236 rows × 17 columns:
 #'   \describe{
 #'     \item{type}{XLSForm question type (e.g. `"select_one"`, `"integer"`).}
 #'     \item{name}{Variable name.}
@@ -31,7 +31,7 @@
 #'     \item{parameters}{Additional XLSForm parameters.}
 #'   }
 #'
-#'   **`choices`** — 3,579 rows × 8 columns:
+#'   **`choices`** — 3,726 rows × 8 columns:
 #'   \describe{
 #'     \item{list_name}{Choice list identifier referenced in `survey$type`.}
 #'     \item{name}{Choice option value.}
