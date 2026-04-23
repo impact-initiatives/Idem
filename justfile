@@ -83,3 +83,7 @@ fetch-ib:
 
 # Regenerate docs + README, then run full check
 ci: doc readme check
+
+val:
+    arf -e "source('data-raw/trim.R')"
+    uvx --from pyxform xls2xform "inst/extdata/trim_form.xlsx"  2>&1
