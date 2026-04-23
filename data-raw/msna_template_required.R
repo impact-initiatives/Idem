@@ -5,8 +5,7 @@
 #
 # Or from the shell:
 #   Rscript -e "devtools::load_all(); source('data-raw/msna_template_required.R')"
-
-path <- system.file("extdata/form.xlsx", package = "Idem")
+path <- system.file("extdata/form.xlsx", package = "idem")
 
 survey_cols <- c(
   "type",
@@ -40,12 +39,15 @@ choices_cols <- c(
 )
 
 msna_template_required <- read_xlsform(path)
-msna_template_required$survey <- msna_template_required$survey[, survey_cols]
+msna_template_required$survey <- msna_template_required$survey[
+  msna_template_required$survey$req == 1,
+  survey_cols
+]
 msna_template_required$choices <- msna_template_required$choices[, choices_cols]
 
 # Strip the absolute local path — the dataset is a self-contained snapshot
 # and the path attribute would otherwise embed the contributor's machine path.
 attr(msna_template_required, "path") <- NA_character_
-attr(msna_template_required, "version") <- as.character(packageVersion("Idem"))
+attr(msna_template_required, "version") <- as.character(packageVersion("idem"))
 
 usethis::use_data(msna_template_required, overwrite = TRUE)

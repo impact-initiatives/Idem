@@ -8,7 +8,7 @@
 An \code{xlsform} object — a named list of two tibbles with class
 \code{c("xlsform", "list")}:
 
-\strong{\code{survey}} — 689 rows × 17 columns:
+\strong{\code{survey}} — 236 rows × 17 columns:
 \describe{
 \item{type}{XLSForm question type (e.g. \code{"select_one"}, \code{"integer"}).}
 \item{name}{Variable name.}
@@ -31,7 +31,7 @@ in French.}
 \item{parameters}{Additional XLSForm parameters.}
 }
 
-\strong{\code{choices}} — 3,579 rows × 8 columns:
+\strong{\code{choices}} — 3,726 rows × 8 columns:
 \describe{
 \item{list_name}{Choice list identifier referenced in \code{survey$type}.}
 \item{name}{Choice option value.}
