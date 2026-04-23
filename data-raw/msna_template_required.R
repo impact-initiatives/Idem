@@ -1,10 +1,11 @@
 # Run this script to regenerate data/msna_template_required.rda.
 #
 # Prerequisites:
-#   devtools::load_all()   # must be run first in the same session
+#   devtools::load_all() # nolint: commented_code_linter
 #
 # Or from the shell:
-#   Rscript -e "devtools::load_all(); source('data-raw/msna_template_required.R')"
+#   Rscript -e \
+#     "devtools::load_all(); source('data-raw/msna_template_required.R')"
 path <- system.file("extdata/form.xlsx", package = "idem")
 
 survey_cols <- c(
