@@ -7,6 +7,7 @@ repos:
     -   id: roxygenize
         additional_dependencies:
         - readxl
+        - rlang@1.2.0
         - tibble
         - tidyr
     # codemeta must be above use-tidy-description when both are used
@@ -41,8 +42,10 @@ repos:
           (.*/|)WORDLIST|
           \.github/workflows/.*|
           data/.*|
+          inst/extdata/.*|
           )$
     -   id: lintr
+        exclude: '^data-raw/.*'
         additional_dependencies:
         - readxl
         - tibble
@@ -53,12 +56,13 @@ repos:
     -   id: no-print-statement
     -   id: no-debug-statement
     -   id: deps-in-desc
+        exclude: '^data-raw/.*'
     -   id: pkgdown
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks: 
     -   id: check-added-large-files
-        args: ['--maxkb=200']
+        args: ['--maxkb=500']
     -   id: file-contents-sorter
         files: '^\.Rbuildignore$'
     -   id: end-of-file-fixer

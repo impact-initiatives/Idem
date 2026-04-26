@@ -65,7 +65,25 @@ hook id:
 hooks-update:
     pre-commit autoupdate
 
+# ── Data ──────────────────────────────────────────────────────────────────────
+
+# Regenerate data/msna_template_required.rda from inst/extdata sources
+data:
+    Rscript -e "devtools::load_all(); source('data-raw/msna_template_required.R')"
+
+# Download the MSNA form from SharePoint into inst/extdata/form.xlsx
+fetch-form:
+    rclone copyto "Sharepoint:MSNA_2026_KOBO_Form_20260331.xlsx" inst/extdata/form.xlsx
+
+# Download the MSNA indicator bank from hppu into inst/extdata/indicator_bank.xlsx
+fetch-ib:
+    rclone copyto "hppu:04. Indicator bank and sectoral guidance/2026_MSNA_IndicatorBank_20260324.xlsx" inst/extdata/indicator_bank.xlsx
+
 # ── Compound workflows ────────────────────────────────────────────────────────
 
 # Regenerate docs + README, then run full check
 ci: doc readme check
+
+val:
+    arf -e "source('data-raw/trim.R')"
+    uvx --from pyxform xls2xform "inst/extdata/trim_form.xlsx"  2>&1

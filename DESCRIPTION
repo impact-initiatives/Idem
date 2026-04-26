@@ -16,6 +16,7 @@ Imports:
     cli,
     purrr,
     readxl,
+    rlang (>= 1.2.0),
     stats,
     stringr,
     tibble,
@@ -26,3 +27,4 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+LazyData: true

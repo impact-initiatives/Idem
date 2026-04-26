@@ -17,6 +17,9 @@
 #' @param target An `xlsform` object representing the authoritative reference
 #'   form.
 #' @param dev An `xlsform` object representing the form being validated.
+#' @param passing_lists A character vector of list names to skip entirely.
+#'   Defaults to [idem_passing_lists]. Pass `character(0)` to disable all
+#'   bypasses.
 #'
 #' @return A tibble with columns `check`, `severity`, `name`, `list_name`, and
 #'   `detail`. Has zero rows when all choice options in `target` are present in
@@ -34,13 +37,27 @@
 #' # No issues: all choice options in target also exist in dev
 #' validate_choices(target, target)
 #'
-#' # Issues found: dev is missing the last choice option that target defines
+#' # Issues found: drop one option from a non-passing list
+#' non_passing_row <- which(
+#'   !is.na(target$choices$list_name) &
+#'     !target$choices$list_name %in% idem_passing_lists
+#' )[1]
 #' dev_trimmed <- xlsform(
 #'   survey  = target$survey,
-#'   choices = target$choices[-nrow(target$choices), ]
+#'   choices = target$choices[-non_passing_row, ]
 #' )
 #' validate_choices(target, dev_trimmed)
-validate_choices <- function(target, dev) {
+#'
+#' # Extend the default passing_lists with a project-specific list
+#' validate_choices(
+#'   target, target,
+#'   passing_lists = c(idem_passing_lists, "l_my_project_list")
+#' )
+validate_choices <- function(
+  target,
+  dev,
+  passing_lists = idem_passing_lists
+) {
   if (!inherits(target, "xlsform")) {
     cli::cli_abort(
       "{.arg target} must be an {.cls xlsform} object, not \\
@@ -53,11 +70,13 @@ validate_choices <- function(target, dev) {
       {.obj_type_friendly {dev}}."
     )
   }
+  check_character(passing_lists, allow_na = FALSE, allow_null = FALSE)
 
   target_choices <- xlsform_choices(target)
   dev_choices <- xlsform_choices(dev)
 
-  shared_lists <- intersect(names(target_choices), names(dev_choices))
+  shared_lists <- intersect(names(target_choices), names(dev_choices)) |>
+    setdiff(passing_lists)
 
   results <- purrr::map(.x = shared_lists, .f = \(list_nm) {
     missing_opts <- setdiff(target_choices[[list_nm]], dev_choices[[list_nm]])

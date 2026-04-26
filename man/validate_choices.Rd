@@ -4,13 +4,17 @@
 \alias{validate_choices}
 \title{Validate choice options between two XLSForms}
 \usage{
-validate_choices(target, dev)
+validate_choices(target, dev, passing_lists = idem_passing_lists)
 }
 \arguments{
 \item{target}{An \code{xlsform} object representing the authoritative reference
 form.}
 
 \item{dev}{An \code{xlsform} object representing the form being validated.}
+
+\item{passing_lists}{A character vector of list names to skip entirely.
+Defaults to \link{idem_passing_lists}. Pass \code{character(0)} to disable all
+bypasses.}
 }
 \value{
 A tibble with columns \code{check}, \code{severity}, \code{name}, \code{list_name}, and
@@ -40,12 +44,22 @@ target <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 # No issues: all choice options in target also exist in dev
 validate_choices(target, target)
 
-# Issues found: dev is missing the last choice option that target defines
+# Issues found: drop one option from a non-passing list
+non_passing_row <- which(
+  !is.na(target$choices$list_name) &
+    !target$choices$list_name \%in\% idem_passing_lists
+)[1]
 dev_trimmed <- xlsform(
   survey  = target$survey,
-  choices = target$choices[-nrow(target$choices), ]
+  choices = target$choices[-non_passing_row, ]
 )
 validate_choices(target, dev_trimmed)
+
+# Extend the default passing_lists with a project-specific list
+validate_choices(
+  target, target,
+  passing_lists = c(idem_passing_lists, "l_my_project_list")
+)
 }
 \seealso{
 \code{\link[=validate_xlsform]{validate_xlsform()}} to run all checks together;
