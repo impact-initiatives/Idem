@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# idem
+# idem <a href="https://impact-initiatives.github.io/idem/"><img src="man/figures/logo.svg" align="right" height="139" alt="idem website" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/impact-initiatives/idem/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/impact-initiatives/idem/actions/workflows/R-CMD-check.yaml)
