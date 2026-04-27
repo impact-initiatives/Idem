@@ -90,6 +90,8 @@ repos:
         files: '\.(Rhistory|RData|Rds|rds)$'
         # `exclude: <regex>` to allow committing specific files
 
+default_install_hook_types: [pre-commit, commit-msg]
+
 ci:
     autoupdate_schedule: monthly
     skip: [pkgdown]

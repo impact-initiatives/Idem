@@ -4,6 +4,7 @@ Affero
 arf
 aut
 autoupdate
+behaviour
 checkUsage
 ci
 cli
@@ -32,8 +33,8 @@ gitGraph
 github
 gitignore
 gsk
-hardcoded
 handwashing
+hardcoded
 hlp
 hppu
 http
@@ -59,17 +60,17 @@ msna
 MSNA
 navbar
 noncommercially
+normalises
 option’
 pkgdown
 pos
 pre
 precommit
 prek
+prot
 PRs
 purrr
 pyproject
-prot
-purrr
 pyxform
 Rbuildignore
 rclone
@@ -80,6 +81,7 @@ readxl
 recognised
 relicensing
 renv
+reprex
 req
 rmarkdown
 Rmd
@@ -99,6 +101,7 @@ textarea
 tibble
 tibbles
 tidyr
+tidyverse
 toml
 usethis
 uv

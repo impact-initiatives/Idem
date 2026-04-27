@@ -175,23 +175,10 @@ precommit::use_precommit()
 `precommit::use_precommit()` writes the hook scripts into `.git/hooks/`. The
 pre-commit framework must already be installed — see
 [Prerequisites](#prerequisites) if you have not done so yet. You only need to
-run this once per clone. If prompted to run `pre-commit install --hook-type
-commit-msg`, continue to step 2 below.
+run this once per clone.
 
-### 2. Activate the commit-msg hook
-
-By default, the `precommit` R package only activates the `pre-commit` hook,
-which runs checks on your code before each commit. Other hooks, like
-`commit-msg` to validate commit messages, must be activated separately.
-Activate it with one additional command in your terminal:
-
-```sh
-pre-commit install --hook-type commit-msg
-```
-
-Run this command from the root of the cloned repository.
-
-This hook enforces the [Conventional Commits](https://www.conventionalcommits.org/)
+This installs both the `pre-commit` and `commit-msg` hooks. The `commit-msg`
+hook enforces the [Conventional Commits](https://www.conventionalcommits.org/)
 format — see [Commit message format](#commit-message-format) below for the
 rules and allowed types.
 
