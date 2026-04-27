@@ -31,51 +31,122 @@
 
 <div id="contributing-to-idem" class="section level1">
 
-<p>This outlines how to propose a change to idem. This package follows tidyverse conventions for code style and workflow — see the <a href="https://rstd.io/tidy-contrib" class="external-link">tidyverse development contributing guide</a> and <a href="https://code-review.tidyverse.org/" class="external-link">code review principles</a> for broader context.</p>
+<p>This document describes the contribution process for idem. This package follows tidyverse conventions for code style and workflow — see the <a href="https://rstd.io/tidy-contrib" class="external-link">tidyverse development contributing guide</a> and <a href="https://code-review.tidyverse.org/" class="external-link">code review principles</a> for broader context.</p>
 <div class="section level2">
-<h2 id="fixing-typos">Fixing typos<a class="anchor" aria-label="anchor" href="#fixing-typos"></a></h2>
-<p>You can fix typos, spelling mistakes, or grammatical errors in the documentation directly using the GitHub web interface, as long as the changes are made in the <em>source</em> file. This generally means editing <a href="https://roxygen2.r-lib.org/articles/roxygen2.html" class="external-link">roxygen2 comments</a> in an <code>.R</code> file, not a <code>.Rd</code> file. You can find the <code>.R</code> file that generates a given <code>.Rd</code> by reading the comment in the first line of the <code>.Rd</code> file.</p>
+<h2 id="before-you-start">Before you start<a class="anchor" aria-label="anchor" href="#before-you-start"></a></h2>
+<p>File an issue before writing any code. This ensures the change is needed and avoids wasted effort. If you have found a bug, include a minimal <a href="https://www.tidyverse.org/help/#reprex" class="external-link">reprex</a> in the issue — this makes it easier to diagnose and to write a unit test later. The tidyverse guide on <a href="https://code-review.tidyverse.org/issues/" class="external-link">how to create a great issue</a> has useful advice.</p>
 </div>
 <div class="section level2">
-<h2 id="bigger-changes">Bigger changes<a class="anchor" aria-label="anchor" href="#bigger-changes"></a></h2>
-<p>If you want to make a bigger change, it’s a good idea to file an issue first and make sure someone from the team agrees that it’s needed. If you’ve found a bug, please file an issue that illustrates the bug with a minimal <a href="https://www.tidyverse.org/help/#reprex" class="external-link">reprex</a> (this will also help you write a unit test, if needed). The tidyverse guide on <a href="https://code-review.tidyverse.org/issues/" class="external-link">how to create a great issue</a> has useful advice on this.</p>
+<h2 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a></h2>
+<p>The following tools must be available on your <code>PATH</code> before following the contribution workflow. Install them once and they will work across all projects.</p>
 <div class="section level3">
-<h3 id="pull-request-process">Pull request process<a class="anchor" aria-label="anchor" href="#pull-request-process"></a></h3>
-<ul><li><p>Fork the package and clone onto your computer. If you haven’t done this before, we recommend using <code>usethis::create_from_github("impact-initiatives/idem", fork = TRUE)</code>.</p></li>
-<li><p>Install all development dependencies with <code>devtools::install_dev_deps()</code>, and then make sure the package passes R CMD check by running <code>devtools::check()</code>. If R CMD check doesn’t pass cleanly, it’s a good idea to ask for help before continuing.</p></li>
-<li><p>Create a Git branch for your pull request (PR). We recommend using <code>usethis::pr_init("brief-description-of-change")</code>.</p></li>
-<li><p>Make your changes, commit to git, and then create a PR by running <code>usethis::pr_push()</code>, and following the prompts in your browser. The title of your PR should briefly describe the change. The body of your PR should contain <code>Fixes #issue-number</code>.</p></li>
-</ul></div>
+<h3 id="uv">uv<a class="anchor" aria-label="anchor" href="#uv"></a></h3>
+<p><a href="https://docs.astral.sh/uv/getting-started/installation/" class="external-link">uv</a> is a Python package manager used to install the other tools:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># macOS / Linux</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-LsSf</span> https://astral.sh/uv/install.sh <span class="kw">|</span> <span class="fu">sh</span></span></code></pre></div>
+<p>See the <a href="https://docs.astral.sh/uv/getting-started/installation/" class="external-link">uv installation guide</a> for Windows and other options.</p>
+</div>
+<div class="section level3">
+<h3 id="pre-commit">pre-commit<a class="anchor" aria-label="anchor" href="#pre-commit"></a></h3>
+<p><a href="https://pre-commit.com/" class="external-link">pre-commit</a> runs the hook scripts before each commit. Install it via uv (recommended):</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="ex">uv</span> tool install pre-commit</span></code></pre></div>
+<p>Alternatives: <code>pip install pre-commit</code> or <code>brew install pre-commit</code>.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="branching-model">Branching model<a class="anchor" aria-label="anchor" href="#branching-model"></a></h2>
+<p>This repository uses a <strong>release-branch workflow</strong>:</p>
+<ol style="list-style-type: decimal"><li>A <code>release/vX.Y.Z</code> branch is created by a maintainer for each planned release.</li>
+<li>Each piece of work (feature, fix, docs, etc.) gets its own branch cut <strong>from the target release branch</strong>, named <code>&lt;issue-number&gt;-brief-description</code> (e.g. <code>7-improve-contributing-guide</code>).</li>
+<li>Completed feature branches are merged into the release branch via a pull request. All CI checks must pass before merging.</li>
+<li>When a release is ready, the release branch is merged into <code>main</code>. The merge commit is tagged with the version number (e.g. <code>v0.2.0</code>).</li>
+</ol><p>Maintainers create and manage release branches. If you are an external contributor, check whether an active release branch exists and target your PR there. If none exists, ask in your issue which branch to use.</p>
+<pre class="mermaid"><code>gitGraph
+   commit id: "…"
+   branch release/v0.2.0
+   checkout release/v0.2.0
+
+   branch "5-add-validation"
+   checkout "5-add-validation"
+   commit id: "feat: add validation"
+   commit id: "test: cover validation"
+   checkout release/v0.2.0
+   merge "5-add-validation" id: "Merge #5"
+
+   branch "6-fix-edge-case"
+   checkout "6-fix-edge-case"
+   commit id: "fix: edge case"
+   checkout release/v0.2.0
+   merge "6-fix-edge-case" id: "Merge #6"
+
+   checkout main
+   merge release/v0.2.0 id: "v0.2.0" tag: "v0.2.0"</code></pre>
+</div>
+<div class="section level2">
+<h2 id="contribution-workflow">Contribution workflow<a class="anchor" aria-label="anchor" href="#contribution-workflow"></a></h2>
+<div class="section level3">
+<h3 id="id_1-fork-and-clone">1. Fork and clone<a class="anchor" aria-label="anchor" href="#id_1-fork-and-clone"></a></h3>
+<p>Fork the repository and clone it locally. The easiest way is:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">create_from_github</span><span class="op">(</span><span class="st">"impact-initiatives/idem"</span>, fork <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Or with plain git:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/<span class="op">&lt;</span>your-username<span class="op">&gt;</span>/idem.git</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="bu">cd</span> idem</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">git</span> remote add upstream https://github.com/impact-initiatives/idem.git</span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="id_2-install-dependencies-and-verify-the-baseline">2. Install dependencies and verify the baseline<a class="anchor" aria-label="anchor" href="#id_2-install-dependencies-and-verify-the-baseline"></a></h3>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_dev_deps</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>R CMD check must pass cleanly before you make any changes. If it does not, open an issue rather than continuing.</p>
+<p>Before moving on, install the pre-commit hooks — see <a href="#pre-commit-hooks">Pre-commit hooks</a> below. The hooks must be in place before you make your first commit.</p>
+</div>
+<div class="section level3">
+<h3 id="id_3-create-a-branch">3. Create a branch<a class="anchor" aria-label="anchor" href="#id_3-create-a-branch"></a></h3>
+<p>Create your branch <strong>from the active release branch</strong>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">git</span> fetch upstream</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> <span class="op">&lt;</span>issue-number<span class="op">&gt;</span>-brief-description-of-change upstream/release/vX.Y.Z</span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="id_4-make-changes-and-commit">4. Make changes and commit<a class="anchor" aria-label="anchor" href="#id_4-make-changes-and-commit"></a></h3>
+<p>Follow the <a href="#commit-message-format">commit message format</a> described below. Each commit should be a coherent, self-contained unit of work. The PR as a whole should address just one thing — see the tidyverse guide on <a href="https://code-review.tidyverse.org/author/focused.html" class="external-link">focused PRs</a>.</p>
+</div>
+<div class="section level3">
+<h3 id="id_5-push-and-open-a-pr">5. Push and open a PR<a class="anchor" aria-label="anchor" href="#id_5-push-and-open-a-pr"></a></h3>
+<p>When ready, push and open a PR:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">pr_push</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Or with plain git:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin 7-brief-description-of-change</span></code></pre></div>
+<p>Then open a pull request on GitHub. The PR title must briefly describe the change. The PR body must contain <code>Fixes #&lt;issue-number&gt;</code>.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="pre-commit-hooks">Pre-commit hooks<a class="anchor" aria-label="anchor" href="#pre-commit-hooks"></a></h2>
-<p>This repository uses <a href="https://pre-commit.com/" class="external-link">pre-commit</a> to run automated checks before each commit. The hook scripts are not committed to the repository — every contributor must install them locally after cloning. The steps below are required, not optional: without them the hooks will not run.</p>
+<p><a href="https://pre-commit.com/" class="external-link">Pre-commit hooks</a> are tests that run each time you attempt to commit. If the tests pass, the commit will be made, otherwise not.</p>
+<p>This repository uses <a href="https://pre-commit.com/" class="external-link">pre-commit</a> to run automated checks before each commit. The hook scripts are not committed to the repository — every contributor must install them locally after cloning. The steps below are <strong>required, not optional</strong>: without them the hooks will not run.</p>
 <div class="section level3">
 <h3 id="id_1-install-the-precommit-r-package-and-activate-the-hooks">1. Install the precommit R package and activate the hooks<a class="anchor" aria-label="anchor" href="#id_1-install-the-precommit-r-package-and-activate-the-hooks"></a></h3>
 <p>The <a href="https://lorenzwalthert.github.io/precommit/" class="external-link"><code>precommit</code></a> R package provides a convenient way to install the pre-commit framework and activate the hooks from R. Run the following in an R session from the root of the cloned repository:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"precommit"</span><span class="op">)</span></span>
 <span><span class="fu">precommit</span><span class="fu">::</span><span class="fu">use_precommit</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><code>precommit::use_precommit()</code> installs the pre-commit framework if needed and writes the hook scripts into <code>.git/hooks/</code>. You only need to do this once per clone.</p>
-</div>
-<div class="section level3">
-<h3 id="id_2-activate-the-commit-msg-hook">2. Activate the commit-msg hook<a class="anchor" aria-label="anchor" href="#id_2-activate-the-commit-msg-hook"></a></h3>
-<p>The <code>precommit</code> R package only activates the <code>pre-commit</code> stage. This repository also uses a <code>commit-msg</code> hook to validate commit message format. Activate it with one additional command in your terminal:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="ex">pre-commit</span> install <span class="at">--hook-type</span> commit-msg</span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="id_3-install-air">3. Install air<a class="anchor" aria-label="anchor" href="#id_3-install-air"></a></h3>
-<p>The <code>air-format</code> hook is a local hook — unlike the other hooks, it is not managed by the <code>precommit</code> R package and will not work unless the <code>air</code> binary is available on your <code>PATH</code>. Install it via <a href="https://docs.astral.sh/uv/getting-started/installation/" class="external-link">uv</a>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">uv</span> tool install air-formatter</span></code></pre></div>
+<p><code>precommit::use_precommit()</code> writes the hook scripts into <code>.git/hooks/</code>. The pre-commit framework must already be installed — see <a href="#prerequisites">Prerequisites</a> if you have not done so yet. You only need to run this once per clone.</p>
+<blockquote>
+<p>[!CAUTION] Do not abort while hooks are running in RStudio git tab. Non-staged changes are stashed to a temp directory and when you abort in RStudio, these changes are not brought back to you repo.</p>
+<p>— <a href="https://lorenzwalthert.github.io/precommit/articles/precommit.html#caution" class="external-link">precommit documentation</a></p>
+</blockquote>
+<p>This installs both the <code>pre-commit</code> and <code>commit-msg</code> hooks. The <code>commit-msg</code> hook enforces the <a href="https://www.conventionalcommits.org/" class="external-link">Conventional Commits</a> format — see <a href="#commit-message-format">Commit message format</a> below for the rules and allowed types.</p>
 </div>
 <div class="section level3">
 <h3 id="run-hooks-manually">Run hooks manually<a class="anchor" aria-label="anchor" href="#run-hooks-manually"></a></h3>
 <p>To run all hooks against every file without making a commit:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="ex">pre-commit</span> run <span class="at">--all-files</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="ex">pre-commit</span> run <span class="at">--all-files</span></span></code></pre></div>
 <p>To run a single hook by its id:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">pre-commit</span> run <span class="op">&lt;</span>hook-id<span class="op">&gt;</span> --all-files</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co"># e.g.</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="ex">pre-commit</span> run lintr <span class="at">--all-files</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="ex">pre-commit</span> run <span class="op">&lt;</span>hook-id<span class="op">&gt;</span> --all-files</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co"># e.g.</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="ex">pre-commit</span> run lintr <span class="at">--all-files</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="hook-reference">Hook reference<a class="anchor" aria-label="anchor" href="#hook-reference"></a></h3>
@@ -143,21 +214,21 @@
 </div>
 <div class="section level2">
 <h2 id="code-style">Code style<a class="anchor" aria-label="anchor" href="#code-style"></a></h2>
-<ul><li><p>New code should follow the <a href="https://style.tidyverse.org" class="external-link">tidyverse style guide</a>. The <code>air-format</code> hook applies this automatically on commit — please don’t restyle code that is unrelated to your change.</p></li>
+<ul><li><p>New code must follow the <a href="https://style.tidyverse.org" class="external-link">tidyverse style guide</a>. The <code>air-format</code> hook applies this automatically on commit — do not restyle code that is unrelated to your change.</p></li>
 <li>
-<p>To format manually before committing, run:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="ex">air</span> format .</span></code></pre></div>
+<p>To format manually before committing:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="ex">air</span> format .</span></code></pre></div>
 <p>Or format a single file:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="ex">air</span> format R/my_file.R</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="ex">air</span> format R/my_file.R</span></code></pre></div>
 </li>
 <li>
 <p>To lint R source files:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">lintr</span><span class="fu">::</span><span class="fu">lint_package</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </li>
 <li>
 <p>This package uses <a href="https://cran.r-project.org/package=roxygen2" class="external-link">roxygen2</a> with <a href="https://roxygen2.r-lib.org/articles/rd-formatting.html" class="external-link">Markdown syntax</a> for all documentation. After editing roxygen2 comments, regenerate the docs:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </li>
 <li><p>This package uses <a href="https://cran.r-project.org/package=testthat" class="external-link">testthat</a> (v3) for unit tests. Contributions that include test cases are easier to accept.</p></li>

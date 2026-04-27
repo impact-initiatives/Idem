@@ -1,57 +1,170 @@
 # Contributing to idem
 
-This outlines how to propose a change to idem. This package follows
-tidyverse conventions for code style and workflow — see the [tidyverse
-development contributing guide](https://rstd.io/tidy-contrib) and [code
-review principles](https://code-review.tidyverse.org/) for broader
-context.
+This document describes the contribution process for idem. This package
+follows tidyverse conventions for code style and workflow — see the
+[tidyverse development contributing guide](https://rstd.io/tidy-contrib)
+and [code review principles](https://code-review.tidyverse.org/) for
+broader context.
 
-## Fixing typos
+## Before you start
 
-You can fix typos, spelling mistakes, or grammatical errors in the
-documentation directly using the GitHub web interface, as long as the
-changes are made in the *source* file. This generally means editing
-[roxygen2 comments](https://roxygen2.r-lib.org/articles/roxygen2.html)
-in an `.R` file, not a `.Rd` file. You can find the `.R` file that
-generates a given `.Rd` by reading the comment in the first line of the
-`.Rd` file.
+File an issue before writing any code. This ensures the change is needed
+and avoids wasted effort. If you have found a bug, include a minimal
+[reprex](https://www.tidyverse.org/help/#reprex) in the issue — this
+makes it easier to diagnose and to write a unit test later. The
+tidyverse guide on [how to create a great
+issue](https://code-review.tidyverse.org/issues/) has useful advice.
 
-## Bigger changes
+## Prerequisites
 
-If you want to make a bigger change, it’s a good idea to file an issue
-first and make sure someone from the team agrees that it’s needed. If
-you’ve found a bug, please file an issue that illustrates the bug with a
-minimal [reprex](https://www.tidyverse.org/help/#reprex) (this will also
-help you write a unit test, if needed). The tidyverse guide on [how to
-create a great issue](https://code-review.tidyverse.org/issues/) has
-useful advice on this.
+The following tools must be available on your `PATH` before following
+the contribution workflow. Install them once and they will work across
+all projects.
 
-### Pull request process
+### uv
 
-- Fork the package and clone onto your computer. If you haven’t done
-  this before, we recommend using
-  `usethis::create_from_github("impact-initiatives/idem", fork = TRUE)`.
+[uv](https://docs.astral.sh/uv/getting-started/installation/) is a
+Python package manager used to install the other tools:
 
-- Install all development dependencies with
-  `devtools::install_dev_deps()`, and then make sure the package passes
-  R CMD check by running `devtools::check()`. If R CMD check doesn’t
-  pass cleanly, it’s a good idea to ask for help before continuing.
+``` sh
+# macOS / Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
 
-- Create a Git branch for your pull request (PR). We recommend using
-  `usethis::pr_init("brief-description-of-change")`.
+See the [uv installation
+guide](https://docs.astral.sh/uv/getting-started/installation/) for
+Windows and other options.
 
-- Make your changes, commit to git, and then create a PR by running
-  `usethis::pr_push()`, and following the prompts in your browser. The
-  title of your PR should briefly describe the change. The body of your
-  PR should contain `Fixes #issue-number`.
+### pre-commit
+
+[pre-commit](https://pre-commit.com/) runs the hook scripts before each
+commit. Install it via uv (recommended):
+
+``` sh
+uv tool install pre-commit
+```
+
+Alternatives: `pip install pre-commit` or `brew install pre-commit`.
+
+## Branching model
+
+This repository uses a **release-branch workflow**:
+
+1.  A `release/vX.Y.Z` branch is created by a maintainer for each
+    planned release.
+2.  Each piece of work (feature, fix, docs, etc.) gets its own branch
+    cut **from the target release branch**, named
+    `<issue-number>-brief-description`
+    (e.g. `7-improve-contributing-guide`).
+3.  Completed feature branches are merged into the release branch via a
+    pull request. All CI checks must pass before merging.
+4.  When a release is ready, the release branch is merged into `main`.
+    The merge commit is tagged with the version number (e.g. `v0.2.0`).
+
+Maintainers create and manage release branches. If you are an external
+contributor, check whether an active release branch exists and target
+your PR there. If none exists, ask in your issue which branch to use.
+
+``` mermaid
+gitGraph
+   commit id: "…"
+   branch release/v0.2.0
+   checkout release/v0.2.0
+
+   branch "5-add-validation"
+   checkout "5-add-validation"
+   commit id: "feat: add validation"
+   commit id: "test: cover validation"
+   checkout release/v0.2.0
+   merge "5-add-validation" id: "Merge #5"
+
+   branch "6-fix-edge-case"
+   checkout "6-fix-edge-case"
+   commit id: "fix: edge case"
+   checkout release/v0.2.0
+   merge "6-fix-edge-case" id: "Merge #6"
+
+   checkout main
+   merge release/v0.2.0 id: "v0.2.0" tag: "v0.2.0"
+```
+
+## Contribution workflow
+
+### 1. Fork and clone
+
+Fork the repository and clone it locally. The easiest way is:
+
+``` r
+usethis::create_from_github("impact-initiatives/idem", fork = TRUE)
+```
+
+Or with plain git:
+
+``` sh
+git clone https://github.com/<your-username>/idem.git
+cd idem
+git remote add upstream https://github.com/impact-initiatives/idem.git
+```
+
+### 2. Install dependencies and verify the baseline
+
+``` r
+devtools::install_dev_deps()
+devtools::check()
+```
+
+R CMD check must pass cleanly before you make any changes. If it does
+not, open an issue rather than continuing.
+
+Before moving on, install the pre-commit hooks — see [Pre-commit
+hooks](#pre-commit-hooks) below. The hooks must be in place before you
+make your first commit.
+
+### 3. Create a branch
+
+Create your branch **from the active release branch**:
+
+``` sh
+git fetch upstream
+git checkout -b <issue-number>-brief-description-of-change upstream/release/vX.Y.Z
+```
+
+### 4. Make changes and commit
+
+Follow the [commit message format](#commit-message-format) described
+below. Each commit should be a coherent, self-contained unit of work.
+The PR as a whole should address just one thing — see the tidyverse
+guide on [focused
+PRs](https://code-review.tidyverse.org/author/focused.html).
+
+### 5. Push and open a PR
+
+When ready, push and open a PR:
+
+``` r
+usethis::pr_push()
+```
+
+Or with plain git:
+
+``` sh
+git push -u origin 7-brief-description-of-change
+```
+
+Then open a pull request on GitHub. The PR title must briefly describe
+the change. The PR body must contain `Fixes #<issue-number>`.
 
 ## Pre-commit hooks
+
+[Pre-commit hooks](https://pre-commit.com/) are tests that run each time
+you attempt to commit. If the tests pass, the commit will be made,
+otherwise not.
 
 This repository uses [pre-commit](https://pre-commit.com/) to run
 automated checks before each commit. The hook scripts are not committed
 to the repository — every contributor must install them locally after
-cloning. The steps below are required, not optional: without them the
-hooks will not run.
+cloning. The steps below are **required, not optional**: without them
+the hooks will not run.
 
 ### 1. Install the precommit R package and activate the hooks
 
@@ -65,30 +178,23 @@ install.packages("precommit")
 precommit::use_precommit()
 ```
 
-`precommit::use_precommit()` installs the pre-commit framework if needed
-and writes the hook scripts into `.git/hooks/`. You only need to do this
-once per clone.
+`precommit::use_precommit()` writes the hook scripts into `.git/hooks/`.
+The pre-commit framework must already be installed — see
+[Prerequisites](#prerequisites) if you have not done so yet. You only
+need to run this once per clone.
 
-### 2. Activate the commit-msg hook
+> \[!CAUTION\] Do not abort while hooks are running in RStudio git tab.
+> Non-staged changes are stashed to a temp directory and when you abort
+> in RStudio, these changes are not brought back to you repo.
+>
+> — [precommit
+> documentation](https://lorenzwalthert.github.io/precommit/articles/precommit.html#caution)
 
-The `precommit` R package only activates the `pre-commit` stage. This
-repository also uses a `commit-msg` hook to validate commit message
-format. Activate it with one additional command in your terminal:
-
-``` sh
-pre-commit install --hook-type commit-msg
-```
-
-### 3. Install air
-
-The `air-format` hook is a local hook — unlike the other hooks, it is
-not managed by the `precommit` R package and will not work unless the
-`air` binary is available on your `PATH`. Install it via
-[uv](https://docs.astral.sh/uv/getting-started/installation/):
-
-``` sh
-uv tool install air-formatter
-```
+This installs both the `pre-commit` and `commit-msg` hooks. The
+`commit-msg` hook enforces the [Conventional
+Commits](https://www.conventionalcommits.org/) format — see [Commit
+message format](#commit-message-format) below for the rules and allowed
+types.
 
 ### Run hooks manually
 
@@ -153,12 +259,12 @@ Commits that do not follow this format will be rejected by the hook.
 
 ## Code style
 
-- New code should follow the [tidyverse style
+- New code must follow the [tidyverse style
   guide](https://style.tidyverse.org). The `air-format` hook applies
-  this automatically on commit — please don’t restyle code that is
-  unrelated to your change.
+  this automatically on commit — do not restyle code that is unrelated
+  to your change.
 
-- To format manually before committing, run:
+- To format manually before committing:
 
   ``` sh
   air format .
