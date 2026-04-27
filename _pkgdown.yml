@@ -4,8 +4,12 @@ template:
 
 navbar:
   structure:
-    left:  [intro, reference, articles, news]
+    left:  [intro, getting_started, reference, news]
     right: [search, github]
+  components:
+    getting_started:
+      text: Getting Started
+      href: articles/getting-started.html
 
 reference:
   - title: "Read & construct"
