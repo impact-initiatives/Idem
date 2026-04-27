@@ -5,7 +5,7 @@ Authors@R:
     person("Iyed", "GHEDAMSI", , "iyed.ghedamsi@impact-initiatives.org", role = c("aut", "cre"))
 Description: Reads and compares XLSForm survey files, validating that a target form
     is consistent with a development form.
-License: GPL (>= 3)
+License: MIT + file LICENSE
 URL: https://impact-initiatives.github.io/idem/
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

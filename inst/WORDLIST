@@ -51,6 +51,7 @@ KOBO
 LazyData
 lcsi
 licensors
+lifecycle
 linter
 lintr
 localised
@@ -60,6 +61,7 @@ msna
 MSNA
 navbar
 noncommercially
+NONINFRINGEMENT
 normalises
 option’
 pkgdown
@@ -83,6 +85,7 @@ relicensing
 renv
 reprex
 req
+rlang
 rmarkdown
 Rmd
 roxygen
@@ -95,6 +98,7 @@ Sharepoint
 snfi
 stringr
 styler
+sublicense
 sublicenses
 Sublicensing
 testthat
