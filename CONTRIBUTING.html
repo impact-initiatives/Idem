@@ -41,15 +41,16 @@
 <p>The following tools must be available on your <code>PATH</code> before following the contribution workflow. Install them once and they will work across all projects.</p>
 <div class="section level3">
 <h3 id="uv">uv<a class="anchor" aria-label="anchor" href="#uv"></a></h3>
-<p><a href="https://docs.astral.sh/uv/getting-started/installation/" class="external-link">uv</a> is a Python package manager used to install the other tools:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># macOS / Linux</span></span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-LsSf</span> https://astral.sh/uv/install.sh <span class="kw">|</span> <span class="fu">sh</span></span></code></pre></div>
-<p>See the <a href="https://docs.astral.sh/uv/getting-started/installation/" class="external-link">uv installation guide</a> for Windows and other options.</p>
+<p><a href="https://docs.astral.sh/uv/getting-started/installation/" class="external-link">uv</a> is a Python package manager used to install the other tools.</p>
+<p><strong>Windows</strong> (<a href="https://docs.astral.sh/uv/getting-started/installation/#__tabbed_1_2" class="external-link">installation guide</a>):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>powershell <span class="op">-</span>ExecutionPolicy ByPass <span class="op">-</span>c <span class="st">"irm https://astral.sh/uv/install.ps1 | iex"</span></span></code></pre></div>
+<p><strong>macOS / Linux</strong> (<a href="https://docs.astral.sh/uv/getting-started/installation/#__tabbed_1_1" class="external-link">installation guide</a>):</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-LsSf</span> https://astral.sh/uv/install.sh <span class="kw">|</span> <span class="fu">sh</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="pre-commit">pre-commit<a class="anchor" aria-label="anchor" href="#pre-commit"></a></h3>
 <p><a href="https://pre-commit.com/" class="external-link">pre-commit</a> runs the hook scripts before each commit. Install it via uv (recommended):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="ex">uv</span> tool install pre-commit</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">uv</span> tool install pre-commit</span></code></pre></div>
 <p>Alternatives: <code>pip install pre-commit</code> or <code>brew install pre-commit</code>.</p>
 </div>
 </div>
@@ -87,16 +88,16 @@
 <div class="section level3">
 <h3 id="id_1-fork-and-clone">1. Fork and clone<a class="anchor" aria-label="anchor" href="#id_1-fork-and-clone"></a></h3>
 <p>Fork the repository and clone it locally. The easiest way is:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">create_from_github</span><span class="op">(</span><span class="st">"impact-initiatives/idem"</span>, fork <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Or with plain git:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/<span class="op">&lt;</span>your-username<span class="op">&gt;</span>/idem.git</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="bu">cd</span> idem</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">git</span> remote add upstream https://github.com/impact-initiatives/idem.git</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/<span class="op">&lt;</span>your-username<span class="op">&gt;</span>/idem.git</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="bu">cd</span> idem</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">git</span> remote add upstream https://github.com/impact-initiatives/idem.git</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="id_2-install-dependencies-and-verify-the-baseline">2. Install dependencies and verify the baseline<a class="anchor" aria-label="anchor" href="#id_2-install-dependencies-and-verify-the-baseline"></a></h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_dev_deps</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>R CMD check must pass cleanly before you make any changes. If it does not, open an issue rather than continuing.</p>
@@ -105,8 +106,8 @@
 <div class="section level3">
 <h3 id="id_3-create-a-branch">3. Create a branch<a class="anchor" aria-label="anchor" href="#id_3-create-a-branch"></a></h3>
 <p>Create your branch <strong>from the active release branch</strong>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">git</span> fetch upstream</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> <span class="op">&lt;</span>issue-number<span class="op">&gt;</span>-brief-description-of-change upstream/release/vX.Y.Z</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">git</span> fetch upstream</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> <span class="op">&lt;</span>issue-number<span class="op">&gt;</span>-brief-description-of-change upstream/release/vX.Y.Z</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="id_4-make-changes-and-commit">4. Make changes and commit<a class="anchor" aria-label="anchor" href="#id_4-make-changes-and-commit"></a></h3>
@@ -115,10 +116,10 @@
 <div class="section level3">
 <h3 id="id_5-push-and-open-a-pr">5. Push and open a PR<a class="anchor" aria-label="anchor" href="#id_5-push-and-open-a-pr"></a></h3>
 <p>When ready, push and open a PR:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">pr_push</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Or with plain git:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin 7-brief-description-of-change</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin 7-brief-description-of-change</span></code></pre></div>
 <p>Then open a pull request on GitHub. The PR title must briefly describe the change. The PR body must contain <code>Fixes #&lt;issue-number&gt;</code>.</p>
 </div>
 </div>
@@ -129,7 +130,7 @@
 <div class="section level3">
 <h3 id="id_1-install-the-precommit-r-package-and-activate-the-hooks">1. Install the precommit R package and activate the hooks<a class="anchor" aria-label="anchor" href="#id_1-install-the-precommit-r-package-and-activate-the-hooks"></a></h3>
 <p>The <a href="https://lorenzwalthert.github.io/precommit/" class="external-link"><code>precommit</code></a> R package provides a convenient way to install the pre-commit framework and activate the hooks from R. Run the following in an R session from the root of the cloned repository:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"precommit"</span><span class="op">)</span></span>
 <span><span class="fu">precommit</span><span class="fu">::</span><span class="fu">use_precommit</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><code>precommit::use_precommit()</code> writes the hook scripts into <code>.git/hooks/</code>. The pre-commit framework must already be installed — see <a href="#prerequisites">Prerequisites</a> if you have not done so yet. You only need to run this once per clone.</p>
@@ -142,11 +143,11 @@
 <div class="section level3">
 <h3 id="run-hooks-manually">Run hooks manually<a class="anchor" aria-label="anchor" href="#run-hooks-manually"></a></h3>
 <p>To run all hooks against every file without making a commit:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="ex">pre-commit</span> run <span class="at">--all-files</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="ex">pre-commit</span> run <span class="at">--all-files</span></span></code></pre></div>
 <p>To run a single hook by its id:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="ex">pre-commit</span> run <span class="op">&lt;</span>hook-id<span class="op">&gt;</span> --all-files</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co"># e.g.</span></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="ex">pre-commit</span> run lintr <span class="at">--all-files</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="ex">pre-commit</span> run <span class="op">&lt;</span>hook-id<span class="op">&gt;</span> --all-files</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co"># e.g.</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="ex">pre-commit</span> run lintr <span class="at">--all-files</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="hook-reference">Hook reference<a class="anchor" aria-label="anchor" href="#hook-reference"></a></h3>
@@ -217,18 +218,18 @@
 <ul><li><p>New code must follow the <a href="https://style.tidyverse.org" class="external-link">tidyverse style guide</a>. The <code>air-format</code> hook applies this automatically on commit — do not restyle code that is unrelated to your change.</p></li>
 <li>
 <p>To format manually before committing:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="ex">air</span> format .</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="ex">air</span> format .</span></code></pre></div>
 <p>Or format a single file:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="ex">air</span> format R/my_file.R</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="ex">air</span> format R/my_file.R</span></code></pre></div>
 </li>
 <li>
 <p>To lint R source files:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">lintr</span><span class="fu">::</span><span class="fu">lint_package</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </li>
 <li>
 <p>This package uses <a href="https://cran.r-project.org/package=roxygen2" class="external-link">roxygen2</a> with <a href="https://roxygen2.r-lib.org/articles/rd-formatting.html" class="external-link">Markdown syntax</a> for all documentation. After editing roxygen2 comments, regenerate the docs:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </li>
 <li><p>This package uses <a href="https://cran.r-project.org/package=testthat" class="external-link">testthat</a> (v3) for unit tests. Contributions that include test cases are easier to accept.</p></li>
