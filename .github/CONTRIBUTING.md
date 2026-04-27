@@ -177,6 +177,13 @@ pre-commit framework must already be installed — see
 [Prerequisites](#prerequisites) if you have not done so yet. You only need to
 run this once per clone.
 
+> [!CAUTION]
+> Do not abort while hooks are running in RStudio git tab. Non-staged changes
+> are stashed to a temp directory and when you abort in RStudio, these changes
+> are not brought back to you repo.
+>
+> — [precommit documentation](https://lorenzwalthert.github.io/precommit/articles/precommit.html#caution)
+
 This installs both the `pre-commit` and `commit-msg` hooks. The `commit-msg`
 hook enforces the [Conventional Commits](https://www.conventionalcommits.org/)
 format — see [Commit message format](#commit-message-format) below for the
