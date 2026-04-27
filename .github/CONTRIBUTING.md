@@ -23,15 +23,19 @@ projects.
 ### uv
 
 [uv](https://docs.astral.sh/uv/getting-started/installation/) is a Python
-package manager used to install the other tools:
+package manager used to install the other tools.
 
-```sh
-# macOS / Linux
-curl -LsSf https://astral.sh/uv/install.sh | sh
+**Windows** ([installation guide](https://docs.astral.sh/uv/getting-started/installation/#__tabbed_1_2)):
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-See the [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/)
-for Windows and other options.
+**macOS / Linux** ([installation guide](https://docs.astral.sh/uv/getting-started/installation/#__tabbed_1_1)):
+
+```sh
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
 
 ### pre-commit
 
