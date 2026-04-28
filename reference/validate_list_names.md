@@ -69,7 +69,7 @@ dev_empty_choices <- xlsform(
   choices = data.frame(list_name = character(), name = character())
 )
 validate_list_names(target, dev_empty_choices)
-#> # A tibble: 174 × 5
+#> # A tibble: 173 × 5
 #>    check      severity name               list_name detail                      
 #>    <chr>      <chr>    <chr>              <chr>     <chr>                       
 #>  1 list_names error    l_survey_modality  NA        List 'l_survey_modality' is…
@@ -82,5 +82,5 @@ validate_list_names(target, dev_empty_choices)
 #>  8 list_names error    l_yn_dnk_pnta      NA        List 'l_yn_dnk_pnta' is def…
 #>  9 list_names error    l_hoh_civil_status NA        List 'l_hoh_civil_status' i…
 #> 10 list_names error    l_setting          NA        List 'l_setting' is defined…
-#> # ℹ 164 more rows
+#> # ℹ 163 more rows
 ```
