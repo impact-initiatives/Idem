@@ -467,8 +467,7 @@ accept a `passing_lists` argument for this purpose. The default is
 
 ``` r
 idem_passing_lists
-#> [1] "l_admin1"     "l_admin2"     "l_admin3"     "l_admin4"     "l_cluster_id"
-#> [6] "l_country"    "l_enum_id"
+#> [1] "l_admin1"  "l_admin2"  "l_admin3"  "l_enum_id"
 ```
 
 Any list named in `passing_lists` is excluded from the options
