@@ -4,10 +4,12 @@
 ^[.]?air[.]toml$
 ^\.Rproj\.user$
 ^\.github$
+^\.lintr$
 ^\.pre-commit-config\.yaml$
 ^_pkgdown\.yml$
 ^data-raw$
 ^docs$
+^justfile$
 ^pkgdown$
 ^renv$
 ^renv\.lock$

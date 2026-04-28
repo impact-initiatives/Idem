@@ -1,6 +1,6 @@
 Package: idem
 Title: XLSForm Comparison and Validation
-Version: 0.0.0.9000
+Version: 2026.4.27
 Authors@R: 
     person("Iyed", "GHEDAMSI", , "iyed.ghedamsi@impact-initiatives.org", role = c("aut", "cre"))
 Description: Reads and compares XLSForm survey files, validating that a target form
