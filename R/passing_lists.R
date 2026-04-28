@@ -12,8 +12,5 @@ idem_passing_lists <- c(
   "l_admin1",
   "l_admin2",
   "l_admin3",
-  "l_admin4",
-  "l_cluster_id",
-  "l_country",
   "l_enum_id"
 )

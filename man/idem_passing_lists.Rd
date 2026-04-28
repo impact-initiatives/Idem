@@ -5,7 +5,7 @@
 \alias{idem_passing_lists}
 \title{Default list names skipped by \code{\link[=validate_choices]{validate_choices()}}}
 \format{
-An object of class \code{character} of length 7.
+An object of class \code{character} of length 4.
 }
 \usage{
 idem_passing_lists
