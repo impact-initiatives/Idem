@@ -58,10 +58,3 @@ started](https://impact-initiatives.github.io/idem/articles/getting-started.md)
 article for a full walkthrough: exploring forms, understanding each
 check, running checks individually, skipping lists, and working with
 results.
-
-## Comparable / Similar tools
-
-- <https://github.com/williameoswald/surveydesignr>
-- <https://github.com/unhcr-americas/XlsFormUtil/blob/HEAD/R/fct_xlsform_compare.R>
-- <https://github.com/PovertyAction/ipacheckscto>
-- <https://github.com/PMA-2020/xform-test>
