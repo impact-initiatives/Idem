@@ -31,7 +31,7 @@
 #'     \item{parameters}{Additional XLSForm parameters.}
 #'   }
 #'
-#'   **`choices`** — 3,714 rows × 8 columns:
+#'   **`choices`** — 2,484 rows × 8 columns:
 #'   \describe{
 #'     \item{list_name}{Choice list identifier referenced in `survey$type`.}
 #'     \item{name}{Choice option value.}

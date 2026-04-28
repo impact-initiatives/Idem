@@ -31,7 +31,7 @@ in French.}
 \item{parameters}{Additional XLSForm parameters.}
 }
 
-\strong{\code{choices}} — 3,714 rows × 8 columns:
+\strong{\code{choices}} — 2,484 rows × 8 columns:
 \describe{
 \item{list_name}{Choice list identifier referenced in \code{survey$type}.}
 \item{name}{Choice option value.}

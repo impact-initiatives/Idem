@@ -45,7 +45,11 @@ msna_template_required$survey <- msna_template_required$survey[
   msna_template_required$survey$req == 1,
   survey_cols
 ]
-msna_template_required$choices <- msna_template_required$choices[, choices_cols]
+referenced <- xlsform_referenced_list_names(msna_template_required)
+msna_template_required$choices <- msna_template_required$choices[
+  msna_template_required$choices$list_name %in% referenced,
+  choices_cols
+]
 
 # Strip the absolute local path — the dataset is a self-contained snapshot
 # and the path attribute would otherwise embed the contributor's machine path.
