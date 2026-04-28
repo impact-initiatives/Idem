@@ -10,7 +10,7 @@ before it causes problems in data collection or analysis.
 
 ``` r
 # install.packages("pak")
-pak::pak("impact-initiatives/idem")
+pak::pak("impact-initiatives/idem@v2026.4.27")
 ```
 
 ## Key concepts
