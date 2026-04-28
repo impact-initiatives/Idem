@@ -50,5 +50,5 @@ validate_list_names(target, dev_empty_choices)
 \seealso{
 \code{\link[=validate_xlsform]{validate_xlsform()}} to run all checks together;
 \code{\link[=validate_survey_list_names]{validate_survey_list_names()}} for the complementary survey-side check;
-\code{\link[=xlsform_choices_list_names]{xlsform_choices_list_names()}} to extract defined list names from a form.
+\code{\link[=xlsform_defined_list_names]{xlsform_defined_list_names()}} to extract defined list names from a form.
 }

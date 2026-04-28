@@ -28,8 +28,8 @@ reference:
       accessors are also used internally by the validation functions.
     contents:
       - xlsform_questions
-      - xlsform_list_names
-      - xlsform_choices_list_names
+      - xlsform_referenced_list_names
+      - xlsform_defined_list_names
       - xlsform_choices
 
   - title: "Validate"

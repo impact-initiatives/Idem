@@ -24,7 +24,7 @@
 #'
 #' @seealso [validate_xlsform()] to run all checks together;
 #'   [validate_survey_list_names()] for the complementary survey-side check;
-#'   [xlsform_choices_list_names()] to extract defined list names from a form.
+#'   [xlsform_defined_list_names()] to extract defined list names from a form.
 #'
 #' @export
 #'
@@ -55,8 +55,8 @@ validate_list_names <- function(target, dev) {
   }
 
   missing <- setdiff(
-    xlsform_choices_list_names(target),
-    xlsform_choices_list_names(dev)
+    xlsform_defined_list_names(target),
+    xlsform_defined_list_names(dev)
   )
 
   tibble::tibble(

@@ -15,7 +15,7 @@
 #'   element is the character vector of option `name` values for that list. Rows
 #'   with `NA` in either `list_name` or `name` are silently dropped.
 #'
-#' @seealso [xlsform_choices_list_names()] for just the list names;
+#' @seealso [xlsform_defined_list_names()] for just the list names;
 #'   [validate_choices()] to compare choice options across two forms.
 #'
 #' @export

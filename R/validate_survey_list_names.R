@@ -28,7 +28,7 @@
 #'
 #' @seealso [validate_xlsform()] to run all checks together;
 #'   [validate_list_names()] for the complementary choices-side check;
-#'   [xlsform_list_names()] to extract referenced list names from a form.
+#'   [xlsform_referenced_list_names()] to extract referenced list names from a form.
 #'
 #' @export
 #'
@@ -63,8 +63,8 @@ validate_survey_list_names <- function(target, dev) {
   }
 
   missing <- setdiff(
-    xlsform_list_names(target),
-    xlsform_list_names(dev)
+    xlsform_referenced_list_names(target),
+    xlsform_referenced_list_names(dev)
   )
 
   tibble::tibble(

@@ -39,6 +39,6 @@ xlsform_questions(form)
 length(xlsform_questions(form))
 }
 \seealso{
-\code{\link[=xlsform_list_names]{xlsform_list_names()}} for list names referenced in the survey;
-\code{\link[=xlsform_choices_list_names]{xlsform_choices_list_names()}} for list names defined in the choices sheet.
+\code{\link[=xlsform_referenced_list_names]{xlsform_referenced_list_names()}} for list names referenced in the survey;
+\code{\link[=xlsform_defined_list_names]{xlsform_defined_list_names()}} for list names defined in the choices sheet.
 }

@@ -10,7 +10,7 @@ exclusions: list(
     "R/validate_xlsform.R" = list(
       line_length_linter = c(17L, 18L, 19L)
     ),
-    "R/xlsform_choices_list_names.R" = list(
+    "R/xlsform_defined_list_names.R" = list(
       line_length_linter = 16L
     ),
     "README.Rmd" = list(

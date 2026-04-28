@@ -21,7 +21,7 @@
 #'
 #' @return A character vector of unique list names referenced in the survey.
 #'
-#' @seealso [xlsform_choices_list_names()] for list names *defined* in the
+#' @seealso [xlsform_defined_list_names()] for list names *defined* in the
 #'   choices sheet; [validate_survey_list_names()] to compare referenced lists
 #'   across two forms.
 #'
@@ -31,25 +31,25 @@
 #' form <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 #'
 #' # Lists actively used by survey questions
-#' xlsform_list_names(form)
+#' xlsform_referenced_list_names(form)
 #'
 #' # Compare with lists defined in the choices sheet
-#' xlsform_choices_list_names(form)
-xlsform_list_names <- function(x, ...) {
-  UseMethod("xlsform_list_names")
+#' xlsform_defined_list_names(form)
+xlsform_referenced_list_names <- function(x, ...) {
+  UseMethod("xlsform_referenced_list_names")
 }
 
 #' @export
-#' @rdname xlsform_list_names
-xlsform_list_names.default <- function(x, ...) {
+#' @rdname xlsform_referenced_list_names
+xlsform_referenced_list_names.default <- function(x, ...) {
   cli::cli_abort(
     "{.arg x} must be an {.cls xlsform} object, not {.obj_type_friendly {x}}."
   )
 }
 
 #' @export
-#' @rdname xlsform_list_names
-xlsform_list_names.xlsform <- function(x, ...) {
+#' @rdname xlsform_referenced_list_names
+xlsform_referenced_list_names.xlsform <- function(x, ...) {
   list_referencing_types <- c(
     "select_one",
     "select_multiple",

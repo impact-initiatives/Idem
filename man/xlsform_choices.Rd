@@ -42,6 +42,6 @@ xlsform_choices(form)
 xlsform_choices(form)[["yn"]]
 }
 \seealso{
-\code{\link[=xlsform_choices_list_names]{xlsform_choices_list_names()}} for just the list names;
+\code{\link[=xlsform_defined_list_names]{xlsform_defined_list_names()}} for just the list names;
 \code{\link[=validate_choices]{validate_choices()}} to compare choice options across two forms.
 }

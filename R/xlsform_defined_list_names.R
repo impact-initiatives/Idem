@@ -15,10 +15,10 @@
 #' CSV/XML/GeoJSON files rather than any in-workbook sheet. This function cannot
 #' resolve those references and emits a warning for each such type it encounters.
 #'
-#' ## Difference from `xlsform_list_names()`
+#' ## Difference from `xlsform_referenced_list_names()`
 #'
-#' [xlsform_list_names()] returns lists *referenced* by survey questions;
-#' `xlsform_choices_list_names()` returns lists *defined* in the choices sheets.
+#' [xlsform_referenced_list_names()] returns lists *referenced* by survey questions;
+#' `xlsform_defined_list_names()` returns lists *defined* in the choices sheets.
 #' The two sets should match for a well-formed form, but can diverge when a
 #' question type is changed without updating the choices sheet (or vice versa).
 #'
@@ -28,7 +28,7 @@
 #' @return A character vector of unique list names drawn from all available
 #'   in-workbook choices sheets.
 #'
-#' @seealso [xlsform_list_names()] for list names referenced in the survey
+#' @seealso [xlsform_referenced_list_names()] for list names referenced in the survey
 #'   sheet; [xlsform_choices()] for the full choice options per list;
 #'   [validate_list_names()] to compare defined lists across two forms.
 #'
@@ -38,29 +38,29 @@
 #' form <- read_xlsform(system.file("extdata/form.xlsx", package = "idem"))
 #'
 #' # All list names defined in the choices sheet
-#' xlsform_choices_list_names(form)
+#' xlsform_defined_list_names(form)
 #'
 #' # Cross-check: lists defined in choices vs. lists used in survey
 #' # (both should be identical for a well-formed form)
 #' all.equal(
-#'   sort(xlsform_choices_list_names(form)),
-#'   sort(xlsform_list_names(form))
+#'   sort(xlsform_defined_list_names(form)),
+#'   sort(xlsform_referenced_list_names(form))
 #' )
-xlsform_choices_list_names <- function(x, ...) {
-  UseMethod("xlsform_choices_list_names")
+xlsform_defined_list_names <- function(x, ...) {
+  UseMethod("xlsform_defined_list_names")
 }
 
 #' @export
-#' @rdname xlsform_choices_list_names
-xlsform_choices_list_names.default <- function(x, ...) {
+#' @rdname xlsform_defined_list_names
+xlsform_defined_list_names.default <- function(x, ...) {
   cli::cli_abort(
     "{.arg x} must be an {.cls xlsform} object, not {.obj_type_friendly {x}}."
   )
 }
 
 #' @export
-#' @rdname xlsform_choices_list_names
-xlsform_choices_list_names.xlsform <- function(x, ...) {
+#' @rdname xlsform_defined_list_names
+xlsform_defined_list_names.xlsform <- function(x, ...) {
   from_file_types <- c("select_one_from_file", "select_multiple_from_file")
   from_file_used <- x$survey$type[
     !is.na(x$survey$type) &
@@ -69,7 +69,7 @@ xlsform_choices_list_names.xlsform <- function(x, ...) {
   if (length(from_file_used) > 0) {
     cli::cli_warn(c(
       "Some question types reference external files and are not handled by \\
-      {.fn xlsform_choices_list_names}.",
+      {.fn xlsform_defined_list_names}.",
       "i" = "Unhandled type{?s}: {.val {unique(from_file_used)}}"
     ))
   }

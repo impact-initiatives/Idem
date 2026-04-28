@@ -73,13 +73,13 @@ These are the list names extracted from the `type` column — the second token
 in values like `select_one l_yn`.
 
 ```{r list-names}
-xlsform_list_names(target)
+xlsform_referenced_list_names(target)
 ```
 
 ### Choice lists defined in the choices sheet
 
 ```{r choices-list-names}
-xlsform_choices_list_names(target)
+xlsform_defined_list_names(target)
 ```
 
 ### Choice options per list
