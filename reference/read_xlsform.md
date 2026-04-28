@@ -62,28 +62,28 @@ form <- read_xlsform(path)
 form
 #> <xlsform> /home/runner/work/_temp/Library/idem/extdata/form.xlsx
 #> • survey: 710 rows
-#> • choices: 3726 rows
+#> • choices: 3714 rows
 
 # Inspect the survey sheet directly
 form$survey
-#> # A tibble: 710 × 24
-#>    level      req  hnrp theme        module          indicator index type  name 
-#>    <chr>    <dbl> <dbl> <chr>        <chr>           <chr>     <dbl> <chr> <chr>
-#>  1 metadata     1     0 Metadata     NA              NA           NA audit audit
-#>  2 metadata     1     0 Metadata     NA              NA           NA start start
-#>  3 metadata     1     0 Metadata     NA              NA           NA end   end  
-#>  4 metadata     1     0 Metadata     NA              NA           NA today today
-#>  5 metadata     1     0 Metadata     NA              NA           NA devi… devi…
-#>  6 metadata     1     0 Metadata     NA              NA           NA calc… inst…
-#>  7 main         1     0 Introduction NA              NA           NA begi… intr…
-#>  8 main         1     1 Introduction Interview deta… % of int…     1 sele… surv…
-#>  9 main         1     1 Introduction Interview deta… For data…     2 sele… enum…
-#> 10 main         0     1 Introduction Interview deta… % of int…     3 sele… enum…
+#> # A tibble: 710 × 23
+#>    level      req theme module indicator index type  name  `label::english (en)`
+#>    <chr>    <dbl> <chr> <chr>  <chr>     <dbl> <chr> <chr> <chr>                
+#>  1 metadata     1 Meta… NA     NA           NA audit audit NA                   
+#>  2 metadata     1 Meta… NA     NA           NA start start NA                   
+#>  3 metadata     1 Meta… NA     NA           NA end   end   NA                   
+#>  4 metadata     1 Meta… NA     NA           NA today today NA                   
+#>  5 metadata     1 Meta… NA     NA           NA devi… devi… NA                   
+#>  6 metadata     1 Meta… NA     NA           NA calc… inst… NA                   
+#>  7 main         1 Intr… NA     NA           NA begi… intr… Introduction         
+#>  8 main         1 Intr… Inter… % of int…     1 sele… surv… Survey modality      
+#>  9 main         1 Intr… Inter… For data…     2 sele… enum… Enumerator id        
+#> 10 main         0 Intr… Inter… % of int…     3 sele… enum… What is the enumerat…
 #> # ℹ 700 more rows
-#> # ℹ 15 more variables: `label::english (en)` <chr>, `label::french (fr)` <chr>,
-#> #   `hint::english (en)` <chr>, `hint::french (fr)` <chr>, calculation <chr>,
-#> #   required <lgl>, relevant <chr>, constraint <chr>, default <lgl>,
-#> #   repeat_count <chr>, `constraint_message::english (en)` <chr>,
+#> # ℹ 14 more variables: `label::french (fr)` <chr>, `hint::english (en)` <chr>,
+#> #   `hint::french (fr)` <chr>, calculation <chr>, required <lgl>,
+#> #   relevant <chr>, constraint <chr>, default <lgl>, repeat_count <chr>,
+#> #   `constraint_message::english (en)` <chr>,
 #> #   `constraint_message::french (fr)` <chr>, appearance <chr>,
 #> #   choice_filter <chr>, parameters <chr>
 
@@ -94,5 +94,5 @@ read_xlsform(path, optional_sheets = "settings")
 #> ! Excluded: "settings"
 #> <xlsform> /home/runner/work/_temp/Library/idem/extdata/form.xlsx
 #> • survey: 710 rows
-#> • choices: 3726 rows
+#> • choices: 3714 rows
 ```
