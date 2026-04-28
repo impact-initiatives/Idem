@@ -42,7 +42,7 @@ to compare option sets across two forms.
 
 ## See also
 
-[`xlsform_choices_list_names()`](https://impact-initiatives.github.io/idem/reference/xlsform_choices_list_names.md)
+[`xlsform_defined_list_names()`](https://impact-initiatives.github.io/idem/reference/xlsform_defined_list_names.md)
 for just the list names;
 [`validate_choices()`](https://impact-initiatives.github.io/idem/reference/validate_choices.md)
 to compare choice options across two forms.

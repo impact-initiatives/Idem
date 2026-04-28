@@ -49,7 +49,7 @@ surfaces the latter case.
 to run all checks together;
 [`validate_list_names()`](https://impact-initiatives.github.io/idem/reference/validate_list_names.md)
 for the complementary choices-side check;
-[`xlsform_list_names()`](https://impact-initiatives.github.io/idem/reference/xlsform_list_names.md)
+[`xlsform_referenced_list_names()`](https://impact-initiatives.github.io/idem/reference/xlsform_referenced_list_names.md)
 to extract referenced list names from a form.
 
 ## Examples

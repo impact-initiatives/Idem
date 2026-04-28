@@ -88,9 +88,9 @@ functions.
 
 - [`xlsform_questions()`](https://impact-initiatives.github.io/idem/reference/xlsform_questions.md)
   : Get question names from an XLSForm
-- [`xlsform_list_names()`](https://impact-initiatives.github.io/idem/reference/xlsform_list_names.md)
+- [`xlsform_referenced_list_names()`](https://impact-initiatives.github.io/idem/reference/xlsform_referenced_list_names.md)
   : Get list names referenced in an XLSForm's survey sheet
-- [`xlsform_choices_list_names()`](https://impact-initiatives.github.io/idem/reference/xlsform_choices_list_names.md)
+- [`xlsform_defined_list_names()`](https://impact-initiatives.github.io/idem/reference/xlsform_defined_list_names.md)
   : Get list names defined in the choices sheets of an XLSForm
 - [`xlsform_choices()`](https://impact-initiatives.github.io/idem/reference/xlsform_choices.md)
   : Get choice options from an XLSForm

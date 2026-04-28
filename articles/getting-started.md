@@ -75,7 +75,7 @@ These are the list names extracted from the `type` column — the second
 token in values like `select_one l_yn`.
 
 ``` r
-xlsform_list_names(target)
+xlsform_referenced_list_names(target)
 #>  [1] "l_survey_modality"                          
 #>  [2] "l_enum_id"                                  
 #>  [3] "l_admin1"                                   
@@ -146,7 +146,7 @@ xlsform_list_names(target)
 ### Choice lists defined in the choices sheet
 
 ``` r
-xlsform_choices_list_names(target)
+xlsform_defined_list_names(target)
 #>   [1] "l_survey_modality"                           
 #>   [2] "l_enum_id"                                   
 #>   [3] "l_gender"                                    

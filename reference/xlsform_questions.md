@@ -38,9 +38,9 @@ to compare question inventories across two forms.
 
 ## See also
 
-[`xlsform_list_names()`](https://impact-initiatives.github.io/idem/reference/xlsform_list_names.md)
+[`xlsform_referenced_list_names()`](https://impact-initiatives.github.io/idem/reference/xlsform_referenced_list_names.md)
 for list names referenced in the survey;
-[`xlsform_choices_list_names()`](https://impact-initiatives.github.io/idem/reference/xlsform_choices_list_names.md)
+[`xlsform_defined_list_names()`](https://impact-initiatives.github.io/idem/reference/xlsform_defined_list_names.md)
 for list names defined in the choices sheet.
 
 ## Examples

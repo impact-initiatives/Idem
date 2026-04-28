@@ -49,7 +49,7 @@ survey questions (not just defined in choices), see
 to run all checks together;
 [`validate_survey_list_names()`](https://impact-initiatives.github.io/idem/reference/validate_survey_list_names.md)
 for the complementary survey-side check;
-[`xlsform_choices_list_names()`](https://impact-initiatives.github.io/idem/reference/xlsform_choices_list_names.md)
+[`xlsform_defined_list_names()`](https://impact-initiatives.github.io/idem/reference/xlsform_defined_list_names.md)
 to extract defined list names from a form.
 
 ## Examples
