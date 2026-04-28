@@ -14,8 +14,8 @@ validated — you do not need to load the template separately.
 ``` r
 msna_template_required
 #> <xlsform> NA
-#> • survey: 236 rows
-#> • choices: 3726 rows
+#> • survey: 291 rows
+#> • choices: 3714 rows
 ```
 
 ``` r
@@ -126,19 +126,21 @@ xlsform_list_names(target)
 #> [48] "l_fsl_lcsi"                                 
 #> [49] "l_fsl_lcsi_other"                           
 #> [50] "l_fsl_lcsi_en_other"                        
-#> [51] "l_nut_ind_under5_sick_symptoms"             
-#> [52] "l_prot_needs_1_services"                    
-#> [53] "l_prot_needs_1_justice"                     
-#> [54] "l_prot_needs_2_activities"                  
-#> [55] "l_prot_needs_2_social"                      
-#> [56] "l_prot_needs_3_movement"                    
-#> [57] "l_prot_perceived_gbv"                       
-#> [58] "l_prot_concern_freq_gbv_areas_type"         
-#> [59] "l_prot_concern_impact"                      
-#> [60] "l_prot_child_labour"                        
-#> [61] "l_ch_pr_behaviour_change"                   
-#> [62] "l_ds_plans"                                 
-#> [63] "l_ds_plans_timeline"
+#> [51] "l_cm_expenditure_frequent"                  
+#> [52] "l_cm_expenditure_infrequent"                
+#> [53] "l_nut_ind_under5_sick_symptoms"             
+#> [54] "l_prot_needs_1_services"                    
+#> [55] "l_prot_needs_1_justice"                     
+#> [56] "l_prot_needs_2_activities"                  
+#> [57] "l_prot_needs_2_social"                      
+#> [58] "l_prot_needs_3_movement"                    
+#> [59] "l_prot_perceived_gbv"                       
+#> [60] "l_prot_concern_freq_gbv_areas_type"         
+#> [61] "l_prot_concern_impact"                      
+#> [62] "l_prot_child_labour"                        
+#> [63] "l_ch_pr_behaviour_change"                   
+#> [64] "l_ds_plans"                                 
+#> [65] "l_ds_plans_timeline"
 ```
 
 ### Choice lists defined in the choices sheet
@@ -148,21 +150,21 @@ xlsform_choices_list_names(target)
 #>   [1] "l_survey_modality"                           
 #>   [2] "l_enum_id"                                   
 #>   [3] "l_gender"                                    
-#>   [4] "l_country"                                   
-#>   [5] "l_admin3"                                    
-#>   [6] "l_admin4"                                    
-#>   [7] "l_cluster_id"                                
-#>   [8] "l_yn"                                        
-#>   [9] "l_yn_dnk_pnta"                               
-#>  [10] "l_hoh_civil_status"                          
-#>  [11] "l_setting"                                   
-#>  [12] "l_ind_age_under1"                            
-#>  [13] "l_edu_level_grade"                           
-#>  [14] "l_edu_barrier"                               
-#>  [15] "l_fsl_hhs"                                   
-#>  [16] "l_fsl_source_food"                           
-#>  [17] "l_fsl_lcsi"                                  
-#>  [18] "l_fsl_lcsi_other"                            
+#>   [4] "l_admin3"                                    
+#>   [5] "l_admin4"                                    
+#>   [6] "l_cluster_id"                                
+#>   [7] "l_yn"                                        
+#>   [8] "l_yn_dnk_pnta"                               
+#>   [9] "l_hoh_civil_status"                          
+#>  [10] "l_setting"                                   
+#>  [11] "l_ind_age_under1"                            
+#>  [12] "l_edu_level_grade"                           
+#>  [13] "l_edu_barrier"                               
+#>  [14] "l_fsl_hhs"                                   
+#>  [15] "l_fsl_source_food"                           
+#>  [16] "l_fsl_lcsi"                                  
+#>  [17] "l_fsl_lcsi_other"                            
+#>  [18] "Pour acheter de la nourriture"               
 #>  [19] "l_fsl_lcsi_en_other"                         
 #>  [20] "l_cm_income_source"                          
 #>  [21] "cm_income_sources_reduced_1"                 

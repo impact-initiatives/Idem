@@ -75,8 +75,8 @@ do not need to load the template separately.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">msna_template_required</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">&lt;xlsform&gt;</span> <span style="color: #0000BB;">NA</span></span></span>
-<span><span class="co">#&gt; • <span style="color: #00BB00;">survey</span>: 236 rows</span></span>
-<span><span class="co">#&gt; • <span style="color: #00BB00;">choices</span>: 3726 rows</span></span></code></pre></div>
+<span><span class="co">#&gt; • <span style="color: #00BB00;">survey</span>: 291 rows</span></span>
+<span><span class="co">#&gt; • <span style="color: #00BB00;">choices</span>: 3714 rows</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/xlsform_questions.html">xlsform_questions</a></span><span class="op">(</span><span class="va">msna_template_required</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "audit"           "start"           "end"             "today"          </span></span>
@@ -176,19 +176,21 @@ the contents of any form.</p>
 <span><span class="co">#&gt; [48] "l_fsl_lcsi"                                 </span></span>
 <span><span class="co">#&gt; [49] "l_fsl_lcsi_other"                           </span></span>
 <span><span class="co">#&gt; [50] "l_fsl_lcsi_en_other"                        </span></span>
-<span><span class="co">#&gt; [51] "l_nut_ind_under5_sick_symptoms"             </span></span>
-<span><span class="co">#&gt; [52] "l_prot_needs_1_services"                    </span></span>
-<span><span class="co">#&gt; [53] "l_prot_needs_1_justice"                     </span></span>
-<span><span class="co">#&gt; [54] "l_prot_needs_2_activities"                  </span></span>
-<span><span class="co">#&gt; [55] "l_prot_needs_2_social"                      </span></span>
-<span><span class="co">#&gt; [56] "l_prot_needs_3_movement"                    </span></span>
-<span><span class="co">#&gt; [57] "l_prot_perceived_gbv"                       </span></span>
-<span><span class="co">#&gt; [58] "l_prot_concern_freq_gbv_areas_type"         </span></span>
-<span><span class="co">#&gt; [59] "l_prot_concern_impact"                      </span></span>
-<span><span class="co">#&gt; [60] "l_prot_child_labour"                        </span></span>
-<span><span class="co">#&gt; [61] "l_ch_pr_behaviour_change"                   </span></span>
-<span><span class="co">#&gt; [62] "l_ds_plans"                                 </span></span>
-<span><span class="co">#&gt; [63] "l_ds_plans_timeline"</span></span></code></pre></div>
+<span><span class="co">#&gt; [51] "l_cm_expenditure_frequent"                  </span></span>
+<span><span class="co">#&gt; [52] "l_cm_expenditure_infrequent"                </span></span>
+<span><span class="co">#&gt; [53] "l_nut_ind_under5_sick_symptoms"             </span></span>
+<span><span class="co">#&gt; [54] "l_prot_needs_1_services"                    </span></span>
+<span><span class="co">#&gt; [55] "l_prot_needs_1_justice"                     </span></span>
+<span><span class="co">#&gt; [56] "l_prot_needs_2_activities"                  </span></span>
+<span><span class="co">#&gt; [57] "l_prot_needs_2_social"                      </span></span>
+<span><span class="co">#&gt; [58] "l_prot_needs_3_movement"                    </span></span>
+<span><span class="co">#&gt; [59] "l_prot_perceived_gbv"                       </span></span>
+<span><span class="co">#&gt; [60] "l_prot_concern_freq_gbv_areas_type"         </span></span>
+<span><span class="co">#&gt; [61] "l_prot_concern_impact"                      </span></span>
+<span><span class="co">#&gt; [62] "l_prot_child_labour"                        </span></span>
+<span><span class="co">#&gt; [63] "l_ch_pr_behaviour_change"                   </span></span>
+<span><span class="co">#&gt; [64] "l_ds_plans"                                 </span></span>
+<span><span class="co">#&gt; [65] "l_ds_plans_timeline"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="choice-lists-defined-in-the-choices-sheet">Choice lists defined in the choices sheet<a class="anchor" aria-label="anchor" href="#choice-lists-defined-in-the-choices-sheet"></a>
@@ -198,21 +200,21 @@ the contents of any form.</p>
 <span><span class="co">#&gt;   [1] "l_survey_modality"                           </span></span>
 <span><span class="co">#&gt;   [2] "l_enum_id"                                   </span></span>
 <span><span class="co">#&gt;   [3] "l_gender"                                    </span></span>
-<span><span class="co">#&gt;   [4] "l_country"                                   </span></span>
-<span><span class="co">#&gt;   [5] "l_admin3"                                    </span></span>
-<span><span class="co">#&gt;   [6] "l_admin4"                                    </span></span>
-<span><span class="co">#&gt;   [7] "l_cluster_id"                                </span></span>
-<span><span class="co">#&gt;   [8] "l_yn"                                        </span></span>
-<span><span class="co">#&gt;   [9] "l_yn_dnk_pnta"                               </span></span>
-<span><span class="co">#&gt;  [10] "l_hoh_civil_status"                          </span></span>
-<span><span class="co">#&gt;  [11] "l_setting"                                   </span></span>
-<span><span class="co">#&gt;  [12] "l_ind_age_under1"                            </span></span>
-<span><span class="co">#&gt;  [13] "l_edu_level_grade"                           </span></span>
-<span><span class="co">#&gt;  [14] "l_edu_barrier"                               </span></span>
-<span><span class="co">#&gt;  [15] "l_fsl_hhs"                                   </span></span>
-<span><span class="co">#&gt;  [16] "l_fsl_source_food"                           </span></span>
-<span><span class="co">#&gt;  [17] "l_fsl_lcsi"                                  </span></span>
-<span><span class="co">#&gt;  [18] "l_fsl_lcsi_other"                            </span></span>
+<span><span class="co">#&gt;   [4] "l_admin3"                                    </span></span>
+<span><span class="co">#&gt;   [5] "l_admin4"                                    </span></span>
+<span><span class="co">#&gt;   [6] "l_cluster_id"                                </span></span>
+<span><span class="co">#&gt;   [7] "l_yn"                                        </span></span>
+<span><span class="co">#&gt;   [8] "l_yn_dnk_pnta"                               </span></span>
+<span><span class="co">#&gt;   [9] "l_hoh_civil_status"                          </span></span>
+<span><span class="co">#&gt;  [10] "l_setting"                                   </span></span>
+<span><span class="co">#&gt;  [11] "l_ind_age_under1"                            </span></span>
+<span><span class="co">#&gt;  [12] "l_edu_level_grade"                           </span></span>
+<span><span class="co">#&gt;  [13] "l_edu_barrier"                               </span></span>
+<span><span class="co">#&gt;  [14] "l_fsl_hhs"                                   </span></span>
+<span><span class="co">#&gt;  [15] "l_fsl_source_food"                           </span></span>
+<span><span class="co">#&gt;  [16] "l_fsl_lcsi"                                  </span></span>
+<span><span class="co">#&gt;  [17] "l_fsl_lcsi_other"                            </span></span>
+<span><span class="co">#&gt;  [18] "Pour acheter de la nourriture"               </span></span>
 <span><span class="co">#&gt;  [19] "l_fsl_lcsi_en_other"                         </span></span>
 <span><span class="co">#&gt;  [20] "l_cm_income_source"                          </span></span>
 <span><span class="co">#&gt;  [21] "cm_income_sources_reduced_1"                 </span></span>
