@@ -17,7 +17,8 @@
 #'
 #' ## Difference from `xlsform_referenced_list_names()`
 #'
-#' [xlsform_referenced_list_names()] returns lists *referenced* by survey questions;
+#' [xlsform_referenced_list_names()] returns lists *referenced* by survey
+#' questions;
 #' `xlsform_defined_list_names()` returns lists *defined* in the choices sheets.
 #' The two sets should match for a well-formed form, but can diverge when a
 #' question type is changed without updating the choices sheet (or vice versa).
@@ -28,8 +29,8 @@
 #' @return A character vector of unique list names drawn from all available
 #'   in-workbook choices sheets.
 #'
-#' @seealso [xlsform_referenced_list_names()] for list names referenced in the survey
-#'   sheet; [xlsform_choices()] for the full choice options per list;
+#' @seealso [xlsform_referenced_list_names()] for list names referenced in the
+#'   survey sheet; [xlsform_choices()] for the full choice options per list;
 #'   [validate_list_names()] to compare defined lists across two forms.
 #'
 #' @export

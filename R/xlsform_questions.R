@@ -12,7 +12,8 @@
 #'
 #' @return A character vector of non-`NA` question names from the survey sheet.
 #'
-#' @seealso [xlsform_referenced_list_names()] for list names referenced in the survey;
+#' @seealso [xlsform_referenced_list_names()] for list names referenced in the
+#'   survey;
 #'   [xlsform_defined_list_names()] for list names defined in the choices sheet.
 #'
 #' @export

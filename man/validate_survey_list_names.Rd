@@ -58,5 +58,6 @@ validate_survey_list_names(target, dev_no_selects)
 \seealso{
 \code{\link[=validate_xlsform]{validate_xlsform()}} to run all checks together;
 \code{\link[=validate_list_names]{validate_list_names()}} for the complementary choices-side check;
-\code{\link[=xlsform_referenced_list_names]{xlsform_referenced_list_names()}} to extract referenced list names from a form.
+\code{\link[=xlsform_referenced_list_names]{xlsform_referenced_list_names()}} to extract referenced list names from a
+form.
 }

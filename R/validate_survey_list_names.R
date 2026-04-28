@@ -28,7 +28,8 @@
 #'
 #' @seealso [validate_xlsform()] to run all checks together;
 #'   [validate_list_names()] for the complementary choices-side check;
-#'   [xlsform_referenced_list_names()] to extract referenced list names from a form.
+#'   [xlsform_referenced_list_names()] to extract referenced list names from a
+#'   form.
 #'
 #' @export
 #'

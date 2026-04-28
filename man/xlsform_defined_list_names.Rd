@@ -42,7 +42,8 @@ resolve those references and emits a warning for each such type it encounters.
 
 \subsection{Difference from \code{xlsform_referenced_list_names()}}{
 
-\code{\link[=xlsform_referenced_list_names]{xlsform_referenced_list_names()}} returns lists \emph{referenced} by survey questions;
+\code{\link[=xlsform_referenced_list_names]{xlsform_referenced_list_names()}} returns lists \emph{referenced} by survey
+questions;
 \code{xlsform_defined_list_names()} returns lists \emph{defined} in the choices sheets.
 The two sets should match for a well-formed form, but can diverge when a
 question type is changed without updating the choices sheet (or vice versa).
@@ -62,7 +63,7 @@ all.equal(
 )
 }
 \seealso{
-\code{\link[=xlsform_referenced_list_names]{xlsform_referenced_list_names()}} for list names referenced in the survey
-sheet; \code{\link[=xlsform_choices]{xlsform_choices()}} for the full choice options per list;
+\code{\link[=xlsform_referenced_list_names]{xlsform_referenced_list_names()}} for list names referenced in the
+survey sheet; \code{\link[=xlsform_choices]{xlsform_choices()}} for the full choice options per list;
 \code{\link[=validate_list_names]{validate_list_names()}} to compare defined lists across two forms.
 }
