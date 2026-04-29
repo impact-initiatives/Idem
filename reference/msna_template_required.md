@@ -17,7 +17,7 @@ msna_template_required
 An `xlsform` object — a named list of two tibbles with class
 `c("xlsform", "list")`:
 
-**`survey`** — 291 rows × 17 columns:
+**`survey`** — 291 rows × 17 columns: \# nolint: line_length_linter.
 
 - type:
 
@@ -87,7 +87,7 @@ An `xlsform` object — a named list of two tibbles with class
 
   Additional XLSForm parameters.
 
-**`choices`** — 2,484 rows × 8 columns:
+**`choices`** — 2484 rows × 8 columns: \# nolint: line_length_linter.
 
 - list_name:
 
