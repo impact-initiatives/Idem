@@ -8,7 +8,7 @@
 An \code{xlsform} object — a named list of two tibbles with class
 \code{c("xlsform", "list")}:
 
-\strong{\code{survey}} — 291 rows × 17 columns:
+\strong{\code{survey}} — \Sexpr[results=rd,stage=render]{nrow(idem::msna_template_required$survey)} rows × \Sexpr[results=rd,stage=render]{ncol(idem::msna_template_required$survey)} columns: # nolint: line_length_linter.
 \describe{
 \item{type}{XLSForm question type (e.g. \code{"select_one"}, \code{"integer"}).}
 \item{name}{Variable name.}
@@ -31,7 +31,7 @@ in French.}
 \item{parameters}{Additional XLSForm parameters.}
 }
 
-\strong{\code{choices}} — 2,484 rows × 8 columns:
+\strong{\code{choices}} — \Sexpr[results=rd,stage=render]{nrow(idem::msna_template_required$choices)} rows × \Sexpr[results=rd,stage=render]{ncol(idem::msna_template_required$choices)} columns: # nolint: line_length_linter.
 \describe{
 \item{list_name}{Choice list identifier referenced in \code{survey$type}.}
 \item{name}{Choice option value.}

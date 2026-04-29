@@ -8,7 +8,7 @@
 #' @format An `xlsform` object — a named list of two tibbles with class
 #'   `c("xlsform", "list")`:
 #'
-#'   **`survey`** — 291 rows × 17 columns:
+#'   **`survey`** — \Sexpr[results=rd,stage=render]{nrow(idem::msna_template_required$survey)} rows × \Sexpr[results=rd,stage=render]{ncol(idem::msna_template_required$survey)} columns: # nolint: line_length_linter.
 #'   \describe{
 #'     \item{type}{XLSForm question type (e.g. `"select_one"`, `"integer"`).}
 #'     \item{name}{Variable name.}
@@ -31,7 +31,7 @@
 #'     \item{parameters}{Additional XLSForm parameters.}
 #'   }
 #'
-#'   **`choices`** — 2,484 rows × 8 columns:
+#'   **`choices`** — \Sexpr[results=rd,stage=render]{nrow(idem::msna_template_required$choices)} rows × \Sexpr[results=rd,stage=render]{ncol(idem::msna_template_required$choices)} columns: # nolint: line_length_linter.
 #'   \describe{
 #'     \item{list_name}{Choice list identifier referenced in `survey$type`.}
 #'     \item{name}{Choice option value.}
