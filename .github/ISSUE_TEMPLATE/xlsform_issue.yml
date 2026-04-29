@@ -1,4 +1,4 @@
-name: "Bundled XLSForm Issue"
+name: "MSNA Template Issue"
 description: "Report an error or inconsistency in the bundled MSNA XLSForm template (msna_template_required)"
 title: "[XLSForm] <short description>"
 labels: xlsform
