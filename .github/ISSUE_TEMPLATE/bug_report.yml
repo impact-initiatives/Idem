@@ -1,0 +1,70 @@
+name: "Bug Report"
+description: "Report incorrect behaviour in the R package (functions, output, errors)"
+title: "[Bug] <short description>"
+labels: bug
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: "What did you expect to happen, and what happened instead?"
+      placeholder: "e.g. validate_choices() returns an empty tibble when it should flag missing options"
+    validations:
+      required: true
+
+  - type: textarea
+    id: reprex
+    attributes:
+      label: "Minimal reprex"
+      description: >
+        Paste a minimal reproducible example using the
+        [reprex package](https://www.tidyverse.org/help/#reprex).
+        Use `xlsform()` to build forms in-memory rather than reading from a file.
+        Include the output produced.
+      value: |
+        ```r
+        library(idem)
+
+        # Build minimal in-memory forms with xlsform()
+        target <- xlsform(
+          survey = data.frame(
+            type = c("select_one yn"),
+            name = c("consent")
+          ),
+          choices = data.frame(
+            list_name = c("yn", "yn"),
+            name      = c("yes", "no"),
+            label     = c("Yes", "No")
+          )
+        )
+
+        dev <- xlsform(
+          survey = data.frame(
+            type = c("select_one yn"),
+            name = c("consent")
+          ),
+          choices = data.frame(
+            list_name = c("yn"),
+            name      = c("yes"),
+            label     = c("Yes")
+          )
+        )
+
+        validate_xlsform(target = target, dev = dev)
+        ```
+    validations:
+      required: true
+
+  - type: textarea
+    id: session_info
+    attributes:
+      label: "Session info"
+      description: "Output of `sessioninfo::session_info()`"
+      render: r
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: "Additional context"
+      description: "Any other relevant context — related functions, edge cases, workarounds"

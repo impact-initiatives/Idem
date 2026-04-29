@@ -1,0 +1,63 @@
+name: "Bundled XLSForm Issue"
+description: "Report an error or inconsistency in the bundled MSNA XLSForm template (msna_template_required)"
+title: "[XLSForm] <short description>"
+labels: xlsform
+
+body:
+  - type: checkboxes
+    id: latest_form
+    attributes:
+      label: "Confirmation"
+      options:
+        - label: >
+            I am reporting against the latest version of the bundled form
+            ([`inst/extdata/form.xlsx`](https://github.com/impact-initiatives/idem/blob/main/inst/extdata/form.xlsx))
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: "What is wrong or missing in the bundled form?"
+      placeholder: >
+        e.g. The `hh_size` variable is referenced in a `relevant` expression
+        in the nutrition sector but is absent from the required question set
+    validations:
+      required: true
+
+  - type: input
+    id: sheet
+    attributes:
+      label: "Sheet"
+      description: "Which XLSForm sheet is affected?"
+      placeholder: "survey / choices / settings"
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: "Row / field location"
+      description: "Question name, list name, or row number where the issue occurs"
+      placeholder: "e.g. question: hh_size, column: relevant, sector: nutrition"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: "Issue type"
+      options:
+        - Missing variable reference
+        - Missing choice option
+        - Missing list name
+        - Incorrect field value
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: "Additional context"
+      description: "Source reference, related MSNA guidance, or any other relevant detail"
